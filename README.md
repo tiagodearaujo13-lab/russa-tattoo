@@ -1,36 +1,64 @@
-This is a [Next.js](https://nextjs.org) project bootstrapped with [`create-next-app`](https://nextjs.org/docs/app/api-reference/cli/create-next-app).
+# Russa Tattoo Studio
 
-## Getting Started
+Plataforma full-stack serverless para estúdio de tatuagem, construída com Next.js, Drizzle ORM, Neon PostgreSQL, Auth.js, Upstash, Resend e UploadThing.
 
-First, run the development server:
+## Estado atual
+
+- Landing page pública dark editorial com hero, sobre, estilos, piercing, agenda ao vivo, galeria, FAQ e contacto.
+- Fluxo de solicitação de agendamento com validação Zod, rate limit e notificações por e-mail.
+- Painel administrativo protegido por magic link em `/login` e disponível em `/admin`.
+- Gestão de agendamentos, slots e galeria.
+- API pública de agenda limitada aos campos públicos do horário.
+- UploadThing configurado com proteção para administrador.
+- Build validado com Next.js 16, TypeScript e ESLint.
+
+## Desenvolvimento
 
 ```bash
+npm install
 npm run dev
-# or
-yarn dev
-# or
-pnpm dev
-# or
-bun dev
 ```
 
-Open [http://localhost:3000](http://localhost:3000) with your browser to see the result.
+A aplicação fica disponível em `http://localhost:3000`.
 
-You can start editing the page by modifying `app/page.tsx`. The page auto-updates as you edit the file.
+## Variáveis de ambiente
 
-This project uses [`next/font`](https://nextjs.org/docs/app/building-your-application/optimizing/fonts) to automatically optimize and load [Geist](https://vercel.com/font), a new font family for Vercel.
+Copie `.env.example` para `.env.local` e preencha:
 
-## Learn More
+- `DATABASE_URL` — conexão Neon PostgreSQL.
+- `AUTH_SECRET` — segredo do Auth.js.
+- `AUTH_URL` ou `NEXTAUTH_URL` — URL pública da aplicação.
+- `ADMIN_EMAIL` — e-mail autorizado no painel.
+- `RESEND_API_KEY` e `EMAIL_FROM` — envio de e-mails.
+- `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` — rate limit.
+- `UPLOADTHING_TOKEN` — upload de imagens.
+- `NEXT_PUBLIC_STUDIO_INSTAGRAM` e `NEXT_PUBLIC_STUDIO_WHATSAPP` — links públicos.
 
-To learn more about Next.js, take a look at the following resources:
+Depois de configurar o banco, gere/aplique as tabelas conforme o ambiente:
 
-- [Next.js Documentation](https://nextjs.org/docs) - learn about Next.js features and API.
-- [Learn Next.js](https://nextjs.org/learn) - an interactive Next.js tutorial.
+```bash
+npx drizzle-kit generate
+npx drizzle-kit migrate
+```
 
-You can check out [the Next.js GitHub repository](https://github.com/vercel/next.js) - your feedback and contributions are welcome!
+Sem a migração aplicada, a agenda e o painel não conseguirão consultar `schedule_slots` e as demais tabelas.
 
-## Deploy on Vercel
+## Verificação
 
-The easiest way to deploy your Next.js app is to use the [Vercel Platform](https://vercel.com/new?utm_medium=default-template&filter=next.js&utm_source=create-next-app&utm_campaign=create-next-app-readme) from the creators of Next.js.
+```bash
+npx tsc --noEmit
+npm run lint
+npm run build
+```
 
-Check out our [Next.js deployment documentation](https://nextjs.org/docs/app/building-your-application/deploying) for more details.
+O lint pode emitir avisos relacionados ao uso de `<img>` em imagens externas; não há erros bloqueantes.
+
+## Rotas principais
+
+- `/` — site público.
+- `/login` — login administrativo por magic link.
+- `/admin` — dashboard.
+- `/admin/agenda` — gestão de horários.
+- `/admin/galeria` — gestão do portfólio.
+- `/api/schedules/public` — agenda pública sanitizada.
+- `/api/uploadthing` — endpoint de upload protegido.
