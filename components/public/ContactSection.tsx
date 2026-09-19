@@ -5,13 +5,14 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react";
 import InstagramIcon from "@/components/public/InstagramIcon";
+import { getWhatsAppUrl, STUDIO_CONFIG } from "@/lib/constants/studio";
 
 const contactInfo = [
   {
     icon: MapPin,
     label: "Morada",
-    value: process.env.NEXT_PUBLIC_STUDIO_ADDRESS || "Rua do Estúdio, 42 — Faro, Algarve",
-    href: "https://maps.google.com/?q=Faro+Algarve+Portugal",
+    value: STUDIO_CONFIG.address.street,
+    href: STUDIO_CONFIG.address.googleMapsUrl,
   },
   {
     icon: Clock,
@@ -92,7 +93,7 @@ export default function ContactSection() {
                 className="border border-white bg-transparent text-white font-semibold rounded-sm hover:bg-white hover:text-black"
               >
                 <Link
-                  href={`https://wa.me/${process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "351912345678"}`}
+                  href={getWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -105,7 +106,7 @@ export default function ContactSection() {
                 className="border border-white bg-transparent text-white font-semibold rounded-sm hover:bg-white hover:text-black"
               >
                 <Link
-                  href={"https://www.instagram.com/russatatuadora/"}
+                  href={STUDIO_CONFIG.instagram}
                   target="_blank"
                   rel="noopener noreferrer"
                 >
@@ -125,7 +126,7 @@ export default function ContactSection() {
             className="relative rounded-sm overflow-hidden glass min-h-[400px]"
           >
             <iframe
-              src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d51370.36489018003!2d-7.9660!3d37.0194!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0xd0d7e0e7e7e7e7e%3A0x0!2sFaro%2C%20Portugal!5e0!3m2!1spt-BR!2spt!4v1700000000000!5m2!1spt-BR!2spt"
+              src={STUDIO_CONFIG.address.embedMapUrl || "https://www.google.com/maps?q=Algarve+Portugal&output=embed"}
               width="100%"
               height="100%"
               style={{ border: 0, minHeight: 400 }}

@@ -6,8 +6,9 @@ import { motion } from "framer-motion";
 import { Menu, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
+import { STUDIO_CONFIG, getWhatsAppUrl } from "@/lib/constants/studio";
 
-const instagramUrl = "https://www.instagram.com/russatatuadora/";
+const instagramUrl = STUDIO_CONFIG.instagram;
 const navLinks = [
   { href: "#sobre", label: "Sobre" },
   { href: "#estilos", label: "Estilos" },
@@ -83,7 +84,7 @@ export default function Header() {
                 <Button asChild className="w-full rounded-sm border border-white bg-transparent py-3 text-xs font-semibold uppercase tracking-widest text-white hover:bg-white hover:text-black" onClick={() => setIsMobileOpen(false)}><Link href="#agenda">Agendar sessão</Link></Button>
                 <div className="flex items-center justify-center gap-5">
                   <Link href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram"><InstagramMark /></Link>
-                  <Link href={`https://wa.me/${process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "351912345678"}`} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-white"><Phone className="h-5 w-5" /></Link>
+                  <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer" aria-label="WhatsApp" className="text-white"><Phone className="h-5 w-5" /></Link>
                 </div>
               </div>
             </div>

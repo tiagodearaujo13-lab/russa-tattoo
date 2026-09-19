@@ -16,25 +16,24 @@ type ActionResult = {
 };
 
 // ── Helper: Verificar admin ──────────────────────────────────
-async function verifyAdmin(): Promise<{ authorized: boolean; error?: ActionResult }> {
+async function verifyAdmin(): Promise<void> {
   const session = await auth();
-  if (
-    !session?.user?.email ||
-    session.user.email.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()
-  ) {
-    return {
-      authorized: false,
-      error: { success: false, message: "Acesso negado.", error: "FORBIDDEN" },
-    };
+  if (!session?.user?.email || session.user.email !== process.env.ADMIN_EMAIL) {
+    throw new Error("UNAUTHORIZED");
   }
-  return { authorized: true };
+}
+
+function actionError(error: unknown): ActionResult {
+  if (error instanceof Error && error.message === "UNAUTHORIZED") {
+    return { success: false, message: "Acesso negado.", error: "UNAUTHORIZED" };
+  }
+  return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
 }
 
 // ── Adicionar item à galeria ─────────────────────────────────
 export async function addGalleryItemAction(data: unknown): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     const parsed = galleryItemSchema.safeParse(data);
     if (!parsed.success) {
@@ -49,20 +48,19 @@ export async function addGalleryItemAction(data: unknown): Promise<ActionResult>
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
-    revalidatePath("/api/schedules/public");
+    revalidatePath("/");
 
     return { success: true, message: "Trabalho adicionado à galeria!" };
   } catch (error) {
     console.error("[Action] Erro ao adicionar item:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
 
 // ── Remover item da galeria ──────────────────────────────────
 export async function removeGalleryItemAction(itemId: string): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     if (!z.string().uuid().safeParse(itemId).success) {
       return { success: false, message: "ID inválido.", error: "VALIDATION_ERROR" };
@@ -72,20 +70,22 @@ export async function removeGalleryItemAction(itemId: string): Promise<ActionRes
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
-    revalidatePath("/api/schedules/public");
+    revalidatePath("/");
 
     return { success: true, message: "Trabalho removido da galeria." };
   } catch (error) {
     console.error("[Action] Erro ao remover item:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
+
+// Nome explícito usado pelo painel e pela camada de autorização.
+export const deleteGalleryItemAction = removeGalleryItemAction;
 
 // ── Toggle featured ──────────────────────────────────────────
 export async function toggleFeaturedAction(itemId: string): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     if (!z.string().uuid().safeParse(itemId).success) {
       return { success: false, message: "ID inválido.", error: "VALIDATION_ERROR" };
@@ -108,7 +108,7 @@ export async function toggleFeaturedAction(itemId: string): Promise<ActionResult
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
-    revalidatePath("/api/schedules/public");
+    revalidatePath("/");
 
     return {
       success: true,
@@ -116,7 +116,7 @@ export async function toggleFeaturedAction(itemId: string): Promise<ActionResult
     };
   } catch (error) {
     console.error("[Action] Erro ao toggle featured:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
 
@@ -126,8 +126,7 @@ export async function updateGalleryItemAction(
   data: unknown
 ): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     if (!z.string().uuid().safeParse(itemId).success) {
       return { success: false, message: "ID inválido.", error: "VALIDATION_ERROR" };
@@ -149,11 +148,11 @@ export async function updateGalleryItemAction(
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
-    revalidatePath("/api/schedules/public");
+    revalidatePath("/");
 
     return { success: true, message: "Item atualizado com sucesso!" };
   } catch (error) {
     console.error("[Action] Erro ao atualizar item:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }

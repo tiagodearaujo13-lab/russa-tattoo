@@ -1,7 +1,7 @@
 import { NextResponse } from "next/server";
 import { db } from "@/lib/db";
 import { scheduleSlots } from "@/lib/db/schema";
-import { gte } from "drizzle-orm";
+import { eq, gte, and } from "drizzle-orm";
 
 /**
  * GET /api/schedules/public
@@ -34,7 +34,12 @@ export async function GET() {
         status: scheduleSlots.status,
       })
       .from(scheduleSlots)
-      .where(gte(scheduleSlots.date, today))
+      .where(
+        and(
+          eq(scheduleSlots.status, "available"),
+          gte(scheduleSlots.date, today)
+        )
+      )
       .orderBy(scheduleSlots.date, scheduleSlots.timeStart);
 
     return NextResponse.json(

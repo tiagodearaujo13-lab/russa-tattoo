@@ -86,14 +86,24 @@ const placeholderItems = [
   },
 ];
 
-export default function GallerySection() {
+type GalleryItem = {
+  id: string;
+  title: string;
+  styleCategory: string;
+  imageUrl: string;
+  instagramPostUrl: string;
+  featured: boolean;
+};
+
+export default function GallerySection({ items = [] }: { items?: GalleryItem[] }) {
   const [activeCategory, setActiveCategory] = useState("Todos");
-  const [lightboxItem, setLightboxItem] = useState<(typeof placeholderItems)[0] | null>(null);
+  const [lightboxItem, setLightboxItem] = useState<GalleryItem | null>(null);
+  const displayItems = items.length > 0 ? items : placeholderItems;
 
   const filteredItems =
     activeCategory === "Todos"
-      ? placeholderItems
-      : placeholderItems.filter((item) => item.styleCategory === activeCategory);
+      ? displayItems
+      : displayItems.filter((item) => item.styleCategory === activeCategory);
 
   return (
     <section id="galeria" className="py-24 md:py-32 relative">
@@ -214,7 +224,7 @@ export default function GallerySection() {
             className="bg-white text-black font-semibold px-8 rounded-sm hover:scale-105 transition-transform"
           >
             <Link
-              href={process.env.NEXT_PUBLIC_STUDIO_INSTAGRAM || "https://www.instagram.com/russatatuadora/"}
+              href="https://www.instagram.com/russatatuadora/"
               target="_blank"
               rel="noopener noreferrer"
             >

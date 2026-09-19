@@ -9,6 +9,7 @@ import { CalendarDays, Clock, RefreshCw } from "lucide-react";
 import { format, isSameDay, parseISO } from "date-fns";
 import { pt } from "date-fns/locale";
 import BookingModal from "./BookingModal";
+import { getWhatsAppUrl } from "@/lib/constants/studio";
 
 type PublicSlot = {
   id: string;
@@ -150,6 +151,21 @@ export default function LiveCalendarWidget() {
               <p className="text-xs text-foreground/30 mt-3 text-center">
                 Atualizado às {format(lastUpdated, "HH:mm")}
               </p>
+            )}
+            {!isLoading && slots.length === 0 && (
+              <div className="mt-5 border-t border-white/5 pt-4 text-center">
+                <p className="text-xs leading-relaxed text-foreground/50">
+                  Sem vagas abertas para este período na agenda automática. Fale connosco pelo WhatsApp para lista de espera ou encaixes.
+                </p>
+                <a
+                  href={getWhatsAppUrl()}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="mt-3 inline-flex rounded-sm border border-white/30 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-black"
+                >
+                  Falar pelo WhatsApp
+                </a>
+              </div>
             )}
           </div>
 

@@ -1,8 +1,9 @@
 import Link from "next/link";
 import { Heart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
+import { STUDIO_CONFIG } from "@/lib/constants/studio";
 
-const instagramUrl = "https://www.instagram.com/russatatuadora/";
+const instagramUrl = STUDIO_CONFIG.instagram;
 const footerLinks = [
   ["#sobre", "Sobre"], ["#estilos", "Estilos"], ["#piercing", "Piercing"], ["#agenda", "Agenda"], ["#galeria", "Galeria"], ["#faq", "FAQ"], ["#contacto", "Contacto"],
 ];

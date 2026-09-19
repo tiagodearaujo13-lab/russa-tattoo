@@ -6,6 +6,7 @@ import { auth } from "@/lib/auth";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
+import { addDays, format, nextMonday } from "date-fns";
 
 // ── Tipos ────────────────────────────────────────────────────
 type ActionResult = {
@@ -28,25 +29,43 @@ const bulkCreateSchema = z.object({
 });
 
 // ── Helper: Verificar admin ──────────────────────────────────
-async function verifyAdmin(): Promise<{ authorized: boolean; error?: ActionResult }> {
+async function verifyAdmin(): Promise<void> {
   const session = await auth();
-  if (
-    !session?.user?.email ||
-    session.user.email.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()
-  ) {
-    return {
-      authorized: false,
-      error: { success: false, message: "Acesso negado.", error: "FORBIDDEN" },
-    };
+  if (!session?.user?.email || session.user.email !== process.env.ADMIN_EMAIL) {
+    throw new Error("UNAUTHORIZED");
   }
-  return { authorized: true };
+}
+
+function actionError(error: unknown): ActionResult {
+  if (error instanceof Error && error.message === "UNAUTHORIZED") {
+    return { success: false, message: "Acesso negado.", error: "UNAUTHORIZED" };
+  }
+  return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+}
+
+// ── Seed rápido para testes ──────────────────────────────────
+export async function seedTestSlotsAction(): Promise<ActionResult> {
+  try {
+    await verifyAdmin();
+    const monday = nextMonday(new Date());
+    const dates = [0, 2, 4].map((offset) => format(addDays(monday, offset), "yyyy-MM-dd"));
+    await db.insert(scheduleSlots).values(
+      dates.map((date) => ({ date, timeStart: "14:00", timeEnd: "15:00", status: "available" as const }))
+    );
+    revalidatePath("/admin/agenda");
+    revalidatePath("/");
+    revalidatePath("/api/schedules/public");
+    return { success: true, message: "3 horários de teste criados para a próxima semana." };
+  } catch (error) {
+    console.error("[Action] Erro ao semear slots:", error);
+    return actionError(error);
+  }
 }
 
 // ── Criar um slot ────────────────────────────────────────────
 export async function createSlotAction(data: unknown): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     const parsed = createSlotSchema.safeParse(data);
     if (!parsed.success) {
@@ -71,15 +90,14 @@ export async function createSlotAction(data: unknown): Promise<ActionResult> {
     return { success: true, message: "Horário criado com sucesso!" };
   } catch (error) {
     console.error("[Action] Erro ao criar slot:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
 
 // ── Criar slots em lote ──────────────────────────────────────
 export async function bulkCreateSlotsAction(data: unknown): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     const parsed = bulkCreateSchema.safeParse(data);
     if (!parsed.success) {
@@ -109,7 +127,7 @@ export async function bulkCreateSlotsAction(data: unknown): Promise<ActionResult
     };
   } catch (error) {
     console.error("[Action] Erro ao criar slots em lote:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
 
@@ -119,8 +137,7 @@ export async function updateSlotStatusAction(
   status: "available" | "blocked"
 ): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     if (!z.string().uuid().safeParse(slotId).success) {
       return { success: false, message: "ID do slot inválido.", error: "VALIDATION_ERROR" };
@@ -141,15 +158,14 @@ export async function updateSlotStatusAction(
     };
   } catch (error) {
     console.error("[Action] Erro ao atualizar slot:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }
 
 // ── Deletar um slot ──────────────────────────────────────────
 export async function deleteSlotAction(slotId: string): Promise<ActionResult> {
   try {
-    const adminCheck = await verifyAdmin();
-    if (!adminCheck.authorized) return adminCheck.error!;
+    await verifyAdmin();
 
     if (!z.string().uuid().safeParse(slotId).success) {
       return { success: false, message: "ID do slot inválido.", error: "VALIDATION_ERROR" };
@@ -164,6 +180,6 @@ export async function deleteSlotAction(slotId: string): Promise<ActionResult> {
     return { success: true, message: "Horário removido com sucesso!" };
   } catch (error) {
     console.error("[Action] Erro ao deletar slot:", error);
-    return { success: false, message: "Erro interno.", error: "INTERNAL_ERROR" };
+    return actionError(error);
   }
 }

@@ -1,6 +1,7 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
 import { Calendar } from "@/components/ui/calendar";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
@@ -27,6 +28,7 @@ import {
   bulkCreateSlotsAction,
   updateSlotStatusAction,
   deleteSlotAction,
+  seedTestSlotsAction,
 } from "@/server/actions/slots.actions";
 import { format, isSameDay, parseISO } from "date-fns";
 import { pt } from "date-fns/locale";
@@ -46,6 +48,7 @@ type SlotManagerCalendarProps = {
 export default function SlotManagerCalendar({
   slots,
 }: SlotManagerCalendarProps) {
+  const router = useRouter();
   const [selectedDate, setSelectedDate] = useState<Date | undefined>(undefined);
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isBulkOpen, setIsBulkOpen] = useState(false);
@@ -63,19 +66,20 @@ export default function SlotManagerCalendar({
   const handleCreateSlot = async () => {
     if (!selectedDate) return;
     setIsLoading("create");
-    await createSlotAction({
+    const result = await createSlotAction({
       date: format(selectedDate, "yyyy-MM-dd"),
       timeStart: newSlot.timeStart,
       timeEnd: newSlot.timeEnd,
     });
     setIsLoading(null);
     setIsCreateOpen(false);
+    if (result.success) router.refresh();
   };
 
   const handleBulkCreate = async () => {
     if (bulkDates.length === 0) return;
     setIsLoading("bulk");
-    await bulkCreateSlotsAction({
+    const result = await bulkCreateSlotsAction({
       dates: bulkDates.map((d) => format(d, "yyyy-MM-dd")),
       timeStart: bulkTimes.timeStart,
       timeEnd: bulkTimes.timeEnd,
@@ -83,19 +87,22 @@ export default function SlotManagerCalendar({
     setIsLoading(null);
     setIsBulkOpen(false);
     setBulkDates([]);
+    if (result.success) router.refresh();
   };
 
   const handleToggleStatus = async (slotId: string, currentStatus: string) => {
     setIsLoading(slotId);
     const newStatus = currentStatus === "blocked" ? "available" : "blocked";
-    await updateSlotStatusAction(slotId, newStatus);
+    const result = await updateSlotStatusAction(slotId, newStatus);
     setIsLoading(null);
+    if (result.success) router.refresh();
   };
 
   const handleDelete = async (slotId: string) => {
     setIsLoading(slotId);
-    await deleteSlotAction(slotId);
+    const result = await deleteSlotAction(slotId);
     setIsLoading(null);
+    if (result.success) router.refresh();
   };
 
   const statusConfig = {
@@ -121,6 +128,20 @@ export default function SlotManagerCalendar({
         />
 
         {/* Bulk Create Button */}
+        <Button
+          variant="outline"
+          onClick={async () => {
+            setIsLoading("seed");
+            const result = await seedTestSlotsAction();
+            setIsLoading(null);
+            if (result.success) router.refresh();
+          }}
+          disabled={isLoading === "seed"}
+          className="w-full border-white/30 text-white hover:bg-white/10"
+        >
+          {isLoading === "seed" ? <Loader2 className="w-4 h-4 mr-2 animate-spin" /> : <CalendarPlus className="w-4 h-4 mr-2" />}
+          Semear 3 horários de teste
+        </Button>
         <Dialog open={isBulkOpen} onOpenChange={setIsBulkOpen}>
           <DialogTrigger asChild>
             <Button

@@ -1,6 +1,9 @@
 "use client";
 
 import { useState } from "react";
+import { useRouter } from "next/navigation";
+import { UploadButton } from "@uploadthing/react";
+import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
@@ -35,6 +38,7 @@ import {
   removeGalleryItemAction,
   toggleFeaturedAction,
 } from "@/server/actions/gallery.actions";
+import { STUDIO_CONFIG } from "@/lib/constants/studio";
 
 type GalleryItem = {
   id: string;
@@ -50,6 +54,7 @@ type GalleryUploaderProps = {
 };
 
 export default function GalleryUploader({ items }: GalleryUploaderProps) {
+  const router = useRouter();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<string | null>(null);
   const [formData, setFormData] = useState({
@@ -62,7 +67,12 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
 
   const handleCreate = async () => {
     setIsLoading("create");
-    const result = await addGalleryItemAction(formData);
+    const result = await addGalleryItemAction({
+      ...formData,
+      title: formData.title.trim() || "Trabalho Russa Tattoo",
+      styleCategory: formData.styleCategory || "Outro",
+      instagramPostUrl: formData.instagramPostUrl.trim() || STUDIO_CONFIG.instagram,
+    });
     if (result.success) {
       setIsCreateOpen(false);
       setFormData({
@@ -72,20 +82,23 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
         instagramPostUrl: "",
         featured: false,
       });
+      router.refresh();
     }
     setIsLoading(null);
   };
 
   const handleRemove = async (id: string) => {
     setIsLoading(id);
-    await removeGalleryItemAction(id);
+    const result = await removeGalleryItemAction(id);
     setIsLoading(null);
+    if (result.success) router.refresh();
   };
 
   const handleToggleFeatured = async (id: string) => {
     setIsLoading(`feat-${id}`);
-    await toggleFeaturedAction(id);
+    const result = await toggleFeaturedAction(id);
     setIsLoading(null);
+    if (result.success) router.refresh();
   };
 
   return (
@@ -110,7 +123,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-foreground/70">Título</Label>
+                <Label className="text-foreground/70">Título (opcional)</Label>
                 <Input
                   placeholder="Nome do trabalho"
                   value={formData.title}
@@ -122,7 +135,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-foreground/70">Categoria</Label>
+                <Label className="text-foreground/70">Categoria (opcional)</Label>
                 <Select
                   value={formData.styleCategory}
                   onValueChange={(value) =>
@@ -153,13 +166,23 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                   className="bg-white/5 border-white/10"
                 />
                 <p className="text-xs text-foreground/30">
-                  Cole a URL da imagem carregada via UploadThing ou Unsplash.
+                  Envie pela área segura ou cole uma URL externa.
                 </p>
+                <UploadButton<OurFileRouter, "galleryImage">
+                  endpoint="galleryImage"
+                  onClientUploadComplete={(files) => {
+                    const url = files?.[0]?.ufsUrl || files?.[0]?.url;
+                    if (url) setFormData((prev) => ({ ...prev, imageUrl: url }));
+                  }}
+                  onUploadError={(error) => console.error("[Gallery] Upload falhou:", error)}
+                  appearance={{ button: "bg-white text-black text-xs", allowedContent: "text-xs text-white/50" }}
+                  content={{ button: "Enviar foto" }}
+                />
               </div>
 
               <div className="space-y-2">
                 <Label className="text-foreground/70 flex items-center gap-1.5">
-                  <Camera className="w-3.5 h-3.5" /> URL do Post Instagram
+                  <Camera className="w-3.5 h-3.5" /> URL do Post Instagram (opcional)
                 </Label>
                 <Input
                   placeholder="https://instagram.com/p/..."
@@ -196,10 +219,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                 onClick={handleCreate}
                 disabled={
                   isLoading === "create" ||
-                  !formData.title ||
-                  !formData.styleCategory ||
-                  !formData.imageUrl ||
-                  !formData.instagramPostUrl
+                  !formData.imageUrl
                 }
                 className="w-full border border-white bg-transparent text-white hover:bg-white hover:text-black"
               >
