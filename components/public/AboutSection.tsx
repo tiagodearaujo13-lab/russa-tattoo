@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Award, Clock, Heart, Users } from "lucide-react";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const stats = [
   { icon: Clock, value: "8+", label: "Anos de Experiência" },
@@ -19,13 +20,7 @@ export default function AboutSection() {
       <div className="container mx-auto px-4 max-w-7xl">
         <div className="grid lg:grid-cols-2 gap-16 items-center">
           {/* Image */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
-            className="relative"
-          >
+          <ScrollReveal direction="left" className="relative">
             <div className="relative rounded-sm overflow-hidden aspect-[4/5]">
               <img
                 src="https://images.unsplash.com/photo-1590246814883-57835158a1d3?auto=format&fit=crop&w=1200&q=85"
@@ -45,15 +40,10 @@ export default function AboutSection() {
               <p className="font-display text-3xl text-white">8+</p>
               <p className="text-sm text-foreground/60">Anos de Arte</p>
             </motion.div>
-          </motion.div>
+          </ScrollReveal>
 
           {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true, margin: "-100px" }}
-            transition={{ duration: 0.7 }}
-          >
+          <ScrollReveal direction="right">
             <span className="text-white text-sm font-semibold tracking-widest uppercase">
               Sobre
             </span>
@@ -88,7 +78,7 @@ export default function AboutSection() {
                   whileInView={{ opacity: 1, y: 0 }}
                   viewport={{ once: true }}
                   transition={{ delay: 0.1 * index, duration: 0.5 }}
-                  className="glass rounded-sm p-4 text-center group hover:border-white/15 transition-all duration-300"
+                  className="group rounded-sm border border-white/10 bg-[#0a0a0a] p-4 text-center transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]"
                 >
                   <stat.icon className="w-5 h-5 text-white mx-auto mb-2 group-hover:scale-110 transition-transform" />
                   <p className="font-display text-2xl text-foreground">
@@ -100,7 +90,7 @@ export default function AboutSection() {
                 </motion.div>
               ))}
             </div>
-          </motion.div>
+          </ScrollReveal>
         </div>
       </div>
     </section>

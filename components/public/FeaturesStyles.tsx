@@ -2,6 +2,7 @@
 
 import { motion } from "framer-motion";
 import { Compass, Droplets, Feather, Hexagon, Minimize2, Skull } from "lucide-react";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const styles = [
   { icon: Compass, name: "Old School", image: "https://images.unsplash.com/photo-1590246814883-57c511c5c5d0?q=80&w=600&auto=format&fit=crop" },
@@ -23,14 +24,14 @@ export default function FeaturesStyles() {
         </motion.div>
         <div className="grid grid-cols-2 gap-px border border-white/10 bg-white/10 md:grid-cols-3">
           {styles.map((style, index) => (
-            <motion.article key={style.name} initial={{ opacity: 0 }} whileInView={{ opacity: 1 }} viewport={{ once: true }} transition={{ delay: index * 0.08 }} className="group relative aspect-square overflow-hidden bg-black">
+            <ScrollReveal key={style.name} direction={index % 3 === 0 ? "left" : index % 3 === 1 ? "bottom" : "right"} delay={index * 80} className="group relative aspect-square overflow-hidden border border-white/10 bg-[#0a0a0a] transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
               <img src={style.image} alt={`Tatuagem ${style.name}`} className="h-full w-full object-cover grayscale opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80" />
               <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
               <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
                 <style.icon className="mb-3 h-5 w-5 text-white" />
                 <h3 className="font-display text-2xl lowercase text-white md:text-3xl">{style.name}</h3>
               </div>
-            </motion.article>
+            </ScrollReveal>
           ))}
         </div>
       </div>

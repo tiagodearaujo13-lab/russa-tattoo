@@ -1,5 +1,4 @@
 import Link from "next/link";
-import { Heart } from "lucide-react";
 import { Separator } from "@/components/ui/separator";
 import { STUDIO_CONFIG } from "@/lib/constants/studio";
 
@@ -22,7 +21,9 @@ export default function Footer() {
         <Link href={instagramUrl} target="_blank" rel="noopener noreferrer" aria-label="Instagram" className="border border-white/20 p-3 transition-colors hover:bg-white hover:[&>svg]:fill-black"><InstagramMark /></Link>
       </div>
       <Separator className="my-8 bg-white/10" />
-      <div className="flex flex-col items-center justify-between gap-3 font-sans text-[10px] uppercase tracking-widest text-zinc-500 md:flex-row"><p>© {year} Russa Tattoo Studio.</p><p className="flex items-center gap-1">Feito com <Heart className="h-3 w-3" /> no Algarve</p><p>RGPD / LGPD</p></div>
+      <div className="flex flex-col items-center justify-between gap-3 font-sans text-[10px] uppercase tracking-widest text-zinc-500 md:flex-row"><p>© {year} Russa Tattoo Studio.</p><p className="text-xs tracking-[0.25em] uppercase text-zinc-500 font-light text-center">
+  © 2026 RUSSA TATTOO STUDIO
+</p><p>RGPD / LGPD</p></div>
     </div>
   </footer>;
 }

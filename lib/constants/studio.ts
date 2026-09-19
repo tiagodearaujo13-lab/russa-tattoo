@@ -16,7 +16,7 @@ export const STUDIO_CONFIG = {
   },
 } as const;
 
-export function getWhatsAppUrl(message = STUDIO_CONFIG.whatsappMessage) {
+export function getWhatsAppUrl(message: string = STUDIO_CONFIG.whatsappMessage) {
   const number = STUDIO_CONFIG.whatsappNumber.replace(/[^0-9]/g, "");
   return `https://wa.me/${number}?text=${encodeURIComponent(message)}`;
 }

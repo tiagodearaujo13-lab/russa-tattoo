@@ -4,6 +4,7 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { ChevronDown } from "lucide-react";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 const actionClass = "rounded-sm border border-white bg-transparent px-8 py-3 text-xs font-semibold uppercase tracking-widest text-white transition-all hover:bg-white hover:text-black";
 
@@ -17,12 +18,20 @@ export default function HeroSection() {
 
       <div className="relative z-10 mx-auto max-w-5xl px-4 text-center">
         <motion.p initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 0.8 }} className="mb-8 font-sans text-xs font-light uppercase tracking-[0.35em] text-zinc-300">Algarve · Portugal</motion.p>
-        <motion.h1 initial={{ opacity: 0, y: 24 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.15 }} className="font-display text-6xl lowercase leading-none text-white sm:text-8xl md:text-9xl">tattoo<br />studio</motion.h1>
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.3 }} className="mx-auto mb-10 mt-8 max-w-xl font-sans text-sm font-light leading-relaxed text-zinc-300 md:text-base">Tatuagem e piercing pensados para a sua pele. Traço, matéria e identidade em cada peça.</motion.p>
-        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.8, delay: 0.45 }} className="flex flex-col items-center justify-center gap-3 sm:flex-row">
-          <Button asChild className={actionClass}><Link href="#agenda">Agendar sessão</Link></Button>
-          <Button asChild variant="outline" className={actionClass}><Link href="#galeria">Ver portfólio</Link></Button>
-        </motion.div>
+        <ScrollReveal direction="bottom" delay={100}>
+          <h1 className="font-display text-6xl lowercase leading-none text-white sm:text-8xl md:text-9xl">tattoo<br />studio</h1>
+        </ScrollReveal>
+        <ScrollReveal direction="scale" delay={220}>
+          <p className="mx-auto mb-10 mt-8 max-w-xl font-sans text-sm font-light leading-relaxed text-zinc-300 md:text-base">Tatuagem e piercing pensados para a sua pele. Traço, matéria e identidade em cada peça.</p>
+        </ScrollReveal>
+        <div className="flex flex-col items-center justify-center gap-3 sm:flex-row">
+          <ScrollReveal direction="bottom" delay={340}>
+            <Button asChild className={actionClass}><Link href="#agenda">Agendar sessão</Link></Button>
+          </ScrollReveal>
+          <ScrollReveal direction="bottom" delay={430}>
+            <Button asChild variant="outline" className={actionClass}><Link href="#galeria">Ver portfólio</Link></Button>
+          </ScrollReveal>
+        </div>
       </div>
 
       <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.2 }} className="absolute bottom-8 left-1/2 z-10 -translate-x-1/2">

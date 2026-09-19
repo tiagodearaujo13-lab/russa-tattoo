@@ -10,6 +10,7 @@ import { format, isSameDay, parseISO } from "date-fns";
 import { pt } from "date-fns/locale";
 import BookingModal from "./BookingModal";
 import { getWhatsAppUrl } from "@/lib/constants/studio";
+import ScrollReveal from "@/components/ui/ScrollReveal";
 
 type PublicSlot = {
   id: string;
@@ -109,15 +110,9 @@ export default function LiveCalendarWidget() {
           </p>
         </motion.div>
 
-        <motion.div
-          initial={{ opacity: 0, y: 30 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.7 }}
-          className="grid md:grid-cols-[auto_1fr] gap-8 max-w-4xl mx-auto"
-        >
+        <ScrollReveal direction="bottom" className="grid md:grid-cols-[auto_1fr] gap-8 max-w-4xl mx-auto">
           {/* Calendar */}
-          <div className="glass rounded-2xl p-6">
+          <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] p-6 transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 text-sm text-foreground/60">
                 <CalendarDays className="w-4 h-4 text-white" />
@@ -170,7 +165,7 @@ export default function LiveCalendarWidget() {
           </div>
 
           {/* Slots List */}
-          <div className="glass rounded-2xl p-6">
+          <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] p-6 transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
             <div className="flex items-center gap-2 mb-6 text-sm text-foreground/60">
               <Clock className="w-4 h-4 text-white" />
               {selectedDate ? (
@@ -242,7 +237,7 @@ export default function LiveCalendarWidget() {
               ))}
             </div>
           </div>
-        </motion.div>
+        </ScrollReveal>
       </div>
 
       {/* Booking Modal */}
