@@ -157,6 +157,7 @@ export async function requestAppointmentAction(
     }
 
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
     revalidatePath("/admin");
 
     return {
@@ -240,6 +241,7 @@ export async function confirmAppointmentAction(
 
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Agendamento confirmado com sucesso!" };
   } catch (error) {
@@ -305,6 +307,7 @@ export async function cancelAppointmentAction(
 
     revalidatePath("/admin");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Agendamento cancelado e horário liberado." };
   } catch (error) {

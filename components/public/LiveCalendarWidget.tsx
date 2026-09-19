@@ -192,7 +192,7 @@ export default function LiveCalendarWidget() {
                       animate={{ opacity: 1, x: 0 }}
                       onClick={() => handleSlotClick(slot)}
                       disabled={slot.status !== "available"}
-                      className={`w-full flex items-center justify-between p-4 rounded-sm border transition-all duration-200 ${
+                      className={`slot-card w-full flex items-center justify-between p-4 rounded-sm border transition-all duration-200 ${
                         slot.status === "available"
                           ? "border-status-available/20 hover:border-status-available/50 hover:bg-status-available/5 cursor-pointer"
                           : "border-white/5 opacity-50 cursor-not-allowed"

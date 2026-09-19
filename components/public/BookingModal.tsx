@@ -104,7 +104,7 @@ export default function BookingModal({
         newErrors.clientEmail = "E-mail inválido.";
       if (
         !formData.clientWhatsapp.trim() ||
-        !/^\+?[1-9]\d{6,14}$/.test(formData.clientWhatsapp.replace(/\s/g, ""))
+        !/^(\+?[1-9]\d{1,14}|\d{9,15})$/.test(formData.clientWhatsapp.replace(/\s/g, ""))
       )
         newErrors.clientWhatsapp =
           "WhatsApp inválido. Use formato internacional (ex: +351912345678).";
@@ -185,13 +185,20 @@ export default function BookingModal({
     setResult(null);
   };
 
-  const handleClose = () => {
+  const handleOpenChange = (open: boolean) => {
+    if (open) return;
+
+    const hasEnteredData = Object.values(formData).some((value) => value.trim().length > 0);
+    if (hasEnteredData && !result && !window.confirm("Tem dados preenchidos. Deseja fechar e perder o progresso?")) {
+      return;
+    }
+
     resetForm();
     onClose();
   };
 
   return (
-    <Dialog open={isOpen} onOpenChange={handleClose}>
+    <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="glass border-white/10 max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
           <DialogTitle className="font-display text-2xl text-center">
@@ -250,6 +257,7 @@ export default function BookingModal({
                 </Label>
                 <Input
                   id="clientName"
+                  name="name"
                   placeholder="O seu nome"
                   value={formData.clientName}
                   onChange={(e) => updateField("clientName", e.target.value)}
@@ -266,6 +274,7 @@ export default function BookingModal({
                 </Label>
                 <Input
                   id="clientEmail"
+                  name="email"
                   type="email"
                   placeholder="seu@email.com"
                   value={formData.clientEmail}
@@ -283,6 +292,7 @@ export default function BookingModal({
                 </Label>
                 <Input
                   id="clientWhatsapp"
+                  name="whatsapp"
                   placeholder="+351 912 345 678"
                   value={formData.clientWhatsapp}
                   onChange={(e) => updateField("clientWhatsapp", e.target.value)}
@@ -334,6 +344,7 @@ export default function BookingModal({
                 </Label>
                 <Input
                   id="bodyLocation"
+                  name="location"
                   placeholder="Ex: Antebraço direito"
                   value={formData.bodyLocation}
                   onChange={(e) => updateField("bodyLocation", e.target.value)}
@@ -350,6 +361,7 @@ export default function BookingModal({
                 </Label>
                 <Input
                   id="approxSizeCm"
+                  name="size"
                   placeholder="Ex: 10cm x 15cm"
                   value={formData.approxSizeCm}
                   onChange={(e) => updateField("approxSizeCm", e.target.value)}
@@ -488,6 +500,7 @@ export default function BookingModal({
               </Button>
             ) : (
               <Button
+                type="submit"
                 onClick={handleSubmit}
                 disabled={isSubmitting}
                 className="border border-white bg-transparent text-white font-semibold hover:bg-white hover:text-black min-w-[140px]"

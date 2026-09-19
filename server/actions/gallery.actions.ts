@@ -49,6 +49,7 @@ export async function addGalleryItemAction(data: unknown): Promise<ActionResult>
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Trabalho adicionado à galeria!" };
   } catch (error) {
@@ -71,6 +72,7 @@ export async function removeGalleryItemAction(itemId: string): Promise<ActionRes
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Trabalho removido da galeria." };
   } catch (error) {
@@ -106,6 +108,7 @@ export async function toggleFeaturedAction(itemId: string): Promise<ActionResult
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return {
       success: true,
@@ -146,6 +149,7 @@ export async function updateGalleryItemAction(
 
     revalidatePath("/admin/galeria");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Item atualizado com sucesso!" };
   } catch (error) {

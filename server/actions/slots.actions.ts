@@ -66,6 +66,7 @@ export async function createSlotAction(data: unknown): Promise<ActionResult> {
 
     revalidatePath("/admin/agenda");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Horário criado com sucesso!" };
   } catch (error) {
@@ -100,6 +101,7 @@ export async function bulkCreateSlotsAction(data: unknown): Promise<ActionResult
 
     revalidatePath("/admin/agenda");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return {
       success: true,
@@ -131,6 +133,7 @@ export async function updateSlotStatusAction(
 
     revalidatePath("/admin/agenda");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return {
       success: true,
@@ -156,6 +159,7 @@ export async function deleteSlotAction(slotId: string): Promise<ActionResult> {
 
     revalidatePath("/admin/agenda");
     revalidatePath("/");
+    revalidatePath("/api/schedules/public");
 
     return { success: true, message: "Horário removido com sucesso!" };
   } catch (error) {

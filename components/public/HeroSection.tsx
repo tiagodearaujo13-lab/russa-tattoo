@@ -11,7 +11,7 @@ export default function HeroSection() {
   return (
     <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-black">
       <div className="absolute inset-0">
-        <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1611501275019-9b5cda994e8d?q=80&w=2070&auto=format&fit=crop')" }} />
+        <div className="absolute inset-0 bg-cover bg-center grayscale" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1920&q=85')" }} />
         <div className="absolute inset-0 bg-[linear-gradient(rgba(0,0,0,0.7),rgba(0,0,0,0.85))]" />
       </div>
 

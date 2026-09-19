@@ -28,7 +28,7 @@ export default function AboutSection() {
           >
             <div className="relative rounded-sm overflow-hidden aspect-[4/5]">
               <img
-                src="https://images.unsplash.com/photo-1598371839696-5c5bb1c12015?q=80&w=1000&auto=format&fit=crop"
+                src="https://images.unsplash.com/photo-1590246814883-57835158a1d3?auto=format&fit=crop&w=1200&q=85"
                 alt="Russa Tattoo Artist no estúdio"
                 className="w-full h-full object-cover"
               />

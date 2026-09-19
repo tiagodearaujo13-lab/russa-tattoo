@@ -45,7 +45,7 @@ export const appointmentSchema = z.object({
     .min(8, { message: "Número de WhatsApp inválido." })
     .max(30, { message: "Número de WhatsApp muito longo." })
     .regex(
-      /^\+?[1-9]\d{6,14}$/,
+      /^(\+?[1-9]\d{1,14}|\d{9,15})$/,
       {
         message:
           "Formato de WhatsApp inválido. Use o formato internacional (ex: +351912345678 ou +5511999887766).",

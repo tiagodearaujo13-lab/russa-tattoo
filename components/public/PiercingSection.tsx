@@ -17,8 +17,12 @@ const piercingTypes = [
 export default function PiercingSection() {
   return (
     <section id="piercing" className="py-24 md:py-32 relative overflow-hidden">
+      <div
+        className="absolute inset-0 bg-cover bg-center grayscale opacity-10"
+        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85')" }}
+      />
       {/* Monochrome accent background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-transparent via-white/3 to-transparent" />
+      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
 
       <div className="container mx-auto px-4 max-w-7xl relative">
         <div className="grid lg:grid-cols-2 gap-16 items-center">

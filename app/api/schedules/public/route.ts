@@ -16,7 +16,14 @@ export const revalidate = 60;
 
 export async function GET() {
   try {
-    const today = new Date().toISOString().split("T")[0];
+    // Os slots são datas civis do estúdio; não converter para UTC para evitar
+    // que a mudança de fuso faça um dia aparecer como o dia anterior.
+    const today = new Intl.DateTimeFormat("en-CA", {
+      timeZone: "Europe/Lisbon",
+      year: "numeric",
+      month: "2-digit",
+      day: "2-digit",
+    }).format(new Date());
 
     const slots = await db
       .select({
