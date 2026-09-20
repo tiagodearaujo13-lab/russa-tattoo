@@ -4,7 +4,7 @@ export const STUDIO_CONFIG = {
     process.env.NEXT_PUBLIC_STUDIO_INSTAGRAM ||
     "https://www.instagram.com/russatatuadora/",
   whatsappNumber: process.env.NEXT_PUBLIC_STUDIO_WHATSAPP || "+351900000000",
-  whatsappMessage: "Olá Russa! Gostaria de tirar uma dúvida sobre agendamento.",
+  whatsappMessage: "Olá Russa! Gostaria de saber mais informações sobre as sessões.",
   address: {
     street: process.env.NEXT_PUBLIC_STUDIO_ADDRESS || "Algarve, Portugal",
     city: "Algarve",

@@ -1,38 +1,138 @@
 "use client";
 
+import Image from "next/image";
 import { motion } from "framer-motion";
-import { Compass, Droplets, Feather, Hexagon, Minimize2, Skull } from "lucide-react";
+import { Flower2, Eye, PenTool, Shapes, Moon, Sparkles } from "lucide-react";
 import ScrollReveal from "@/components/ui/ScrollReveal";
+import { useLanguage } from "./LanguageProvider";
 
-const styles = [
-  { icon: Compass, name: "Old School", image: "https://images.unsplash.com/photo-1590246814883-57c511c5c5d0?q=80&w=600&auto=format&fit=crop" },
-  { icon: Feather, name: "Realistic", image: "https://images.unsplash.com/photo-1581783898382-80983a5e3e1e?q=80&w=600&auto=format&fit=crop" },
-  { icon: Hexagon, name: "Japanese", image: "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=600&auto=format&fit=crop" },
-  { icon: Droplets, name: "Watercolor", image: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?q=80&w=600&auto=format&fit=crop" },
-  { icon: Skull, name: "Maori", image: "https://images.unsplash.com/photo-1568515045052-f9a854d70bfd?q=80&w=600&auto=format&fit=crop" },
-  { icon: Minimize2, name: "Minimalist", image: "https://images.unsplash.com/photo-1604431696980-07e518647610?q=80&w=600&auto=format&fit=crop" },
+const fineLineStyles = [
+  {
+    icon: Flower2,
+    key: "styles.fineLineBotanic",
+    descKey: "styles.fineLineBotanicDesc",
+    image: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    icon: Eye,
+    key: "styles.microRealism",
+    descKey: "styles.microRealismDesc",
+    image: "https://images.unsplash.com/photo-1542856391-010fb87dcfed?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    icon: PenTool,
+    key: "styles.lettering",
+    descKey: "styles.letteringDesc",
+    image: "https://images.unsplash.com/photo-1560707303-4e980ce876ad?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    icon: Shapes,
+    key: "styles.geometric",
+    descKey: "styles.geometricDesc",
+    image: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    icon: Moon,
+    key: "styles.softBlackwork",
+    descKey: "styles.softBlackworkDesc",
+    image: "https://images.unsplash.com/photo-1565058379802-bbe93b2f703a?q=80&w=800&auto=format&fit=crop",
+  },
+  {
+    icon: Sparkles,
+    key: "styles.ornamental",
+    descKey: "styles.ornamentalDesc",
+    image: "https://images.unsplash.com/photo-1562962230-16e4623d36e6?q=80&w=800&auto=format&fit=crop",
+  },
 ];
 
 export default function FeaturesStyles() {
+  const { t } = useLanguage();
+
   return (
-    <section id="estilos" className="bg-black py-24 md:py-32">
-      <div className="container mx-auto max-w-7xl px-4">
-        <motion.div initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} className="mb-14 text-center">
-          <p className="font-sans text-xs font-light uppercase tracking-[0.3em] text-zinc-400">Especialidades</p>
-          <h2 className="mt-4 font-display text-4xl lowercase text-white md:text-6xl">art tattoo</h2>
-          <p className="mx-auto mt-5 max-w-xl font-sans text-sm font-light leading-relaxed text-zinc-300">Seis linguagens, uma assinatura. Escolha a direção para a sua próxima peça.</p>
+    <section
+      id="estilos"
+      className="section-light relative overflow-hidden bg-[#faf9f6] py-28 text-zinc-900 md:py-36 border-t border-black/5"
+    >
+      <div className="container mx-auto max-w-7xl px-6 md:px-12">
+        {/* Header */}
+        <motion.div
+          initial={{ opacity: 0, y: 16 }}
+          whileInView={{ opacity: 1, y: 0 }}
+          viewport={{ once: true }}
+          className="mb-16 max-w-2xl"
+        >
+          <div className="flex items-center gap-3">
+            <span className="h-[1px] w-6 bg-zinc-400" />
+            <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-medium">
+              {t("styles.eyebrow")}
+            </p>
+          </div>
+
+          <h2 className="mt-4 font-edo text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.05em] text-zinc-950 leading-[1.05]">
+            {t("styles.title")}
+          </h2>
+
+          <div className="mt-4 h-[1.5px] w-12 bg-zinc-900" />
+
+          <p className="mt-5 max-w-xl font-times text-base sm:text-lg font-normal leading-relaxed text-zinc-600">
+            {t("styles.support")}
+          </p>
         </motion.div>
-        <div className="grid grid-cols-2 gap-px border border-white/10 bg-white/10 md:grid-cols-3">
-          {styles.map((style, index) => (
-            <ScrollReveal key={style.name} direction={index % 3 === 0 ? "left" : index % 3 === 1 ? "bottom" : "right"} delay={index * 80} className="group relative aspect-square overflow-hidden border border-white/10 bg-[#0a0a0a] transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
-              <img src={style.image} alt={`Tatuagem ${style.name}`} className="h-full w-full object-cover grayscale opacity-60 transition-all duration-700 group-hover:scale-105 group-hover:opacity-80" />
-              <div className="absolute inset-0 bg-gradient-to-t from-black via-black/20 to-transparent" />
-              <div className="absolute inset-x-0 bottom-0 p-5 md:p-7">
-                <style.icon className="mb-3 h-5 w-5 text-white" />
-                <h3 className="font-display text-2xl lowercase text-white md:text-3xl">{style.name}</h3>
-              </div>
-            </ScrollReveal>
-          ))}
+
+        {/* Styles Grid: 3 columns x 2 rows */}
+        <div className="grid grid-cols-1 border-l border-t border-black/10 sm:grid-cols-2 lg:grid-cols-3">
+          {fineLineStyles.map((style, index) => {
+            const Icon = style.icon;
+            return (
+              <ScrollReveal
+                key={style.key}
+                direction="bottom"
+                delay={index * 70}
+                className="group relative flex flex-col justify-between overflow-hidden border-b border-r border-black/10 bg-white p-7 transition-all duration-500 hover:shadow-[0_16px_40px_rgba(0,0,0,0.06)]"
+              >
+                {/* Background image on subtle hover */}
+                <div className="relative mb-6 aspect-[16/10] w-full overflow-hidden rounded-xs bg-zinc-100">
+                  <Image
+                    src={style.image}
+                    alt={`Estilo ${t(style.key)}`}
+                    fill
+                    sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, 33vw"
+                    className="object-cover grayscale contrast-110 brightness-95 transition-all duration-700 group-hover:scale-105 group-hover:grayscale-0"
+                  />
+                  <div className="absolute inset-0 bg-gradient-to-t from-black/40 via-transparent to-transparent opacity-0 transition-opacity duration-300 group-hover:opacity-100" />
+                </div>
+
+                {/* Content */}
+                <div>
+                  <div className="mb-3 flex items-center justify-between">
+                    <div className="flex items-center gap-2 text-zinc-700">
+                      <Icon className="h-4 w-4" />
+                      <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-zinc-400 font-medium">
+                        0{index + 1}
+                      </span>
+                    </div>
+                  </div>
+
+                  <h3 className="font-edo text-xl sm:text-2xl font-normal text-zinc-950 tracking-[0.03em]">
+                    {t(style.key)}
+                  </h3>
+
+                  <p className="mt-2 font-times text-sm sm:text-base font-normal leading-relaxed text-zinc-600">
+                    {t(style.descKey)}
+                  </p>
+                </div>
+
+                <div className="mt-6 pt-4 border-t border-black/5 flex items-center justify-between">
+                  <span className="font-sans text-[9px] uppercase tracking-[0.2em] text-zinc-400 group-hover:text-zinc-950 transition-colors">
+                    Atelier Fine Line
+                  </span>
+                  <span className="font-sans text-sm text-zinc-400 transition-transform duration-300 group-hover:translate-x-1 group-hover:text-zinc-950">
+                    →
+                  </span>
+                </div>
+              </ScrollReveal>
+            );
+          })}
         </div>
       </div>
     </section>

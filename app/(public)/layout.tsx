@@ -1,21 +1,25 @@
 import type { Metadata } from "next";
 import Header from "@/components/public/Header";
 import Footer from "@/components/public/Footer";
+import LanguageProvider from "@/components/public/LanguageProvider";
+import CustomCursor from "@/components/public/CustomCursor";
 
 export const metadata: Metadata = {
   title: "Russa Tattoo Studio — Arte que Marca para Sempre | Algarve",
   description:
-    "Estúdio de tatuagem e piercing no Algarve, Portugal. Especialista em Fine Line, Blackwork e estilos minimalistas. Agende a sua sessão online.",
+    "Atelier Boutique de tatuagem e body piercing no Algarve, Portugal. Mais de 12 anos de experiência com especialidade em Fine Line, Botânica, Micro-Realismo e Lettering delicado. Agende a sua sessão.",
   keywords: [
     "tatuagem",
     "tattoo",
     "piercing",
     "algarve",
-    "faro",
     "fine line",
-    "blackwork",
+    "botânica",
+    "micro realismo",
+    "lettering",
     "minimalista",
-    "estúdio tatuagem portugal",
+    "estúdio tatuagem algarve",
+    "russa tattoo",
   ],
   openGraph: {
     title: "Russa Tattoo Studio",
@@ -31,10 +35,11 @@ export default function PublicLayout({
   children: React.ReactNode;
 }) {
   return (
-    <>
+    <LanguageProvider>
+      <CustomCursor />
       <Header />
       <main>{children}</main>
       <Footer />
-    </>
+    </LanguageProvider>
   );
 }

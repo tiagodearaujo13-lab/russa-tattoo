@@ -4,102 +4,22 @@ import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { Gem, Shield, Sparkles } from "lucide-react";
+import { useLanguage } from "./LanguageProvider";
 
 const piercingTypes = [
-  { name: "Orelha", description: "Lóbulo, hélix, tragus, daith, conch e industrial", price: "Desde 25€" },
-  { name: "Nariz", description: "Nostril, septum e bridge", price: "Desde 30€" },
-  { name: "Lábio", description: "Labret, medusa, snake bites e monroe", price: "Desde 30€" },
-  { name: "Sobrancelha", description: "Eyebrow piercing clássico e anti-eyebrow", price: "Desde 30€" },
-  { name: "Umbigo", description: "Navel piercing clássico e invertido", price: "Desde 35€" },
-  { name: "Microdermal", description: "Implantes subdérmicos em qualquer zona", price: "Desde 40€" },
+  { nameKey: "piercing.ear", descriptionKey: "piercing.earDescription", price: "Desde 25€" },
+  { nameKey: "piercing.nose", descriptionKey: "piercing.noseDescription", price: "Desde 30€" },
+  { nameKey: "piercing.lip", descriptionKey: "piercing.lipDescription", price: "Desde 30€" },
+  { nameKey: "piercing.brow", descriptionKey: "piercing.browDescription", price: "Desde 30€" },
+  { nameKey: "piercing.navel", descriptionKey: "piercing.navelDescription", price: "Desde 35€" },
+  { nameKey: "piercing.microdermal", descriptionKey: "piercing.microdermalDescription", price: "Desde 40€" },
 ];
 
 export default function PiercingSection() {
-  return (
-    <section id="piercing" className="py-24 md:py-32 relative overflow-hidden">
-      <div
-        className="absolute inset-0 bg-cover bg-center grayscale opacity-10"
-        style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85')" }}
-      />
-      {/* Monochrome accent background */}
-      <div className="absolute inset-0 bg-gradient-to-b from-black via-black/90 to-black" />
+  const { t } = useLanguage();
+  return <section id="piercing" className="relative overflow-hidden bg-[#0e0e0e] py-24 md:py-32"><div className="absolute inset-0 bg-cover bg-center grayscale opacity-10" style={{ backgroundImage: "url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85')" }} /><div className="absolute inset-0 bg-gradient-to-b from-[#0c0c0c] via-[#0c0c0c]/90 to-[#0c0c0c]" /><div className="container relative mx-auto max-w-7xl px-4 md:px-8"><div className="grid items-start gap-16 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24"><motion.div initial={{ opacity: 0, x: -40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }}><div className="mb-6 inline-flex min-h-11 items-center gap-3 border border-white/10 px-3 py-2 text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-300"><Gem className="h-4 w-4" /> {t("piercing.eyebrow")}</div><h2 className="font-edo text-3xl sm:text-4xl md:text-5xl uppercase leading-tight tracking-[0.08em] text-white">{t("piercing.title")}</h2><p className="mb-8 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-zinc-300">{t("piercing.support")}</p><div className="mb-10 flex flex-wrap gap-3"><span className="inline-flex min-h-11 items-center gap-2 border border-white/10 px-3 py-2 text-[10px] uppercase tracking-[0.14em] text-zinc-400"><Shield className="h-3.5 w-3.5 text-white" /> {t("piercing.titanium")}</span><span className="inline-flex min-h-11 items-center gap-2 border border-white/10 px-3 py-2 text-[10px] uppercase tracking-[0.14em] text-zinc-400"><Sparkles className="h-3.5 w-3.5 text-white" /> {t("piercing.sterile")}</span></div><Button asChild className="btn-dotwork-outline min-h-11"><Link href="#agenda">{t("piercing.book")}</Link></Button></motion.div><motion.div initial={{ opacity: 0, x: 40 }} whileInView={{ opacity: 1, x: 0 }} viewport={{ once: true }} transition={{ duration: 0.7 }} className="border-t border-white/[0.08]">{piercingTypes.map((piercing, index) => <motion.div key={piercing.nameKey} initial={{ opacity: 0, y: 20 }} whileInView={{ opacity: 1, y: 0 }} viewport={{ once: true }} transition={{ delay: 0.08 * index, duration: 0.4 }} className="group border-b border-white/[0.08] py-5"><div className="flex items-baseline gap-3"><h3 className="shrink-0 font-edo text-lg sm:text-xl uppercase tracking-[0.06em] text-white transition-colors group-hover:text-zinc-300">{t(piercing.nameKey)}</h3><span className="mb-1 h-px flex-1 border-b border-dotted border-white/25" /><span className="shrink-0 font-edo text-lg text-white">{languageAwarePrice(piercing.price, t("piercing.eyebrow"), t)}</span></div><p className="mt-2 max-w-md font-times text-sm leading-relaxed text-zinc-400">{t(piercing.descriptionKey)}</p></motion.div>)}</motion.div></div></div></section>;
+}
 
-      <div className="container mx-auto px-4 max-w-7xl relative">
-        <div className="grid lg:grid-cols-2 gap-16 items-center">
-          {/* Content */}
-          <motion.div
-            initial={{ opacity: 0, x: -40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-          >
-            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-sm bg-white/10 border border-white/20 text-white text-sm font-medium mb-6">
-              <Gem className="w-4 h-4" />
-              Piercing Profissional
-            </div>
-
-            <h2 className="font-display text-4xl md:text-5xl mb-6">
-              <span className="text-white">Piercing</span> com
-              <br />
-              Arte & Segurança
-            </h2>
-
-            <p className="text-foreground/60 leading-relaxed mb-8 max-w-lg">
-              Além da tatuagem, oferecemos serviços de piercing com jóias de
-              titânio grau implante e aço cirúrgico. Todo o procedimento é
-              realizado com materiais esterilizados e descartáveis.
-            </p>
-
-            <div className="flex items-center gap-6 mb-10">
-              <div className="flex items-center gap-2 text-sm text-foreground/50">
-                <Shield className="w-4 h-4 text-white" />
-                Materiais Esterilizados
-              </div>
-              <div className="flex items-center gap-2 text-sm text-foreground/50">
-                <Sparkles className="w-4 h-4 text-white" />
-                Jóias de Titânio
-              </div>
-            </div>
-
-            <Button
-              asChild
-              className="border border-white bg-transparent text-white hover:bg-white hover:text-black font-semibold px-8 rounded-sm transition-all hover:scale-105"
-            >
-              <Link href="#agenda">Agendar Piercing</Link>
-            </Button>
-          </motion.div>
-
-          {/* Piercing Types Grid */}
-          <motion.div
-            initial={{ opacity: 0, x: 40 }}
-            whileInView={{ opacity: 1, x: 0 }}
-            viewport={{ once: true }}
-            transition={{ duration: 0.7 }}
-            className="grid grid-cols-2 gap-4"
-          >
-            {piercingTypes.map((piercing, index) => (
-              <motion.div
-                key={piercing.name}
-                initial={{ opacity: 0, y: 20 }}
-                whileInView={{ opacity: 1, y: 0 }}
-                viewport={{ once: true }}
-                transition={{ delay: 0.08 * index, duration: 0.4 }}
-                className="glass rounded-sm p-5 group hover:border-white/20 transition-all duration-300 hover-lift"
-              >
-                <h3 className="font-display text-lg text-foreground group-hover:text-white transition-colors">
-                  {piercing.name}
-                </h3>
-                <p className="text-xs text-foreground/40 mt-1 mb-3 line-clamp-2">
-                  {piercing.description}
-                </p>
-                <span className="text-sm font-semibold text-white">
-                  {piercing.price}
-                </span>
-              </motion.div>
-            ))}
-          </motion.div>
-        </div>
-      </div>
-    </section>
-  );
+function languageAwarePrice(price: string, _label: string, t: (key: string) => string) {
+  return price.replace("Desde", t("language.priceFrom") === "language.priceFrom" ? "From" : t("language.priceFrom"));
 }

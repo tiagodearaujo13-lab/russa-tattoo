@@ -6,67 +6,70 @@ import { Button } from "@/components/ui/button";
 import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react";
 import InstagramIcon from "@/components/public/InstagramIcon";
 import { getWhatsAppUrl, STUDIO_CONFIG } from "@/lib/constants/studio";
-
-const contactInfo = [
-  {
-    icon: MapPin,
-    label: "Morada",
-    value: STUDIO_CONFIG.address.street,
-    href: STUDIO_CONFIG.address.googleMapsUrl,
-  },
-  {
-    icon: Clock,
-    label: "Horário",
-    value: "Seg–Sex: 10h–19h | Sáb: 10h–15h",
-    href: null,
-  },
-  {
-    icon: Phone,
-    label: "Telefone",
-    value: process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351 912 345 678",
-    href: `tel:${(process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351912345678").replace(/\s/g, "")}`,
-  },
-  {
-    icon: Mail,
-    label: "E-mail",
-    value: "contacto@russatattoo.pt",
-    href: "mailto:contacto@russatattoo.pt",
-  },
-];
+import { useLanguage } from "./LanguageProvider";
 
 export default function ContactSection() {
-  return (
-    <section id="contacto" className="py-24 md:py-32 relative overflow-hidden">
-      <div className="absolute inset-0 bg-gradient-to-t from-white/3 to-transparent" />
+  const { t } = useLanguage();
+  const contactInfo = [
+    {
+      icon: MapPin,
+      label: t("contact.address"),
+      value: STUDIO_CONFIG.address.street,
+      href: STUDIO_CONFIG.address.googleMapsUrl,
+    },
+    {
+      icon: Clock,
+      label: t("contact.hours"),
+      value: t("contact.schedule"),
+      href: null,
+    },
+    {
+      icon: Phone,
+      label: t("contact.phone"),
+      value: process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351 912 345 678",
+      href: `tel:${(process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351912345678").replace(/\s/g, "")}`,
+    },
+    {
+      icon: Mail,
+      label: t("contact.email"),
+      value: "contacto@russatattoo.pt",
+      href: "mailto:contacto@russatattoo.pt",
+    },
+  ];
 
-      <div className="container mx-auto px-4 max-w-7xl relative">
-        <div className="grid lg:grid-cols-2 gap-16">
-          {/* Contact Info */}
+  return (
+    <section id="contacto" className="relative overflow-hidden bg-[#0c0c0c] py-24 text-white md:py-32">
+      <div className="container relative mx-auto max-w-7xl px-4 md:px-8">
+        <div className="grid gap-16 lg:grid-cols-2 items-center">
+          {/* Informações de Contacto */}
           <motion.div
             initial={{ opacity: 0, x: -40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <span className="text-white text-sm font-semibold tracking-widest uppercase">
-              Contacto
+            <span className="font-edo text-xs uppercase tracking-[0.25em] text-zinc-400">
+              {t("contact.eyebrow")}
             </span>
-            <h2 className="font-display text-4xl md:text-5xl mt-3 mb-6">
-              Visite o Estúdio
+            <h2 className="font-edo mt-4 text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-white">
+              {t("contact.title")}
             </h2>
-            <p className="text-foreground/60 leading-relaxed mb-10 max-w-lg">
-              Estamos no coração do Algarve. Venha conhecer o espaço, conversar
-              sobre a sua ideia ou simplesmente tomar um café.
+            <div className="mt-4 h-[2px] w-12 bg-white" />
+            <p className="mb-10 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-zinc-300">
+              {t("contact.support")}
             </p>
 
-            <div className="space-y-6 mb-10">
+            <div className="mb-10 space-y-4">
               {contactInfo.map((info) => (
-                <div key={info.label} className="flex items-start gap-4">
-                  <div className="p-2.5 rounded-sm bg-white/10 text-white shrink-0">
-                    <info.icon className="w-5 h-5" />
+                <div
+                  key={info.label}
+                  className="flex items-start gap-4 border border-white/[0.08] p-4 bg-[#141414]/60"
+                >
+                  <div className="shrink-0 border border-white/10 p-2.5 text-white">
+                    <info.icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="text-xs text-foreground/40 uppercase tracking-wider mb-0.5">
+                    <p className="mb-1 font-edo text-xs uppercase tracking-[0.14em] text-zinc-400">
                       {info.label}
                     </p>
                     {info.href ? (
@@ -74,67 +77,57 @@ export default function ContactSection() {
                         href={info.href}
                         target={info.href.startsWith("http") ? "_blank" : undefined}
                         rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="text-foreground/80 hover:text-white transition-colors"
+                        className="font-times text-base sm:text-lg text-zinc-200 transition-colors hover:text-white"
                       >
                         {info.value}
                       </Link>
                     ) : (
-                      <p className="text-foreground/80">{info.value}</p>
+                      <p className="font-times text-base sm:text-lg text-zinc-200">
+                        {info.value}
+                      </p>
                     )}
                   </div>
                 </div>
               ))}
             </div>
 
-            {/* Social Buttons */}
             <div className="flex flex-wrap gap-3">
-              <Button
-                asChild
-                className="border border-white bg-transparent text-white font-semibold rounded-sm hover:bg-white hover:text-black"
-              >
-                <Link
-                  href={getWhatsAppUrl()}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <MessageCircle className="w-4 h-4 mr-2" />
-                  WhatsApp
+              <Button asChild className="btn-dotwork-outline min-h-11 font-edo tracking-[0.1em] text-xs">
+                <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                  <MessageCircle className="mr-2 h-4 w-4" />
+                  {t("contact.whatsapp")}
                 </Link>
               </Button>
-              <Button
-                asChild
-                className="border border-white bg-transparent text-white font-semibold rounded-sm hover:bg-white hover:text-black"
-              >
-                <Link
-                  href={STUDIO_CONFIG.instagram}
-                  target="_blank"
-                  rel="noopener noreferrer"
-                >
-                  <InstagramIcon className="w-4 h-4 mr-2" />
-                  Instagram
+              <Button asChild className="btn-dotwork-outline min-h-11 font-edo tracking-[0.1em] text-xs">
+                <Link href={STUDIO_CONFIG.instagram} target="_blank" rel="noopener noreferrer">
+                  <InstagramIcon className="mr-2 h-4 w-4" />
+                  {t("contact.instagram")}
                 </Link>
               </Button>
             </div>
           </motion.div>
 
-          {/* Map */}
+          {/* Google Maps Embed */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative rounded-sm overflow-hidden glass min-h-[400px]"
+            className="relative min-h-[420px] overflow-hidden border border-white/[0.08] bg-[#141414]"
           >
             <iframe
-              src={STUDIO_CONFIG.address.embedMapUrl || "https://www.google.com/maps?q=Algarve+Portugal&output=embed"}
+              src={
+                STUDIO_CONFIG.address.embedMapUrl ||
+                "https://www.google.com/maps?q=Algarve+Portugal&output=embed"
+              }
               width="100%"
               height="100%"
-              style={{ border: 0, minHeight: 400 }}
+              style={{ border: 0, minHeight: 420 }}
               allowFullScreen
               loading="lazy"
               referrerPolicy="no-referrer-when-downgrade"
-              title="Localização do Russa Tattoo Studio"
-              className="grayscale hover:grayscale-0 transition-all duration-500"
+              title={t("contact.map")}
+              className="grayscale transition-all duration-500 hover:grayscale-0"
             />
           </motion.div>
         </div>

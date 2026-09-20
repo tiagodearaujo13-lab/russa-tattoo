@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import {
@@ -258,11 +259,15 @@ export default function AppointmentsTable({
               {detailItem.referenceImageUrl && (
                 <div className="p-4 rounded-xl bg-white/5">
                   <p className="text-foreground/40 mb-2">Imagem de Referência</p>
-                  <img
-                    src={detailItem.referenceImageUrl}
-                    alt="Referência"
-                    className="w-full max-h-60 object-contain rounded-lg"
-                  />
+                  <div className="relative h-60 w-full">
+                    <Image
+                      src={detailItem.referenceImageUrl}
+                      alt="Referência"
+                      fill
+                      sizes="(max-width: 768px) 100vw, 480px"
+                      className="rounded-lg object-contain"
+                    />
+                  </div>
                 </div>
               )}
             </div>

@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import { useState } from "react";
 import { useRouter } from "next/navigation";
 import { UploadButton } from "@uploadthing/react";
@@ -254,10 +255,12 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
               className="glass rounded-xl overflow-hidden group border border-white/5"
             >
               <div className="aspect-square relative">
-                <img
+                <Image
                   src={item.imageUrl}
                   alt={item.title}
-                  className="w-full h-full object-cover"
+                  fill
+                  sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
+                  className="object-cover"
                 />
                 {item.featured && (
                   <Badge className="absolute top-2 right-2 bg-white/90 text-background text-[10px]">

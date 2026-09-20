@@ -7,7 +7,8 @@ import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { CalendarDays, Clock, RefreshCw } from "lucide-react";
 import { format, isSameDay, parseISO } from "date-fns";
-import { pt } from "date-fns/locale";
+import { enUS, pt } from "date-fns/locale";
+import { useLanguage } from "./LanguageProvider";
 import BookingModal from "./BookingModal";
 import { getWhatsAppUrl } from "@/lib/constants/studio";
 import ScrollReveal from "@/components/ui/ScrollReveal";
@@ -27,6 +28,8 @@ export default function LiveCalendarWidget() {
   const [isBookingOpen, setIsBookingOpen] = useState(false);
   const [isLoading, setIsLoading] = useState(true);
   const [lastUpdated, setLastUpdated] = useState<Date | null>(null);
+  const { language, t } = useLanguage();
+  const calendarLocale = language === "en" ? enUS : pt;
 
   const fetchSlots = useCallback(async () => {
     try {
@@ -71,17 +74,17 @@ export default function LiveCalendarWidget() {
 
   const statusConfig = {
     available: {
-      label: "Disponível",
+      label: t("calendar.available"),
       className: "bg-status-available/10 text-status-available border-status-available/30",
       dot: "bg-status-available",
     },
     reserved: {
-      label: "Reservado",
+      label: t("calendar.reserved"),
       className: "bg-status-reserved/10 text-status-reserved border-status-reserved/30",
       dot: "bg-status-reserved",
     },
     blocked: {
-      label: "Indisponível",
+      label: t("calendar.blocked"),
       className: "bg-status-blocked/10 text-status-blocked border-status-blocked/30",
       dot: "bg-status-blocked",
     },
@@ -99,24 +102,24 @@ export default function LiveCalendarWidget() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="text-white text-sm font-semibold tracking-widest uppercase">
-            Agenda Ao Vivo
-          </span>
-          <h2 className="font-display text-4xl md:text-5xl mt-3 mb-4">
-            Escolha o Seu Horário
+          <span className="dotwork-label">{t("calendar.eyebrow")}</span>
+          <h2 className="font-edo mt-4 text-3xl sm:text-4xl md:text-5xl tracking-[0.06em] text-white">
+            {t("calendar.title")}
           </h2>
-          <p className="text-foreground/60 max-w-2xl mx-auto">
-            Veja a disponibilidade em tempo real e reserve a sua sessão diretamente.
+          <p className="text-foreground/60 mx-auto max-w-2xl font-sans text-sm md:text-base mt-2">
+            {t("calendar.support")}
           </p>
         </motion.div>
 
         <ScrollReveal direction="bottom" className="grid md:grid-cols-[auto_1fr] gap-8 max-w-4xl mx-auto">
           {/* Calendar */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] p-6 transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
+          <div className="rounded-sm border border-white/[0.08] bg-[#141414] p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 text-sm text-foreground/60">
                 <CalendarDays className="w-4 h-4 text-white" />
-                Calendário
+                <span className="font-edo text-base tracking-[0.05em] text-white">
+                  {t("calendar.calendar")}
+                </span>
               </div>
               <Button
                 variant="ghost"
@@ -132,65 +135,75 @@ export default function LiveCalendarWidget() {
               mode="single"
               selected={selectedDate}
               onSelect={setSelectedDate}
-              locale={pt}
+              locale={calendarLocale}
               disabled={(date) => date < new Date(new Date().setHours(0, 0, 0, 0))}
               modifiers={{
                 available: availableDates,
               }}
               modifiersClassNames={{
-                available: "!bg-white/20 !text-white font-semibold hover:!bg-white/30",
+                available: "!bg-white/20 !text-white font-semibold hover:!bg-white/30 animate-calendar-pulse",
               }}
               className="rounded-sm"
             />
             {lastUpdated && (
-              <p className="text-xs text-foreground/30 mt-3 text-center">
-                Atualizado às {format(lastUpdated, "HH:mm")}
+              <p className="mt-3 text-center text-xs text-foreground/30 font-sans">
+                {t("calendar.updated")} {format(lastUpdated, "HH:mm")}
               </p>
             )}
             {!isLoading && slots.length === 0 && (
               <div className="mt-5 border-t border-white/5 pt-4 text-center">
-                <p className="text-xs leading-relaxed text-foreground/50">
-                  Sem vagas abertas para este período na agenda automática. Fale connosco pelo WhatsApp para lista de espera ou encaixes.
+                <p className="text-xs leading-relaxed text-foreground/50 font-sans">
+                  {t("calendar.noOpenSlots")}
                 </p>
                 <a
                   href={getWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex rounded-sm border border-white/30 px-4 py-2 text-xs font-semibold text-white transition-colors hover:bg-white hover:text-black"
+                  className="mt-3 inline-flex min-h-11 items-center rounded-sm border border-white/30 px-4 py-2 font-edo text-xs tracking-[0.1em] text-white transition-colors hover:bg-white hover:text-black"
                 >
-                  Falar pelo WhatsApp
+                  {t("calendar.whatsapp")}
                 </a>
               </div>
             )}
           </div>
 
           {/* Slots List */}
-          <div className="rounded-2xl border border-white/10 bg-[#0a0a0a] p-6 transition-all duration-500 hover:-translate-y-2 hover:border-white/40 hover:bg-gradient-to-b hover:from-zinc-900 hover:to-black hover:shadow-[0_20px_40px_-15px_rgba(255,255,255,0.07)]">
+          <div className="rounded-sm border border-white/[0.08] bg-[#141414] p-6">
             <div className="flex items-center gap-2 mb-6 text-sm text-foreground/60">
               <Clock className="w-4 h-4 text-white" />
               {selectedDate ? (
-                <span>
-                  Horários de{" "}
-                  <strong className="text-foreground">
-                    {format(selectedDate, "d 'de' MMMM", { locale: pt })}
+                <span className="font-edo text-base tracking-[0.04em] text-white">
+                  {t("calendar.hoursOf")}{" "}
+                  <strong className="text-white underline decoration-white/30">
+                    {format(selectedDate, "d 'de' MMMM", { locale: calendarLocale })}
                   </strong>
                 </span>
               ) : (
-                <span>Selecione uma data no calendário</span>
+                <span className="font-edo text-base tracking-[0.04em] text-white">
+                  {t("calendar.selectDate")}
+                </span>
               )}
             </div>
 
             {!selectedDate ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
                 <CalendarDays className="w-12 h-12 mb-4" />
-                <p className="text-sm">Clique num dia para ver os horários</p>
-                <p className="text-xs mt-1">Dias com destaque têm disponibilidade</p>
+                <p className="font-edo text-base tracking-[0.04em] text-zinc-300">
+                  {t("calendar.clickDay")}
+                </p>
+                <p className="mt-1 text-xs font-sans text-zinc-500">
+                  {t("calendar.highlighted")}
+                </p>
               </div>
             ) : daySlots.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
                 <Clock className="w-12 h-12 mb-4" />
-                <p className="text-sm">Sem horários para este dia</p>
-                <p className="text-xs mt-1">Tente outra data</p>
+                <p className="font-edo text-base tracking-[0.04em] text-zinc-300">
+                  {t("calendar.noHours")}
+                </p>
+                <p className="mt-1 text-xs font-sans text-zinc-500">
+                  {t("calendar.tryAnother")}
+                </p>
               </div>
             ) : (
               <div className="space-y-3">
@@ -203,21 +216,21 @@ export default function LiveCalendarWidget() {
                       animate={{ opacity: 1, x: 0 }}
                       onClick={() => handleSlotClick(slot)}
                       disabled={slot.status !== "available"}
-                      className={`slot-card w-full flex items-center justify-between p-4 rounded-sm border transition-all duration-200 ${
+                      className={`slot-card w-full flex items-center justify-between border p-4 transition-all duration-200 ${
                         slot.status === "available"
-                          ? "border-status-available/20 hover:border-status-available/50 hover:bg-status-available/5 cursor-pointer"
+                          ? "border-white/20 hover:border-white/60 hover:bg-white/5 cursor-pointer"
                           : "border-white/5 opacity-50 cursor-not-allowed"
                       }`}
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-2.5 h-2.5 rounded-sm ${config.dot}`} />
-                        <span className="font-semibold text-foreground">
+                        <span className="font-edo text-base tracking-[0.05em] text-white">
                           {slot.timeStart} — {slot.timeEnd}
                         </span>
                       </div>
                       <Badge
                         variant="outline"
-                        className={`text-xs ${config.className}`}
+                        className={`font-edo text-xs tracking-[0.04em] ${config.className}`}
                       >
                         {config.label}
                       </Badge>
@@ -230,7 +243,7 @@ export default function LiveCalendarWidget() {
             {/* Legend */}
             <div className="flex items-center gap-4 mt-6 pt-4 border-t border-white/5">
               {Object.entries(statusConfig).map(([key, config]) => (
-                <div key={key} className="flex items-center gap-1.5 text-xs text-foreground/40">
+                <div key={key} className="flex items-center gap-1.5 font-edo text-xs tracking-[0.03em] text-foreground/50">
                   <div className={`w-2 h-2 rounded-sm ${config.dot}`} />
                   {config.label}
                 </div>

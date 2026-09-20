@@ -51,7 +51,7 @@ npm run lint
 npm run build
 ```
 
-O lint pode emitir avisos relacionados ao uso de `<img>` em imagens externas; não há erros bloqueantes.
+O lint deve concluir sem erros ou avisos.
 
 ## Rotas principais
 
