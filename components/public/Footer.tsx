@@ -31,67 +31,73 @@ export default function Footer() {
   const { t } = useLanguage();
 
   return (
-    <footer className="border-t border-white/10 bg-[#0a0a0a] py-14 text-white md:py-20">
+    <footer className="border-t border-[#CCCCCC]/20 bg-[#1A1A1A] py-14 text-white md:py-20">
       <div className="container mx-auto max-w-7xl px-6 md:px-12">
-        {/* Giant Watermark */}
+        {/* Marca d'Água Gigante Editorial */}
         <div className="overflow-hidden select-none pointer-events-none">
-          <p className="font-edo text-5xl uppercase tracking-[0.14em] text-white/5 md:text-7xl lg:text-8xl">
-            Russa Tattoo Studio
+          <p className="font-russa text-5xl uppercase tracking-[-0.02em] text-white/5 md:text-7xl lg:text-9xl font-bold flex flex-wrap items-baseline gap-4">
+            <span>RUSSA</span>
+            <span className="font-tatuadora text-2xl md:text-4xl lg:text-5xl tracking-[0.35em] font-light text-white/5">
+              TATUADORA
+            </span>
           </p>
         </div>
 
         <Separator className="my-10 bg-white/10" />
 
-        {/* Main Footer Row */}
+        {/* Linha Principal do Rodapé */}
         <div className="flex flex-col gap-10 md:flex-row md:items-center md:justify-between">
-          {/* Brand Info with Official Logo */}
+          {/* Informações da Marca com Logotipo Oficial Bodoni + Montserrat */}
           <div className="flex items-center gap-4">
-            <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/20 ring-1 ring-white/10">
+            <div className="relative h-11 w-11 shrink-0 overflow-hidden rounded-full border border-white/20 ring-1 ring-white/10 bg-[#1A1A1A]">
               <Image
-                src="/images/logo.jpg"
-                alt="Russa Tattoo Studio Logo"
+                src="/images/brand/russa-hero-crop.png"
+                alt="Russa Tatuadora — Marca Oficial"
                 fill
-                className="object-cover"
+                className="object-cover object-center"
                 sizes="44px"
               />
             </div>
             <div>
-              <Link href="/" className="font-edo text-2xl tracking-[0.14em] font-normal text-white hover:text-zinc-300 transition-colors">
+              <Link
+                href="/"
+                className="font-russa text-2xl font-bold tracking-[-0.01em] text-white hover:text-zinc-300 transition-colors block leading-tight"
+              >
                 RUSSA
               </Link>
-              <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-zinc-400">
-                {t("footer.tagline")}
+              <p className="font-tatuadora text-[8px] uppercase tracking-[0.38em] text-[#DCDCDC] mt-0.5">
+                TATUADORA
               </p>
             </div>
           </div>
 
-          {/* Nav Links */}
+          {/* Links de Navegação */}
           <nav className="flex max-w-2xl flex-wrap gap-x-7 gap-y-3">
             {footerLinks.map(([href, key]) => (
               <Link
                 key={href}
                 href={href}
-                className="font-sans text-[10px] font-medium uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+                className="font-tatuadora text-[10px] font-medium uppercase tracking-[0.2em] text-[#CCCCCC] transition-colors hover:text-white"
               >
                 {t(key)}
               </Link>
             ))}
           </nav>
 
-          {/* Social & Back to Top */}
+          {/* Redes Sociais & Voltar ao Topo */}
           <div className="flex items-center gap-4">
             <Link
               href={instagramUrl}
               target="_blank"
               rel="noopener noreferrer"
               aria-label="Instagram @russatatuadora"
-              className="flex h-10 w-10 items-center justify-center rounded-xs border border-white/20 text-zinc-400 transition-all hover:border-white hover:bg-white hover:text-black"
+              className="flex h-10 w-10 items-center justify-center rounded-xs border border-white/20 text-[#CCCCCC] transition-all hover:border-white hover:bg-white hover:text-black"
             >
               <InstagramMark />
             </Link>
             <Link
               href="#hero"
-              className="group flex items-center gap-2 font-sans text-[10px] uppercase tracking-[0.2em] text-zinc-400 transition-colors hover:text-white"
+              className="group flex items-center gap-2 font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#CCCCCC] transition-colors hover:text-white"
             >
               <span>{t("footer.backToTop")}</span>
               <span className="flex h-8 w-8 items-center justify-center rounded-xs border border-white/20 transition-all group-hover:border-white group-hover:bg-white group-hover:text-black">
@@ -103,10 +109,10 @@ export default function Footer() {
 
         <Separator className="my-10 bg-white/10" />
 
-        {/* Copyright & Privacy */}
-        <div className="flex flex-col items-center justify-between gap-3 font-sans text-[10px] uppercase tracking-[0.2em] text-zinc-400 md:flex-row">
-          <p>© {year} Russa Tattoo Studio · Algarve, Portugal.</p>
-          <p className="text-zinc-400">Fine Line · Botânica · Body Piercing</p>
+        {/* Direitos Autorais & RGPD */}
+        <div className="flex flex-col items-center justify-between gap-3 font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#CCCCCC] md:flex-row">
+          <p>© {year} Russa Tatuadora · Algarve, Portugal.</p>
+          <p className="text-[#CCCCCC]">Fine Line · Botânica · Body Piercing</p>
           <p>{t("footer.rgpd")}</p>
         </div>
       </div>

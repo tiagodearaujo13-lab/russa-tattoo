@@ -38,8 +38,8 @@ export default function ContactSection() {
   ];
 
   return (
-    <section id="contacto" className="relative overflow-hidden bg-[#0c0c0c] py-24 text-white md:py-32">
-      <div className="container relative mx-auto max-w-7xl px-4 md:px-8">
+    <section id="contacto" className="relative overflow-hidden bg-[#1A1A1A] py-24 text-white md:py-32 border-t border-[#CCCCCC]/20">
+      <div className="container relative mx-auto max-w-7xl px-5 sm:px-8 md:px-12">
         <div className="grid gap-16 lg:grid-cols-2 items-center">
           {/* Informações de Contacto */}
           <motion.div
@@ -48,14 +48,14 @@ export default function ContactSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <span className="font-edo text-xs uppercase tracking-[0.25em] text-zinc-400">
+            <span className="font-tatuadora text-[9.5px] uppercase tracking-[0.3em] text-[#DCDCDC] font-medium">
               {t("contact.eyebrow")}
             </span>
-            <h2 className="font-edo mt-4 text-3xl sm:text-4xl md:text-5xl uppercase tracking-[0.06em] text-white">
+            <h2 className="font-russa mt-4 text-3xl sm:text-4xl md:text-5xl uppercase tracking-[-0.01em] text-white font-bold">
               {t("contact.title")}
             </h2>
-            <div className="mt-4 h-[2px] w-12 bg-white" />
-            <p className="mb-10 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-zinc-300">
+            <div className="mt-4 h-[1.5px] w-12 bg-white/30" />
+            <p className="mb-10 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
               {t("contact.support")}
             </p>
 
@@ -63,13 +63,13 @@ export default function ContactSection() {
               {contactInfo.map((info) => (
                 <div
                   key={info.label}
-                  className="flex items-start gap-4 border border-white/[0.08] p-4 bg-[#141414]/60"
+                  className="flex items-start gap-4 border border-[#CCCCCC]/20 p-4 bg-[#222222]/70"
                 >
-                  <div className="shrink-0 border border-white/10 p-2.5 text-white">
+                  <div className="shrink-0 border border-[#CCCCCC]/20 p-2.5 text-white">
                     <info.icon className="h-5 w-5" />
                   </div>
                   <div>
-                    <p className="mb-1 font-edo text-xs uppercase tracking-[0.14em] text-zinc-400">
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#CCCCCC] font-medium">
                       {info.label}
                     </p>
                     {info.href ? (
@@ -92,13 +92,13 @@ export default function ContactSection() {
             </div>
 
             <div className="flex flex-wrap gap-3">
-              <Button asChild className="btn-dotwork-outline min-h-11 font-edo tracking-[0.1em] text-xs">
+              <Button asChild className="btn-dotwork-outline min-h-11 font-tatuadora tracking-[0.18em] uppercase text-xs font-semibold">
                 <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
                   <MessageCircle className="mr-2 h-4 w-4" />
                   {t("contact.whatsapp")}
                 </Link>
               </Button>
-              <Button asChild className="btn-dotwork-outline min-h-11 font-edo tracking-[0.1em] text-xs">
+              <Button asChild className="btn-dotwork-outline min-h-11 font-tatuadora tracking-[0.18em] uppercase text-xs font-semibold">
                 <Link href={STUDIO_CONFIG.instagram} target="_blank" rel="noopener noreferrer">
                   <InstagramIcon className="mr-2 h-4 w-4" />
                   {t("contact.instagram")}

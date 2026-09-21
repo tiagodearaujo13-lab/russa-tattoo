@@ -30,25 +30,25 @@ function InstagramMark({ className = "fill-current" }: { className?: string }) {
   );
 }
 
-function Logo({ t }: { t: (key: string) => string }) {
+function Logo() {
   return (
     <div className="flex items-center gap-2.5 sm:gap-3">
-      <div className="relative h-8 w-8 sm:h-9 sm:w-9 shrink-0 overflow-hidden rounded-full border border-white/20 ring-1 ring-white/10 shadow-xs">
+      <div className="relative h-8 w-8 sm:h-9 sm:w-9 shrink-0 overflow-hidden rounded-full border border-white/20 ring-1 ring-white/10 shadow-xs bg-[#1A1A1A]">
         <Image
-          src="/images/logo.jpg"
-          alt="Russa Tattoo Logo"
+          src="/images/brand/russa-hero-crop.png"
+          alt="Russa Tatuadora Logo"
           fill
-          className="object-cover"
+          className="object-cover object-center"
           sizes="36px"
           priority
         />
       </div>
       <div className="flex flex-col">
-        <span className="font-edo text-lg sm:text-xl tracking-[0.14em] font-normal leading-tight text-white">
+        <span className="font-russa text-lg sm:text-xl font-bold tracking-[-0.01em] leading-tight text-white">
           RUSSA
         </span>
-        <span className="font-sans text-[8px] sm:text-[8.5px] uppercase tracking-[0.25em] text-zinc-400">
-          {t("header.studio")}
+        <span className="font-tatuadora text-[7.5px] sm:text-[8px] uppercase tracking-[0.38em] text-[#DCDCDC]">
+          TATUADORA
         </span>
       </div>
     </div>
@@ -80,7 +80,7 @@ function LanguageSwitcher({
           className={`h-full px-2 sm:px-2.5 font-sans text-[9px] sm:text-[9.5px] font-semibold uppercase tracking-[0.16em] transition-all rounded-xs ${
             language === item
               ? "bg-white text-black shadow-xs"
-              : "text-zinc-300 hover:text-white"
+              : "text-[#DCDCDC] hover:text-white"
           }`}
         >
           {item}
@@ -108,13 +108,13 @@ export default function Header() {
       transition={{ duration: 0.6, ease: [0.16, 1, 0.3, 1] }}
       className={`fixed inset-x-0 top-0 z-50 transition-all duration-400 ${
         isScrolled
-          ? "border-b border-white/10 bg-[#09090b]/92 py-2.5 sm:py-3 shadow-[0_8px_32px_rgba(0,0,0,0.4)] backdrop-blur-xl"
-          : "border-b border-transparent bg-transparent py-4 sm:py-5"
+          ? "border-b border-[#CCCCCC]/20 bg-[#1A1A1A]/94 py-2.5 sm:py-3 shadow-[0_8px_32px_rgba(0,0,0,0.5)] backdrop-blur-xl"
+          : "border-b border-transparent bg-gradient-to-b from-black/75 via-black/25 to-transparent py-4 sm:py-5"
       }`}
     >
       <div className="container mx-auto flex max-w-7xl items-center justify-between gap-3 sm:gap-4 px-4 sm:px-8">
-        <Link href="/" aria-label="Russa Tattoo Studio" className="group">
-          <Logo t={t} />
+        <Link href="/" aria-label="Russa Tatuadora" className="group">
+          <Logo />
         </Link>
 
         {/* Desktop Navigation (Notebooks, Desktops) */}
@@ -123,7 +123,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="group relative font-sans text-[10px] xl:text-[10.5px] font-medium uppercase tracking-[0.22em] text-zinc-300 transition-colors hover:text-white"
+              className="group relative font-sans text-[10px] xl:text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#DCDCDC] transition-colors hover:text-white"
             >
               {t(link.key)}
               <span className="absolute -bottom-1.5 left-0 h-[1.5px] w-0 bg-white transition-all duration-300 ease-out group-hover:w-full" />
@@ -141,7 +141,7 @@ export default function Header() {
             target="_blank"
             rel="noopener noreferrer"
             aria-label="Instagram @russatatuadora"
-            className="text-zinc-400 transition-colors hover:text-white p-1.5"
+            className="text-[#CCCCCC] transition-colors hover:text-white p-1.5"
           >
             <InstagramMark className="fill-current" />
           </Link>
@@ -172,15 +172,15 @@ export default function Header() {
             </SheetTrigger>
             <SheetContent
               side="right"
-              className="w-[min(320px,88vw)] border-white/10 bg-[#0c0c0c] p-0 text-white"
+              className="w-[min(320px,88vw)] border-[#CCCCCC]/20 bg-[#1A1A1A] p-0 text-white"
             >
               <div className="flex h-full flex-col">
-                <div className="border-b border-white/10 p-5 sm:p-6">
-                  <Logo t={t} />
+                <div className="border-b border-[#CCCCCC]/20 p-5 sm:p-6">
+                  <Logo />
                 </div>
 
-                <div className="flex items-center justify-between border-b border-white/10 px-6 py-4">
-                  <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-zinc-400">
+                <div className="flex items-center justify-between border-b border-[#CCCCCC]/20 px-6 py-4">
+                  <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[#CCCCCC]">
                     {t("header.language")}
                   </span>
                   <LanguageSwitcher language={language} setLanguage={setLanguage} />
@@ -192,14 +192,14 @@ export default function Header() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsMobileOpen(false)}
-                      className="py-3 font-sans text-xs uppercase tracking-[0.2em] text-zinc-300 transition-colors hover:text-white"
+                      className="py-3 font-sans text-xs uppercase tracking-[0.2em] text-[#DCDCDC] transition-colors hover:text-white"
                     >
                       {t(link.key)}
                     </Link>
                   ))}
                 </nav>
 
-                <div className="mt-auto space-y-3 border-t border-white/10 p-5 sm:p-6">
+                <div className="mt-auto space-y-3 border-t border-[#CCCCCC]/20 p-5 sm:p-6">
                   <Button
                     asChild
                     className="btn-dotwork-outline w-full min-h-11 text-xs tracking-[0.2em]"
@@ -222,7 +222,7 @@ export default function Header() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label="Instagram"
-                      className="text-zinc-400 hover:text-white transition-colors"
+                      className="text-[#CCCCCC] hover:text-white transition-colors"
                     >
                       <InstagramMark className="fill-white h-5 w-5" />
                     </Link>

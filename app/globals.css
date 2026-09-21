@@ -3,25 +3,20 @@
 @import "tw-animate-css";
 @import "shadcn/tailwind.css";
 
-@font-face {
-  font-family: 'Edo SZ';
-  src: url('/fonts/edosz.ttf') format('truetype');
-  font-weight: normal;
-  font-style: normal;
-  font-display: swap;
-}
-
 @custom-variant dark (&:is(.dark *));
 
 @theme inline {
   --color-background: var(--background);
   --color-foreground: var(--foreground);
-  --font-sans: var(--font-montserrat), sans-serif;
-  --font-mono: var(--font-montserrat), monospace;
-  --font-heading: 'Edo SZ', sans-serif;
-  --font-serif: 'Edo SZ', serif;
-  --font-cinzel: 'Edo SZ', serif;
-  --font-edo: 'Edo SZ', sans-serif;
+  --font-sans: var(--font-tatuadora), var(--font-montserrat), sans-serif;
+  --font-mono: var(--font-tatuadora), var(--font-montserrat), monospace;
+  --font-russa: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+  --font-tatuadora: var(--font-tatuadora), var(--font-montserrat), sans-serif;
+  --font-montserrat: var(--font-tatuadora), sans-serif;
+  --font-heading: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+  --font-serif: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+  --font-cinzel: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+  --font-edo: var(--font-russa), 'Bodoni Moda', Georgia, serif;
   --color-status-available: #ffffff;
   --color-status-reserved: #a1a1aa;
   --color-status-blocked: #52525b;
@@ -66,37 +61,43 @@
 /* ── Dark luxury editorial theme ──────────────────────────── */
 :root,
 .dark {
-  --background: #0c0c0c;
+  --background: #1A1A1A;
   --foreground: #ffffff;
-  --card: #141414;
+  --card: #222222;
   --card-foreground: #ffffff;
-  --popover: #141414;
+  --popover: #222222;
   --popover-foreground: #ffffff;
   --primary: #ffffff;
-  --primary-foreground: #0c0c0c;
-  --secondary: #181818;
+  --primary-foreground: #1A1A1A;
+  --secondary: #222222;
   --secondary-foreground: #ffffff;
-  --muted: #181818;
-  --muted-foreground: #a1a1aa;
-  --accent: #181818;
+  --muted: #222222;
+  --muted-foreground: #CCCCCC;
+  --accent: #222222;
   --accent-foreground: #ffffff;
-  --destructive: #a1a1aa;
+  --destructive: #808080;
   --border: rgba(255, 255, 255, 0.08);
   --input: rgba(255, 255, 255, 0.1);
   --ring: #ffffff;
   --chart-1: #ffffff;
-  --chart-2: #d4d4d8;
-  --chart-3: #a1a1aa;
-  --chart-4: #71717a;
-  --chart-5: #52525b;
-  --sidebar: #101010;
+  --chart-2: #DCDCDC;
+  --chart-3: #CCCCCC;
+  --chart-4: #8C8C8C;
+  --chart-5: #808080;
+  --sidebar: #1A1A1A;
   --sidebar-foreground: #ffffff;
   --sidebar-primary: #ffffff;
-  --sidebar-primary-foreground: #0c0c0c;
-  --sidebar-accent: #181818;
+  --sidebar-primary-foreground: #1A1A1A;
+  --sidebar-accent: #222222;
   --sidebar-accent-foreground: #ffffff;
   --sidebar-border: rgba(255, 255, 255, 0.08);
   --sidebar-ring: #ffffff;
+  /* Brand Book Official Colors */
+  --brand-black: #1A1A1A;
+  --brand-gray-neutral: #808080;
+  --brand-gray-accent: #DCDCDC;
+  --brand-gray-light: #E8E8E8;
+  --brand-canvas: #1A1A1A;
 }
 
 @layer base {
@@ -142,9 +143,19 @@
     font-family: "Times New Roman", Times, "Liberation Serif", serif;
   }
 
+  .font-russa {
+    font-family: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+  }
+
+  .font-tatuadora {
+    font-family: var(--font-tatuadora), var(--font-montserrat), sans-serif;
+    letter-spacing: 0.38em;
+    text-transform: uppercase;
+  }
+
   .font-edo {
-    font-family: 'Edo SZ', sans-serif;
-    letter-spacing: 0.05em;
+    font-family: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+    letter-spacing: 0.02em;
   }
 
   .font-serif-cormorant {
@@ -155,14 +166,14 @@
   .font-serif,
   .font-heading,
   .dotwork-heading {
-    font-family: 'Edo SZ', sans-serif;
-    letter-spacing: 0.08em;
+    font-family: var(--font-russa), 'Bodoni Moda', Georgia, serif;
+    letter-spacing: 0.04em;
   }
 
   .fineline-heading {
-    font-family: 'Edo SZ', sans-serif;
+    font-family: var(--font-russa), 'Bodoni Moda', Georgia, serif;
     font-weight: normal;
-    letter-spacing: 0.05em;
+    letter-spacing: 0.03em;
   }
 
   .fineline-subheading {
@@ -170,11 +181,11 @@
     text-transform: uppercase;
     font-size: 0.6875rem;
     letter-spacing: 0.25em;
-    color: #787570;
+    color: #CCCCCC;
   }
 
   .editorial-divider {
-    border-color: rgba(255, 255, 255, 0.08);
+    border-color: rgba(204, 204, 204, 0.12);
     border-width: 1px;
   }
 
@@ -203,25 +214,25 @@
   }
 
   .section-light {
-    color-scheme: light;
-    background-color: #faf9f6;
-    color: #141414;
+    color-scheme: dark;
+    background-color: #1A1A1A;
+    color: #ffffff;
   }
 
   .section-light .text-muted-foreground {
-    color: #686661;
+    color: #8F8F8F;
   }
 
   .btn-luxury-dark {
     display: inline-flex;
     align-items: center;
     justify-content: center;
-    background: #111111;
-    color: #faf9f6;
-    border: 1px solid #111111;
+    background: #ffffff;
+    color: #0c0c0c;
+    border: 1px solid #ffffff;
     border-radius: 0.125rem;
     padding: 0.75rem 2rem;
-    font-family: var(--font-montserrat), sans-serif;
+    font-family: var(--font-tatuadora), sans-serif;
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -231,7 +242,7 @@
 
   .btn-luxury-dark:hover {
     background: transparent;
-    color: #111111;
+    color: #ffffff;
   }
 
   .btn-luxury-outline {
@@ -239,11 +250,11 @@
     align-items: center;
     justify-content: center;
     background: transparent;
-    color: #111111;
-    border: 1px solid rgba(17, 17, 17, 0.25);
+    color: #ffffff;
+    border: 1px solid rgba(255, 255, 255, 0.25);
     border-radius: 0.125rem;
     padding: 0.75rem 2rem;
-    font-family: var(--font-montserrat), sans-serif;
+    font-family: var(--font-tatuadora), sans-serif;
     font-size: 0.6875rem;
     font-weight: 600;
     letter-spacing: 0.2em;
@@ -252,9 +263,9 @@
   }
 
   .btn-luxury-outline:hover {
-    background: #111111;
-    color: #faf9f6;
-    border-color: #111111;
+    background: #ffffff;
+    color: #0c0c0c;
+    border-color: #ffffff;
   }
 
   .dotwork-wave {
@@ -297,11 +308,11 @@
   .dotwork-corner::after { right: 5px; bottom: 5px; }
 
   .section-light .dotwork-corner::before,
-  .section-light .dotwork-corner::after { color: rgba(12, 12, 12, 0.4); }
+  .section-light .dotwork-corner::after { color: rgba(255, 255, 255, 0.25); }
 
   .section-light button:focus-visible,
   .section-light a:focus-visible {
-    outline: 2px solid #0c0c0c;
+    outline: 2px solid #ffffff;
     outline-offset: 3px;
   }
 
@@ -373,7 +384,7 @@
   }
 
   .animate-fade-up { animation: fadeUp 600ms ease-out both; }
-  .animate-fade-in { animation: fadeIn 400ms ease-out both; }
+  .animate-fade-in { animation: fadeIn 1.8s cubic-bezier(0.16, 1, 0.3, 1) both; }
   .animate-scroll-line { animation: scrollLine 1.8s cubic-bezier(0.16, 1, 0.3, 1) infinite; }
   .animate-calendar-pulse { animation: calendarPulse 2.4s ease-in-out infinite; }
 }

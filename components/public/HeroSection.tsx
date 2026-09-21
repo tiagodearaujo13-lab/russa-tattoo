@@ -1,288 +1,80 @@
 "use client";
 
-import { useEffect, useState } from "react";
 import Image from "next/image";
-import { AnimatePresence, motion } from "framer-motion";
+import { motion } from "framer-motion";
 import Link from "next/link";
-import { ChevronLeft, ChevronRight } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageProvider";
 
-const heroImages = [
-  {
-    url: "https://images.unsplash.com/photo-1598371839696-5c5bb00bdc28?auto=format&fit=crop&w=1920&q=85",
-    alt: "Fine line tattoo arte delicada",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1560707303-4e980ce876ad?auto=format&fit=crop&w=1920&q=85",
-    alt: "Artista tatuadora no estúdio",
-  },
-  {
-    url: "https://images.unsplash.com/photo-1562962230-16e4623d36e6?auto=format&fit=crop&w=1920&q=85",
-    alt: "Tatuagem botânica e geométrica",
-  },
-];
-
-// Letras da esquerda para a direita (R, U)
 function LeftLetters({ text, delay = 0.2 }: { text: string; delay?: number }) {
   return (
     <span className="inline-flex overflow-hidden">
       {text.split("").map((letter, i) => (
-        <motion.span
-          key={`left-${letter}-${i}`}
-          initial={{ opacity: 0, x: -64, filter: "blur(4px)" }}
-          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          transition={{
-            duration: 0.75,
-            delay: delay + i * 0.12,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="inline-block"
-        >
-          {letter}
-        </motion.span>
+        <motion.span key={`left-${letter}-${i}`} initial={{ opacity: 0, x: -64, filter: "blur(4px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} transition={{ duration: 0.85, delay: delay + i * 0.12, ease: [0.16, 1, 0.3, 1] }} className="inline-block">{letter}</motion.span>
       ))}
     </span>
   );
 }
 
-// Letras da direita para a esquerda (S, S, A)
 function RightLetters({ text, delay = 0.44 }: { text: string; delay?: number }) {
   return (
     <span className="inline-flex overflow-hidden">
       {text.split("").map((letter, i) => (
-        <motion.span
-          key={`right-${letter}-${i}`}
-          initial={{ opacity: 0, x: 64, filter: "blur(4px)" }}
-          animate={{ opacity: 1, x: 0, filter: "blur(0px)" }}
-          transition={{
-            duration: 0.75,
-            delay: delay + i * 0.12,
-            ease: [0.16, 1, 0.3, 1],
-          }}
-          className="inline-block"
-        >
-          {letter}
-        </motion.span>
+        <motion.span key={`right-${letter}-${i}`} initial={{ opacity: 0, x: 64, filter: "blur(4px)" }} animate={{ opacity: 1, x: 0, filter: "blur(0px)" }} transition={{ duration: 0.85, delay: delay + i * 0.12, ease: [0.16, 1, 0.3, 1] }} className="inline-block">{letter}</motion.span>
       ))}
     </span>
   );
 }
 
-// STUDIO aparecendo letra por letra como tatuagem na pele
-function TattooLetters({ text, delay = 1.1 }: { text: string; delay?: number }) {
+function TatuadoraLetters({ text, delay = 0.95 }: { text: string; delay?: number }) {
   return (
-    <span className="inline-flex overflow-hidden tracking-[0.25em] sm:tracking-[0.3em]">
+    <span className="inline-flex overflow-hidden">
       {text.split("").map((letter, i) => (
-        <motion.span
-          key={`tattoo-${letter}-${i}`}
-          initial={{
-            opacity: 0,
-            y: 8,
-            scale: 0.85,
-            filter: "blur(6px)",
-          }}
-          animate={{
-            opacity: 1,
-            y: 0,
-            scale: 1,
-            filter: "blur(0px)",
-          }}
-          transition={{
-            duration: 0.65,
-            delay: delay + i * 0.1,
-            ease: "easeOut",
-          }}
-          className="inline-block text-zinc-400 font-light"
-        >
-          {letter}
-        </motion.span>
+        <motion.span key={`tat-${letter}-${i}`} initial={{ opacity: 0, y: 10, scale: 0.88, filter: "blur(6px)" }} animate={{ opacity: 1, y: 0, scale: 1, filter: "blur(0px)" }} transition={{ duration: 0.7, delay: delay + i * 0.08, ease: "easeOut" }} className="inline-block">{letter}</motion.span>
       ))}
     </span>
   );
 }
 
 export default function HeroSection() {
-  const [activeSlide, setActiveSlide] = useState(0);
-  const [isPaused, setIsPaused] = useState(false);
   const { t } = useLanguage();
 
-  useEffect(() => {
-    if (isPaused) return;
-    const timer = window.setInterval(
-      () => setActiveSlide((current) => (current + 1) % heroImages.length),
-      6000
-    );
-    return () => window.clearInterval(timer);
-  }, [isPaused]);
-
-  const moveSlide = (direction: 1 | -1) =>
-    setActiveSlide((current) => (current + direction + heroImages.length) % heroImages.length);
-
   return (
-    <section
-      id="hero"
-      className="relative flex min-h-[92vh] sm:min-h-screen items-center overflow-hidden bg-[#070708] text-white"
-      onMouseEnter={() => setIsPaused(true)}
-      onMouseLeave={() => setIsPaused(false)}
-    >
-      {/* Background Carrossel com 3 imagens e overlay de alto contraste */}
-      <div className="absolute inset-0 pointer-events-none select-none">
-        <AnimatePresence mode="sync">
-          {heroImages.map(
-            (image, index) =>
-              index === activeSlide && (
-                <motion.div
-                  key={image.url}
-                  initial={{ opacity: 0, scale: 1.06 }}
-                  animate={{ opacity: 0.38, scale: 1 }}
-                  exit={{ opacity: 0 }}
-                  transition={{ duration: 1.2, ease: "easeInOut" }}
-                  className="absolute inset-0"
-                >
-                  <Image
-                    src={image.url}
-                    alt={image.alt}
-                    fill
-                    priority={index === 0}
-                    sizes="100vw"
-                    className="object-cover grayscale contrast-125 brightness-75"
-                  />
-                </motion.div>
-              )
-          )}
-        </AnimatePresence>
-
-        {/* Gradientes escuros com alto contraste para garantir leitura perfeita da tipografia branca */}
-        <div className="absolute inset-0 bg-gradient-to-r from-[#070708] via-[#070708]/85 to-[#070708]/70" />
-        <div className="absolute inset-0 bg-[radial-gradient(ellipse_at_top_left,rgba(20,20,22,0.4)_0%,#070708_75%)]" />
-        <div className="absolute inset-x-0 bottom-0 h-36 bg-gradient-to-t from-[#070708] via-[#070708]/70 to-transparent" />
+    <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#1A1A1A] text-white">
+      {/* A cabeça termina na base do Hero para continuar diretamente no About. */}
+      <div className="absolute inset-x-0 bottom-0 z-0 flex items-end justify-center pointer-events-none select-none">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }} className="relative aspect-[2590/2456] w-[320px] animate-fade-in sm:w-[460px] md:w-[620px] lg:w-[780px] xl:w-[920px]">
+          <Image src="/images/brand/russa-hero-crop.png" alt="Olhar de Russa Tatuadora" fill priority sizes="(max-width: 640px) 320px, (max-width: 768px) 460px, (max-width: 1024px) 620px, (max-width: 1280px) 780px, 920px" className="object-contain object-bottom opacity-70 mix-blend-screen" />
+        </motion.div>
       </div>
 
-      {/* Conteúdo Principal — Responsivo para Mobile, Tablet e Desktop */}
-      <div className="relative z-10 mx-auto w-full max-w-7xl px-5 sm:px-8 md:px-12 lg:px-16 pt-28 pb-20 sm:pt-36 sm:pb-28">
-        <div className="max-w-4xl">
-          {/* Eyebrow / Tagline */}
-          <motion.div
-            initial={{ opacity: 0, y: 12 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 0.15, duration: 0.6 }}
-            className="mb-6 flex items-center gap-3"
-          >
-            <span className="h-[1px] w-6 sm:w-10 bg-zinc-500" />
-            <span className="font-sans text-[9px] sm:text-[10px] uppercase tracking-[0.3em] sm:tracking-[0.35em] text-zinc-400 font-medium">
-              {t("hero.eyebrow")} · ALGARVE, PORTUGAL
-            </span>
-          </motion.div>
+      {/* Vinheta suave: preserva o foco nas letras sem criar caixas duras. */}
+      <div className="absolute inset-0 z-[1] pointer-events-none bg-[radial-gradient(ellipse_at_center,transparent_20%,rgba(26,26,26,0.38)_72%,#1A1A1A_100%)]" />
+      <div className="absolute inset-0 z-[1] pointer-events-none bg-gradient-to-b from-[#1A1A1A]/65 via-transparent to-[#1A1A1A]/85" />
 
-          {/* Título com Mistura de 3 Fontes Artísticas e Animação Direcional */}
-          <h1 className="text-5xl sm:text-7xl md:text-8xl lg:text-9xl xl:text-[8.5rem] leading-[0.92] text-white">
-            {/* RUSSA: Fonte Edo SZ (RU da esquerda + SSA da direita) */}
-            <span className="block overflow-hidden whitespace-nowrap font-edo tracking-[0.06em]">
-              <LeftLetters text="RU" delay={0.25} />
-              <RightLetters text="SSA" delay={0.42} />
-            </span>
+      <div className="relative z-10 mx-auto flex min-h-screen w-full max-w-7xl flex-col justify-center px-5 pb-24 pt-28 text-center sm:px-8 md:px-12 lg:px-16">
+        <motion.div initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 0.15, duration: 0.6 }} className="mb-5 flex items-center justify-center gap-3 sm:mb-6">
+          <span className="h-px w-6 bg-[#808080] sm:w-10" />
+          <span className="font-tatuadora text-[9px] font-medium uppercase tracking-[0.38em] text-[#DCDCDC] sm:text-[10px]">{t("hero.eyebrow")} · ALGARVE, PORTUGAL</span>
+          <span className="h-px w-6 bg-[#808080] sm:w-10" />
+        </motion.div>
 
-            {/* TATTOO: Segunda Fonte (Cormorant Garamond itálica, de baixo para cima) */}
-            <motion.span
-              initial={{ opacity: 0, y: 65 }}
-              animate={{ opacity: 1, y: 0 }}
-              transition={{
-                delay: 0.82,
-                duration: 0.8,
-                ease: [0.16, 1, 0.3, 1],
-              }}
-              className="block font-serif-cormorant font-normal italic text-zinc-100 mt-1 tracking-[0.03em]"
-            >
-              TATTOO
-            </motion.span>
-
-            {/* STUDIO: Terceira Fonte (Original Montserrat letra por letra como tatuagem) */}
-            <span className="block mt-1 sm:mt-2 text-2xl sm:text-4xl md:text-5xl lg:text-6xl font-sans font-light">
-              <TattooLetters text="STUDIO" delay={1.2} />
-            </span>
-          </h1>
-
-          {/* Texto de Apoio */}
-          <motion.p
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.6, duration: 0.7 }}
-            className="mt-6 sm:mt-8 max-w-xl font-times text-sm sm:text-base md:text-lg font-normal leading-relaxed text-zinc-300"
-          >
-            {t("hero.support")}
-          </motion.p>
-
-          {/* Botões de Ação de Alto Contraste */}
-          <motion.div
-            initial={{ opacity: 0, y: 20 }}
-            animate={{ opacity: 1, y: 0 }}
-            transition={{ delay: 1.8, duration: 0.7 }}
-            className="mt-8 sm:mt-10 flex flex-col sm:flex-row items-stretch sm:items-center gap-3.5 sm:gap-4 max-w-md sm:max-w-none"
-          >
-            <Button
-              asChild
-              className="btn-dotwork-primary min-h-[48px] px-8 text-xs uppercase tracking-[0.2em] font-semibold"
-            >
-              <Link href="#agenda">{t("hero.book")}</Link>
-            </Button>
-            <Button
-              asChild
-              className="btn-dotwork-outline min-h-[48px] px-8 text-xs uppercase tracking-[0.2em] font-semibold"
-            >
-              <Link href="#galeria" className="group">
-                {t("hero.portfolio")}
-                <span
-                  aria-hidden="true"
-                  className="ml-2.5 inline-block transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5"
-                >
-                  ↗
-                </span>
-              </Link>
-            </Button>
-          </motion.div>
-        </div>
-      </div>
-
-      {/* Controles do Carrossel de 3 Imagens (Canto inferior esquerdo) */}
-      <div className="absolute bottom-6 sm:bottom-8 left-5 sm:left-8 md:left-12 z-20 flex items-center gap-2.5 sm:gap-3">
-        <button
-          type="button"
-          onClick={() => moveSlide(-1)}
-          aria-label="Slide anterior"
-          className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xs border border-white/20 text-white transition-colors hover:bg-white hover:text-black"
-        >
-          <ChevronLeft className="h-4 w-4" />
-        </button>
-        <span className="font-sans text-[11px] font-medium tracking-[0.22em] text-zinc-300">
-          0{activeSlide + 1} / 0{heroImages.length}
-        </span>
-        <button
-          type="button"
-          onClick={() => moveSlide(1)}
-          aria-label="Próximo slide"
-          className="flex h-9 w-9 sm:h-10 sm:w-10 items-center justify-center rounded-xs border border-white/20 text-white transition-colors hover:bg-white hover:text-black"
-        >
-          <ChevronRight className="h-4 w-4" />
-        </button>
-      </div>
-
-      {/* Indicador de Scroll Suave (Canto inferior direito) */}
-      <motion.div
-        initial={{ opacity: 0 }}
-        animate={{ opacity: 1 }}
-        transition={{ delay: 2.0 }}
-        className="hidden sm:block absolute bottom-8 right-6 md:right-12 z-20"
-      >
-        <Link
-          href="#sobre"
-          className="group flex items-center gap-3 font-sans text-[10px] uppercase tracking-[0.25em] text-zinc-400 transition-colors hover:text-white"
-        >
-          <span>{t("hero.scroll")}</span>
-          <span className="relative h-12 w-px overflow-hidden bg-white/20">
-            <span className="animate-scroll-line absolute inset-0 w-full bg-white" />
+        <h1 className="select-none text-white">
+          <span className="block overflow-hidden whitespace-nowrap font-russa text-6xl font-bold leading-[0.88] tracking-[-0.02em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem]">
+            <LeftLetters text="RU" delay={0.25} /><RightLetters text="SSA" delay={0.42} />
           </span>
-        </Link>
+          <span className="mt-3 block font-tatuadora text-xs font-light uppercase tracking-[0.4em] text-[#E8E8E8] sm:text-base md:text-xl lg:text-2xl sm:tracking-[0.44em]"><TatuadoraLetters text="TATUADORA" delay={0.95} /></span>
+        </h1>
+
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.7 }} className="mx-auto mt-6 max-w-xl font-times text-sm font-normal leading-relaxed text-[#DCDCDC] sm:mt-8 sm:text-base md:text-lg">{t("hero.support")}</motion.p>
+        <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.7, duration: 0.7 }} className="mt-8 flex max-w-md flex-col items-stretch justify-center gap-3.5 self-center sm:mt-10 sm:max-w-none sm:flex-row sm:items-center sm:gap-4">
+          <Button asChild className="btn-dotwork-primary min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#agenda">{t("hero.book")}</Link></Button>
+          <Button asChild className="btn-dotwork-outline min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#galeria" className="group">{t("hero.portfolio")}<span aria-hidden="true" className="ml-2.5 inline-block transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span></Link></Button>
+        </motion.div>
+      </div>
+
+      <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ delay: 1.9, duration: 0.8 }} className="absolute bottom-6 left-1/2 z-20 -translate-x-1/2 sm:bottom-8">
+        <Link href="#sobre" className="group flex flex-col items-center gap-2 font-tatuadora text-[10px] uppercase tracking-[0.3em] text-[#DCDCDC] transition-colors hover:text-white"><span>{t("hero.scroll")}</span><span className="relative h-10 w-px overflow-hidden bg-[#CCCCCC]/30"><span className="animate-scroll-line absolute inset-0 w-full bg-white" /></span></Link>
       </motion.div>
     </section>
   );

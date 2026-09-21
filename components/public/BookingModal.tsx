@@ -202,21 +202,21 @@ export default function BookingModal({
 
   return (
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
-      <DialogContent className="rounded-sm border-white/10 bg-[#0c0c0c] max-w-lg max-h-[90vh] overflow-y-auto">
+      <DialogContent className="rounded-sm border-[#CCCCCC]/20 bg-[#1A1A1A] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-edo text-center text-2xl sm:text-3xl tracking-[0.06em] text-white">
+          <DialogTitle className="font-russa text-center text-2xl sm:text-3xl tracking-[-0.01em] text-white font-bold">
             {t("booking.title")}
           </DialogTitle>
         </DialogHeader>
 
         {/* Slot Info */}
         {slot && (
-          <div className="flex flex-wrap items-center justify-center gap-4 border border-white/10 bg-[#141414] px-4 py-3 text-sm">
-            <div className="flex items-center gap-2 font-edo tracking-[0.03em] text-white">
+          <div className="flex flex-wrap items-center justify-center gap-4 border border-[#CCCCCC]/20 bg-[#222222] px-4 py-3 text-sm">
+            <div className="flex items-center gap-2 font-tatuadora text-xs tracking-[0.14em] uppercase text-white font-medium">
               <CalendarDays className="w-4 h-4 text-white" />
               {format(parseISO(slot.date), "d 'de' MMMM, yyyy", { locale: calendarLocale })}
             </div>
-            <div className="flex items-center gap-2 font-edo tracking-[0.03em] text-white">
+            <div className="flex items-center gap-2 font-tatuadora text-xs tracking-[0.14em] uppercase text-white font-medium">
               <Clock className="w-4 h-4 text-white" />
               {slot.timeStart} — {slot.timeEnd}
             </div>
@@ -228,7 +228,7 @@ export default function BookingModal({
           {steps.map((step, index) => (
             <div
               key={step.title}
-              className={`flex items-center gap-1.5 rounded-sm border border-white/10 px-3 py-1.5 text-xs font-medium transition-all ${
+              className={`flex items-center gap-1.5 rounded-sm border border-[#CCCCCC]/20 px-3 py-1.5 text-xs font-medium transition-all ${
                 index === currentStep
                   ? "bg-white/20 text-white"
                   : index < currentStep
@@ -264,7 +264,7 @@ export default function BookingModal({
                   placeholder={t("booking.namePlaceholder")}
                   value={formData.clientName}
                   onChange={(e) => updateField("clientName", e.target.value)}
-                  className="rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                 />
                 {errors.clientName && (
                   <p className="text-xs text-destructive">{errors.clientName}</p>
@@ -282,7 +282,7 @@ export default function BookingModal({
                   placeholder={t("booking.emailPlaceholder")}
                   value={formData.clientEmail}
                   onChange={(e) => updateField("clientEmail", e.target.value)}
-                  className="rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                 />
                 {errors.clientEmail && (
                   <p className="text-xs text-destructive">{errors.clientEmail}</p>
@@ -299,7 +299,7 @@ export default function BookingModal({
                   placeholder={t("booking.whatsappPlaceholder")}
                   value={formData.clientWhatsapp}
                   onChange={(e) => updateField("clientWhatsapp", e.target.value)}
-                  className="rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                 />
                 {errors.clientWhatsapp && (
                   <p className="text-xs text-destructive">{errors.clientWhatsapp}</p>
@@ -325,10 +325,10 @@ export default function BookingModal({
                   value={formData.tattooStyle}
                   onValueChange={(value) => updateField("tattooStyle", value ?? "")}
                 >
-                  <SelectTrigger className="rounded-sm border-white/10 bg-[#141414] focus-visible:border-white/40 focus-visible:ring-0">
+                  <SelectTrigger className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus-visible:border-white/40 focus-visible:ring-0">
                     <SelectValue placeholder={t("booking.stylePlaceholder")} />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-white/10">
+                  <SelectContent className="bg-[#1a1a1a] border-[#CCCCCC]/20">
                     {tattooStyles.map((style) => (
                       <SelectItem key={style} value={style}>
                         {style}
@@ -351,7 +351,7 @@ export default function BookingModal({
                   placeholder={t("booking.bodyPlaceholder")}
                   value={formData.bodyLocation}
                   onChange={(e) => updateField("bodyLocation", e.target.value)}
-                  className="rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                 />
                 {errors.bodyLocation && (
                   <p className="text-xs text-destructive">{errors.bodyLocation}</p>
@@ -368,7 +368,7 @@ export default function BookingModal({
                   placeholder={t("booking.sizePlaceholder")}
                   value={formData.approxSizeCm}
                   onChange={(e) => updateField("approxSizeCm", e.target.value)}
-                  className="rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                 />
                 {errors.approxSizeCm && (
                   <p className="text-xs text-destructive">{errors.approxSizeCm}</p>
@@ -385,7 +385,7 @@ export default function BookingModal({
                   placeholder={t("booking.descriptionPlaceholder")}
                   value={formData.description}
                   onChange={(e) => updateField("description", e.target.value)}
-                  className="min-h-[100px] rounded-sm border-white/10 bg-[#141414] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
+                  className="min-h-[100px] rounded-sm border-[#CCCCCC]/20 bg-[#222222] focus:border-white/40 focus-visible:border-white/40 focus-visible:ring-0"
                   maxLength={500}
                 />
                 <p className="text-xs text-foreground/30 text-right">
@@ -428,7 +428,7 @@ export default function BookingModal({
                   <h3 className="font-heading text-lg text-center uppercase tracking-[0.12em] text-foreground/80 mb-4">
                     {t("booking.confirmData")}
                   </h3>
-                  <div className="space-y-2 border border-white/10 bg-[#141414] p-4 text-sm">
+                  <div className="space-y-2 border border-[#CCCCCC]/20 bg-[#222222] p-4 text-sm">
                     <div className="flex justify-between">
                       <span className="text-foreground/50">{t("booking.name")}</span>
                       <span className="font-medium">{formData.clientName}</span>

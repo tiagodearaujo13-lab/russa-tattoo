@@ -156,25 +156,25 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
   };
 
   return (
-    <section id="galeria" className="section-light relative bg-[#faf9f6] py-28 text-zinc-900 md:py-36">
-      <div className="container relative mx-auto max-w-7xl px-6 md:px-12">
+    <section id="galeria" className="relative bg-[#1A1A1A] py-24 sm:py-28 text-white md:py-36 border-t border-[#CCCCCC]/20">
+      <div className="container relative mx-auto max-w-7xl px-5 sm:px-8 md:px-12">
         {/* Header */}
         <ScrollReveal direction="bottom" className="mb-14 text-center">
           <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] w-6 bg-zinc-400" />
-            <span className="font-sans text-[10px] uppercase tracking-[0.3em] text-zinc-500 font-medium">
+            <span className="h-[1px] w-6 bg-[#808080]" />
+            <span className="font-tatuadora text-[9.5px] uppercase tracking-[0.3em] text-[#DCDCDC] font-medium">
               {t("gallery.eyebrow")}
             </span>
-            <span className="h-[1px] w-6 bg-zinc-400" />
+            <span className="h-[1px] w-6 bg-[#808080]" />
           </div>
 
-          <h2 className="mt-4 font-edo text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[0.05em] text-zinc-950">
+          <h2 className="mt-4 font-russa text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[-0.01em] text-white font-bold">
             {t("gallery.title")}
           </h2>
 
-          <div className="mx-auto mt-4 h-[1.5px] w-12 bg-zinc-900" />
+          <div className="mx-auto mt-4 h-[1.5px] w-12 bg-white/30" />
 
-          <p className="mx-auto mt-5 max-w-2xl font-times text-base sm:text-lg font-normal text-zinc-600 leading-relaxed">
+          <p className="mx-auto mt-5 max-w-2xl font-times text-base sm:text-lg font-normal text-[#DCDCDC] leading-relaxed">
             {t("gallery.support")}
           </p>
         </ScrollReveal>
@@ -186,10 +186,10 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
               key={category.value}
               type="button"
               onClick={() => setActiveCategory(category.value)}
-              className={`h-9 px-3 text-xs uppercase tracking-[0.2em] font-medium transition-all ${
+              className={`h-9 px-3 font-tatuadora text-[10px] uppercase tracking-[0.2em] font-medium transition-all ${
                 activeCategory === category.value
-                  ? "border-b-2 border-zinc-950 text-zinc-950 font-semibold"
-                  : "border-b-2 border-transparent text-zinc-500 hover:text-zinc-950"
+                  ? "border-b-2 border-white text-white font-semibold"
+                  : "border-b-2 border-transparent text-[#CCCCCC] hover:text-white"
               }`}
             >
               {t(category.key)}
@@ -210,7 +210,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                 transition={{ duration: 0.35, delay: index * 0.04 }}
                 className={`group relative ${
                   index % 3 === 1 ? "aspect-[3/4]" : "aspect-square"
-                } cursor-pointer overflow-hidden border border-black/8 bg-zinc-100 shadow-[0_4px_20px_rgba(0,0,0,0.03)]`}
+                } cursor-pointer overflow-hidden border border-[#CCCCCC]/20 bg-[#141416] shadow-[0_4px_20px_rgba(0,0,0,0.5)]`}
                 onClick={() => setLightboxItem(item)}
               >
                 <Image
@@ -222,14 +222,14 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                 />
 
                 {/* Gradient overlay on hover */}
-                <div className="absolute inset-0 bg-gradient-to-t from-black/80 via-black/30 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
+                <div className="absolute inset-0 bg-gradient-to-t from-black/85 via-black/40 to-transparent opacity-0 transition-opacity duration-400 group-hover:opacity-100" />
 
                 {/* Hover details */}
                 <div className="absolute inset-x-0 bottom-0 p-5 text-white opacity-0 transition-all duration-400 translate-y-3 group-hover:opacity-100 group-hover:translate-y-0">
-                  <p className="font-sans text-[9px] uppercase tracking-[0.25em] text-zinc-300">
+                  <p className="font-tatuadora text-[9px] uppercase tracking-[0.25em] text-[#DCDCDC]">
                     {item.styleCategory}
                   </p>
-                  <p className="mt-1 font-edo text-lg sm:text-xl font-normal tracking-[0.03em] text-white">
+                  <p className="mt-1 font-russa text-lg sm:text-xl font-bold tracking-[-0.01em] text-white">
                     {item.title}
                   </p>
                   <Link
@@ -309,17 +309,17 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
               />
 
               <div className="absolute inset-x-0 bottom-0 flex flex-col items-start gap-3 bg-gradient-to-t from-black/95 via-black/70 to-transparent p-6 pt-20 md:p-8">
-                <p className="font-sans text-[10px] uppercase tracking-[0.3em] text-white/60">
+                <p className="font-tatuadora text-[10px] uppercase tracking-[0.3em] text-white/70">
                   {lightboxItem.styleCategory}
                 </p>
-                <p className="font-edo text-2xl md:text-3xl font-normal text-white tracking-[0.04em]">
+                <p className="font-russa text-2xl md:text-3xl font-bold text-white tracking-[-0.01em]">
                   {lightboxItem.title}
                 </p>
                 <Link
                   href={quoteUrl(lightboxItem)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xs border border-white/50 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
+                  className="inline-flex items-center gap-2 rounded-xs border border-[#CCCCCC]/200 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
                 >
                   <MessageCircle className="h-3.5 w-3.5" />
                   {t("gallery.quoteThis")}

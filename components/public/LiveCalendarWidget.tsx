@@ -102,8 +102,8 @@ export default function LiveCalendarWidget() {
           transition={{ duration: 0.6 }}
           className="text-center mb-16"
         >
-          <span className="dotwork-label">{t("calendar.eyebrow")}</span>
-          <h2 className="font-edo mt-4 text-3xl sm:text-4xl md:text-5xl tracking-[0.06em] text-white">
+          <span className="dotwork-label font-tatuadora text-[9.5px] uppercase tracking-[0.3em] text-[#DCDCDC]">{t("calendar.eyebrow")}</span>
+          <h2 className="font-russa mt-4 text-3xl sm:text-4xl md:text-5xl tracking-[-0.01em] text-white font-bold">
             {t("calendar.title")}
           </h2>
           <p className="text-foreground/60 mx-auto max-w-2xl font-sans text-sm md:text-base mt-2">
@@ -113,11 +113,11 @@ export default function LiveCalendarWidget() {
 
         <ScrollReveal direction="bottom" className="grid md:grid-cols-[auto_1fr] gap-8 max-w-4xl mx-auto">
           {/* Calendar */}
-          <div className="rounded-sm border border-white/[0.08] bg-[#141414] p-6">
+          <div className="rounded-sm border border-white/[0.08] bg-[#222222] p-6">
             <div className="flex items-center justify-between mb-4">
               <div className="flex items-center gap-2 text-sm text-foreground/60">
                 <CalendarDays className="w-4 h-4 text-white" />
-                <span className="font-edo text-base tracking-[0.05em] text-white">
+                <span className="font-tatuadora text-sm tracking-[0.16em] uppercase text-white font-medium">
                   {t("calendar.calendar")}
                 </span>
               </div>
@@ -159,7 +159,7 @@ export default function LiveCalendarWidget() {
                   href={getWhatsAppUrl()}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="mt-3 inline-flex min-h-11 items-center rounded-sm border border-white/30 px-4 py-2 font-edo text-xs tracking-[0.1em] text-white transition-colors hover:bg-white hover:text-black"
+                  className="mt-3 inline-flex min-h-11 items-center rounded-sm border border-white/30 px-4 py-2 font-tatuadora text-[10px] uppercase tracking-[0.16em] text-white transition-colors hover:bg-white hover:text-black"
                 >
                   {t("calendar.whatsapp")}
                 </a>
@@ -168,18 +168,18 @@ export default function LiveCalendarWidget() {
           </div>
 
           {/* Slots List */}
-          <div className="rounded-sm border border-white/[0.08] bg-[#141414] p-6">
+          <div className="rounded-sm border border-white/[0.08] bg-[#222222] p-6">
             <div className="flex items-center gap-2 mb-6 text-sm text-foreground/60">
               <Clock className="w-4 h-4 text-white" />
               {selectedDate ? (
-                <span className="font-edo text-base tracking-[0.04em] text-white">
+                <span className="font-tatuadora text-sm tracking-[0.14em] uppercase text-white">
                   {t("calendar.hoursOf")}{" "}
                   <strong className="text-white underline decoration-white/30">
                     {format(selectedDate, "d 'de' MMMM", { locale: calendarLocale })}
                   </strong>
                 </span>
               ) : (
-                <span className="font-edo text-base tracking-[0.04em] text-white">
+                <span className="font-tatuadora text-sm tracking-[0.14em] uppercase text-white">
                   {t("calendar.selectDate")}
                 </span>
               )}
@@ -187,21 +187,21 @@ export default function LiveCalendarWidget() {
 
             {!selectedDate ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
-                <CalendarDays className="w-12 h-12 mb-4" />
-                <p className="font-edo text-base tracking-[0.04em] text-zinc-300">
+                <CalendarDays className="w-12 h-12 mb-4 text-zinc-600" />
+                <p className="font-times text-base tracking-[0.02em] text-zinc-300">
                   {t("calendar.clickDay")}
                 </p>
-                <p className="mt-1 text-xs font-sans text-zinc-500">
+                <p className="mt-1 text-xs font-tatuadora tracking-[0.15em] uppercase text-zinc-500">
                   {t("calendar.highlighted")}
                 </p>
               </div>
             ) : daySlots.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
-                <Clock className="w-12 h-12 mb-4" />
-                <p className="font-edo text-base tracking-[0.04em] text-zinc-300">
+                <Clock className="w-12 h-12 mb-4 text-zinc-600" />
+                <p className="font-times text-base tracking-[0.02em] text-zinc-300">
                   {t("calendar.noHours")}
                 </p>
-                <p className="mt-1 text-xs font-sans text-zinc-500">
+                <p className="mt-1 text-xs font-tatuadora tracking-[0.15em] uppercase text-zinc-500">
                   {t("calendar.tryAnother")}
                 </p>
               </div>
@@ -224,13 +224,13 @@ export default function LiveCalendarWidget() {
                     >
                       <div className="flex items-center gap-3">
                         <div className={`w-2.5 h-2.5 rounded-sm ${config.dot}`} />
-                        <span className="font-edo text-base tracking-[0.05em] text-white">
+                        <span className="font-tatuadora text-sm tracking-[0.12em] uppercase text-white font-medium">
                           {slot.timeStart} — {slot.timeEnd}
                         </span>
                       </div>
                       <Badge
                         variant="outline"
-                        className={`font-edo text-xs tracking-[0.04em] ${config.className}`}
+                        className={`font-tatuadora text-[9px] uppercase tracking-[0.12em] ${config.className}`}
                       >
                         {config.label}
                       </Badge>
@@ -243,7 +243,7 @@ export default function LiveCalendarWidget() {
             {/* Legend */}
             <div className="flex items-center gap-4 mt-6 pt-4 border-t border-white/5">
               {Object.entries(statusConfig).map(([key, config]) => (
-                <div key={key} className="flex items-center gap-1.5 font-edo text-xs tracking-[0.03em] text-foreground/50">
+                <div key={key} className="flex items-center gap-1.5 font-tatuadora text-[9px] uppercase tracking-[0.12em] text-zinc-400">
                   <div className={`w-2 h-2 rounded-sm ${config.dot}`} />
                   {config.label}
                 </div>

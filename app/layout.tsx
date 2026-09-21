@@ -1,10 +1,18 @@
 import type { Metadata } from "next";
-import { Cormorant_Garamond, Montserrat } from "next/font/google";
+import { Bodoni_Moda, Cormorant_Garamond, Montserrat } from "next/font/google";
 import "./globals.css";
+
+const bodoniModa = Bodoni_Moda({
+  subsets: ["latin"],
+  variable: "--font-russa",
+  weight: ["400", "600", "700"],
+  display: "swap",
+});
 
 const montserrat = Montserrat({
   subsets: ["latin"],
-  variable: "--font-montserrat",
+  variable: "--font-tatuadora",
+  weight: ["200", "300", "400", "500", "600", "700"],
   display: "swap",
 });
 
@@ -59,7 +67,7 @@ const structuredData = {
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="pt" className="h-full antialiased scroll-smooth">
-      <body className={`${montserrat.variable} ${cormorant.variable} min-h-full flex flex-col bg-[#0c0c0c] text-white`}>
+      <body className={`${bodoniModa.variable} ${montserrat.variable} ${cormorant.variable} min-h-full flex flex-col bg-[#1A1A1A] text-white`}>
         {children}
         <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(structuredData) }} />
       </body>
