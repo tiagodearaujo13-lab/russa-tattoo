@@ -86,7 +86,7 @@ export default function FeaturesStyles() {
 
           <div className="mt-4 h-[1.5px] w-12 bg-white/30" />
 
-          <p className="mt-5 max-w-xl font-times text-base sm:text-lg font-normal leading-relaxed text-[#DCDCDC]">
+          <p className="mt-5 max-w-xl font-tatuadora text-base sm:text-lg font-normal leading-relaxed text-[#DCDCDC]">
             {t("styles.support")}
           </p>
         </motion.div>
@@ -127,11 +127,11 @@ export default function FeaturesStyles() {
                     </div>
                   </div>
 
-                  <h3 className="font-russa text-xl sm:text-2xl font-bold text-white tracking-[-0.01em]">
+                  <h3 className="font-tatuadora text-xl sm:text-2xl font-light tracking-[0.05em] text-white">
                     {t(style.key)}
                   </h3>
 
-                  <p className="mt-2 font-times text-sm sm:text-base font-normal leading-relaxed text-[#CCCCCC]">
+                  <p className="mt-2 font-tatuadora text-sm sm:text-base font-normal leading-relaxed text-[#CCCCCC]">
                     {t(style.descKey)}
                   </p>
                 </div>
@@ -140,7 +140,7 @@ export default function FeaturesStyles() {
                   <span className="font-tatuadora text-[8.5px] uppercase tracking-[0.2em] text-[#808080] group-hover:text-white transition-colors">
                     Atelier Fine Line
                   </span>
-                  <span className="font-sans text-sm text-[#808080] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white">
+                  <span className="font-tatuadora text-sm text-[#808080] transition-transform duration-300 group-hover:translate-x-1 group-hover:text-white">
                     →
                   </span>
                 </div>

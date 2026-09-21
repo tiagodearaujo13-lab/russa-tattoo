@@ -5,6 +5,8 @@ import { motion } from "framer-motion";
 import CountUp from "./CountUp";
 import { useLanguage } from "./LanguageProvider";
 
+const SILHOUETTE_WIDTH = "w-[340px] sm:w-[480px] md:w-[620px] lg:w-[760px] xl:w-[900px]";
+
 const stats = [
   { value: 12, suffix: "+", key: "about.years" },
   { value: 1500, suffix: "+", key: "about.clients" },
@@ -20,20 +22,19 @@ export default function AboutSection() {
       id="sobre"
       className="relative overflow-hidden bg-gradient-to-b from-[#CCCCCC] to-[#D1D1D1] text-[#1A1A1A]"
     >
-      {/* Continuação visual do Hero, suavemente integrada ao cinzento editorial. */}
-      <div className="pointer-events-none absolute inset-x-0 top-0 z-0 flex items-start justify-center select-none">
+      <div className="pointer-events-none absolute left-1/2 top-0 z-0 flex -translate-x-1/2 items-start justify-center select-none">
         <motion.div
           initial={{ opacity: 0, y: 24 }}
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true }}
           transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className="relative aspect-[2590/1527] w-[320px] opacity-80 mix-blend-multiply sm:w-[460px] sm:opacity-85 md:w-[620px] lg:w-[780px] lg:opacity-95 xl:w-[920px]"
+          className={`relative aspect-[301/210] opacity-80 mix-blend-multiply sm:opacity-85 lg:opacity-95 ${SILHOUETTE_WIDTH}`}
         >
           <Image
             src="/images/brand/russa-continuation-bottom.png"
             alt="Russa Tatuadora — Busto e Ombros (Continuação Oficial)"
             fill
-            sizes="(max-width: 640px) 320px, (max-width: 768px) 460px, (max-width: 1024px) 620px, (max-width: 1280px) 780px, 920px"
+            sizes="(max-width: 640px) 340px, (max-width: 768px) 480px, (max-width: 1024px) 620px, (max-width: 1280px) 760px, 900px"
             className="object-contain object-top"
           />
         </motion.div>
@@ -45,7 +46,7 @@ export default function AboutSection() {
           whileInView={{ opacity: 1, y: 0 }}
           viewport={{ once: true, amount: 0.2 }}
           transition={{ duration: 0.8, ease: [0.16, 1, 0.3, 1] }}
-          className="max-w-2xl lg:max-w-3xl"
+          className="max-w-2xl bg-[#CCCCCC]/80 p-6 backdrop-blur-md md:bg-[#CCCCCC]/70 lg:max-w-3xl sm:p-8"
         >
           <div className="flex items-center gap-3">
             <span className="h-px w-6 bg-[#1A1A1A]/40 sm:w-8" />
@@ -60,7 +61,7 @@ export default function AboutSection() {
 
           <div className="mt-4 h-px w-12 bg-[#1A1A1A]/20" />
 
-          <div className="mt-6 space-y-4 font-times text-base font-light leading-relaxed text-[#222222] sm:mt-8 sm:text-lg">
+          <div className="mt-6 space-y-4 font-tatuadora text-base font-light leading-relaxed text-[#222222] sm:mt-8 sm:text-lg">
             <p>{t("about.paragraph1")}</p>
             <p>{t("about.paragraph2")}</p>
             <p>{t("about.paragraph3")}</p>

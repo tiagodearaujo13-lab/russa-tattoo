@@ -106,7 +106,7 @@ export default function LiveCalendarWidget() {
           <h2 className="font-russa mt-4 text-3xl sm:text-4xl md:text-5xl tracking-[-0.01em] text-white font-bold">
             {t("calendar.title")}
           </h2>
-          <p className="text-foreground/60 mx-auto max-w-2xl font-sans text-sm md:text-base mt-2">
+          <p className="text-foreground/60 mx-auto max-w-2xl font-tatuadora text-sm md:text-base mt-2">
             {t("calendar.support")}
           </p>
         </motion.div>
@@ -146,13 +146,13 @@ export default function LiveCalendarWidget() {
               className="rounded-sm"
             />
             {lastUpdated && (
-              <p className="mt-3 text-center text-xs text-foreground/30 font-sans">
+              <p className="mt-3 text-center text-xs text-foreground/30 font-tatuadora">
                 {t("calendar.updated")} {format(lastUpdated, "HH:mm")}
               </p>
             )}
             {!isLoading && slots.length === 0 && (
               <div className="mt-5 border-t border-white/5 pt-4 text-center">
-                <p className="text-xs leading-relaxed text-foreground/50 font-sans">
+                <p className="text-xs leading-relaxed text-foreground/50 font-tatuadora">
                   {t("calendar.noOpenSlots")}
                 </p>
                 <a
@@ -188,7 +188,7 @@ export default function LiveCalendarWidget() {
             {!selectedDate ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
                 <CalendarDays className="w-12 h-12 mb-4 text-zinc-600" />
-                <p className="font-times text-base tracking-[0.02em] text-zinc-300">
+                <p className="font-tatuadora text-base tracking-[0.02em] text-zinc-300">
                   {t("calendar.clickDay")}
                 </p>
                 <p className="mt-1 text-xs font-tatuadora tracking-[0.15em] uppercase text-zinc-500">
@@ -198,7 +198,7 @@ export default function LiveCalendarWidget() {
             ) : daySlots.length === 0 ? (
               <div className="flex flex-col items-center justify-center py-16 text-foreground/30">
                 <Clock className="w-12 h-12 mb-4 text-zinc-600" />
-                <p className="font-times text-base tracking-[0.02em] text-zinc-300">
+                <p className="font-tatuadora text-base tracking-[0.02em] text-zinc-300">
                   {t("calendar.noHours")}
                 </p>
                 <p className="mt-1 text-xs font-tatuadora tracking-[0.15em] uppercase text-zinc-500">

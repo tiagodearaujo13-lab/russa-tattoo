@@ -51,7 +51,7 @@ export default function PiercingSection() {
 
             <div className="mt-4 h-[1.5px] w-12 bg-white/30" />
 
-            <p className="mb-8 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
+            <p className="mb-8 mt-6 max-w-lg font-tatuadora text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
               {t("piercing.support")}
             </p>
 
@@ -86,15 +86,15 @@ export default function PiercingSection() {
                 className="group border-b border-[#CCCCCC]/20 py-5 transition-colors hover:bg-white/[0.02] px-2"
               >
                 <div className="flex items-baseline gap-3">
-                  <h3 className="shrink-0 font-russa text-lg sm:text-xl uppercase tracking-[0.02em] text-white font-bold transition-colors group-hover:text-[#DCDCDC]">
+                  <h3 className="shrink-0 font-tatuadora text-lg font-light sm:text-xl uppercase tracking-[0.08em] text-white transition-colors group-hover:text-[#DCDCDC]">
                     {t(piercing.nameKey)}
                   </h3>
                   <span className="mb-1 h-px flex-1 border-b border-dotted border-white/20" />
-                  <span className="shrink-0 font-russa text-lg font-bold text-white">
+                  <span className="shrink-0 font-tatuadora text-lg font-light tracking-[0.08em] text-white">
                     {languageAwarePrice(piercing.price, t("piercing.eyebrow"), t)}
                   </span>
                 </div>
-                <p className="mt-2 max-w-md font-times text-sm leading-relaxed text-[#CCCCCC] font-light">
+                <p className="mt-2 max-w-md font-tatuadora text-sm leading-relaxed text-[#CCCCCC] font-light">
                   {t(piercing.descriptionKey)}
                 </p>
               </motion.div>

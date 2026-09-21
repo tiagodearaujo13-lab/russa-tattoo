@@ -31,7 +31,7 @@ export default function FAQSection() {
             {t("faq.title")}
           </h2>
           <div className="mx-auto mt-4 h-[1.5px] w-12 bg-white/30" />
-          <p className="mt-5 font-times text-base sm:text-lg text-[#DCDCDC] font-light">
+          <p className="mt-5 font-tatuadora text-base sm:text-lg text-[#DCDCDC] font-light">
             {t("faq.support")}
           </p>
         </motion.div>
@@ -51,7 +51,7 @@ export default function FAQSection() {
                 className="border-t border-[#CCCCCC]/20 last:border-b"
               >
                 <AccordionTrigger className="group/accordion-trigger min-h-12 gap-4 rounded-none py-5 text-left hover:no-underline [&>svg]:hidden">
-                  <span className="font-russa text-base sm:text-lg tracking-[0.01em] text-white font-bold group-hover/accordion-trigger:text-[#DCDCDC] transition-colors">
+                  <span className="font-tatuadora text-base font-light sm:text-lg tracking-[0.05em] text-white group-hover/accordion-trigger:text-[#DCDCDC] transition-colors">
                     {faq.question}
                   </span>
                   <span className="relative ml-auto h-5 w-5 shrink-0 text-xl font-light leading-none text-[#CCCCCC]">
@@ -63,7 +63,7 @@ export default function FAQSection() {
                     </span>
                   </span>
                 </AccordionTrigger>
-                <AccordionContent className="pb-6 pr-6 sm:pr-10 font-times text-base sm:text-lg leading-relaxed text-[#DCDCDC]">
+                <AccordionContent className="pb-6 pr-6 sm:pr-10 font-tatuadora text-base sm:text-lg leading-relaxed text-[#DCDCDC]">
                   {faq.answer}
                 </AccordionContent>
               </AccordionItem>

@@ -77,7 +77,7 @@ function LanguageSwitcher({
           type="button"
           onClick={() => setLanguage(item)}
           aria-pressed={language === item}
-          className={`h-full px-2 sm:px-2.5 font-sans text-[9px] sm:text-[9.5px] font-semibold uppercase tracking-[0.16em] transition-all rounded-xs ${
+          className={`h-full px-2 sm:px-2.5 font-tatuadora text-[9px] sm:text-[9.5px] font-semibold uppercase tracking-[0.16em] transition-all rounded-xs ${
             language === item
               ? "bg-white text-black shadow-xs"
               : "text-[#DCDCDC] hover:text-white"
@@ -123,7 +123,7 @@ export default function Header() {
             <Link
               key={link.href}
               href={link.href}
-              className="group relative font-sans text-[10px] xl:text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#DCDCDC] transition-colors hover:text-white"
+              className="group relative font-tatuadora text-[10px] xl:text-[10.5px] font-medium uppercase tracking-[0.22em] text-[#DCDCDC] transition-colors hover:text-white"
             >
               {t(link.key)}
               <span className="absolute -bottom-1.5 left-0 h-[1.5px] w-0 bg-white transition-all duration-300 ease-out group-hover:w-full" />
@@ -180,7 +180,7 @@ export default function Header() {
                 </div>
 
                 <div className="flex items-center justify-between border-b border-[#CCCCCC]/20 px-6 py-4">
-                  <span className="font-sans text-[9px] uppercase tracking-[0.25em] text-[#CCCCCC]">
+                  <span className="font-tatuadora text-[9px] uppercase tracking-[0.25em] text-[#CCCCCC]">
                     {t("header.language")}
                   </span>
                   <LanguageSwitcher language={language} setLanguage={setLanguage} />
@@ -192,7 +192,7 @@ export default function Header() {
                       key={link.href}
                       href={link.href}
                       onClick={() => setIsMobileOpen(false)}
-                      className="py-3 font-sans text-xs uppercase tracking-[0.2em] text-[#DCDCDC] transition-colors hover:text-white"
+                      className="py-3 font-tatuadora text-xs uppercase tracking-[0.2em] text-[#DCDCDC] transition-colors hover:text-white"
                     >
                       {t(link.key)}
                     </Link>

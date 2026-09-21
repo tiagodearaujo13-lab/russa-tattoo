@@ -6,6 +6,8 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageProvider";
 
+const SILHOUETTE_WIDTH = "w-[340px] sm:w-[480px] md:w-[620px] lg:w-[760px] xl:w-[900px]";
+
 function LeftLetters({ text, delay = 0.2 }: { text: string; delay?: number }) {
   return (
     <span className="inline-flex overflow-hidden">
@@ -42,9 +44,9 @@ export default function HeroSection() {
   return (
     <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#1A1A1A] text-white">
       {/* A cabeça termina na base do Hero para continuar diretamente no About. */}
-      <div className="absolute inset-x-0 bottom-0 z-0 flex items-end justify-center pointer-events-none select-none">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }} className="relative aspect-[2590/2456] w-[320px] animate-fade-in sm:w-[460px] md:w-[620px] lg:w-[780px] xl:w-[920px]">
-          <Image src="/images/brand/russa-hero-crop.png" alt="Olhar de Russa Tatuadora" fill priority sizes="(max-width: 640px) 320px, (max-width: 768px) 460px, (max-width: 1024px) 620px, (max-width: 1280px) 780px, 920px" className="object-contain object-bottom opacity-70 mix-blend-screen" />
+      <div className="absolute bottom-0 left-1/2 z-0 flex -translate-x-1/2 items-end justify-center pointer-events-none select-none pb-0">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }} className={`relative aspect-[2557/2428] animate-fade-in ${SILHOUETTE_WIDTH}`}>
+          <Image src="/images/brand/russa-hero-crop.png" alt="Olhar de Russa Tatuadora" fill priority sizes="(max-width: 640px) 340px, (max-width: 768px) 480px, (max-width: 1024px) 620px, (max-width: 1280px) 760px, 900px" className="object-contain object-bottom opacity-70 mix-blend-screen" />
         </motion.div>
       </div>
 
@@ -60,13 +62,13 @@ export default function HeroSection() {
         </motion.div>
 
         <h1 className="select-none text-white">
-          <span className="block overflow-hidden whitespace-nowrap font-russa text-6xl font-bold leading-[0.88] tracking-[-0.02em] text-white drop-shadow-[0_4px_24px_rgba(0,0,0,0.85)] sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem]">
+          <span className="block overflow-hidden whitespace-nowrap font-russa text-6xl font-bold leading-[0.88] tracking-[-0.02em] text-[#9E9E9E] drop-shadow-[0_2px_16px_rgba(0,0,0,0.7)] sm:text-8xl md:text-9xl lg:text-[9.5rem] xl:text-[10.5rem]">
             <LeftLetters text="RU" delay={0.25} /><RightLetters text="SSA" delay={0.42} />
           </span>
-          <span className="mt-3 block font-tatuadora text-xs font-light uppercase tracking-[0.4em] text-[#E8E8E8] sm:text-base md:text-xl lg:text-2xl sm:tracking-[0.44em]"><TatuadoraLetters text="TATUADORA" delay={0.95} /></span>
+          <span className="mt-3 block font-tatuadora text-xs font-light uppercase tracking-[0.4em] text-[#E0E0E0] sm:text-base md:text-xl lg:text-2xl sm:tracking-[0.44em]"><TatuadoraLetters text="TATUADORA" delay={0.95} /></span>
         </h1>
 
-        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.7 }} className="mx-auto mt-6 max-w-xl font-times text-sm font-normal leading-relaxed text-[#DCDCDC] sm:mt-8 sm:text-base md:text-lg">{t("hero.support")}</motion.p>
+        <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.7 }} className="mx-auto mt-6 max-w-xl font-tatuadora text-sm font-normal leading-relaxed text-[#DCDCDC] sm:mt-8 sm:text-base md:text-lg">{t("hero.support")}</motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.7, duration: 0.7 }} className="mt-8 flex max-w-md flex-col items-stretch justify-center gap-3.5 self-center sm:mt-10 sm:max-w-none sm:flex-row sm:items-center sm:gap-4">
           <Button asChild className="btn-dotwork-primary min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#agenda">{t("hero.book")}</Link></Button>
           <Button asChild className="btn-dotwork-outline min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#galeria" className="group">{t("hero.portfolio")}<span aria-hidden="true" className="ml-2.5 inline-block transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span></Link></Button>

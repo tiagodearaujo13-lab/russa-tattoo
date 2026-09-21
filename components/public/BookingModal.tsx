@@ -204,7 +204,7 @@ export default function BookingModal({
     <Dialog open={isOpen} onOpenChange={handleOpenChange}>
       <DialogContent className="rounded-sm border-[#CCCCCC]/20 bg-[#1A1A1A] max-w-lg max-h-[90vh] overflow-y-auto">
         <DialogHeader>
-          <DialogTitle className="font-russa text-center text-2xl sm:text-3xl tracking-[-0.01em] text-white font-bold">
+          <DialogTitle className="font-tatuadora text-center text-2xl font-light sm:text-3xl tracking-[0.08em] text-white">
             {t("booking.title")}
           </DialogTitle>
         </DialogHeader>

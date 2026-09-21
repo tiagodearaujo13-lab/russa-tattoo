@@ -55,7 +55,7 @@ export default function ContactSection() {
               {t("contact.title")}
             </h2>
             <div className="mt-4 h-[1.5px] w-12 bg-white/30" />
-            <p className="mb-10 mt-6 max-w-lg font-times text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
+            <p className="mb-10 mt-6 max-w-lg font-tatuadora text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
               {t("contact.support")}
             </p>
 
@@ -77,12 +77,12 @@ export default function ContactSection() {
                         href={info.href}
                         target={info.href.startsWith("http") ? "_blank" : undefined}
                         rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="font-times text-base sm:text-lg text-zinc-200 transition-colors hover:text-white"
+                        className="font-tatuadora text-base sm:text-lg text-zinc-200 transition-colors hover:text-white"
                       >
                         {info.value}
                       </Link>
                     ) : (
-                      <p className="font-times text-base sm:text-lg text-zinc-200">
+                      <p className="font-tatuadora text-base sm:text-lg text-zinc-200">
                         {info.value}
                       </p>
                     )}

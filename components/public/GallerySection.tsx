@@ -174,7 +174,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
 
           <div className="mx-auto mt-4 h-[1.5px] w-12 bg-white/30" />
 
-          <p className="mx-auto mt-5 max-w-2xl font-times text-base sm:text-lg font-normal text-[#DCDCDC] leading-relaxed">
+          <p className="mx-auto mt-5 max-w-2xl font-tatuadora text-base sm:text-lg font-normal text-[#DCDCDC] leading-relaxed">
             {t("gallery.support")}
           </p>
         </ScrollReveal>
@@ -229,7 +229,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                   <p className="font-tatuadora text-[9px] uppercase tracking-[0.25em] text-[#DCDCDC]">
                     {item.styleCategory}
                   </p>
-                  <p className="mt-1 font-russa text-lg sm:text-xl font-bold tracking-[-0.01em] text-white">
+                  <p className="mt-1 font-tatuadora text-lg font-light tracking-[0.05em] sm:text-xl text-white">
                     {item.title}
                   </p>
                   <Link
@@ -237,7 +237,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                     target="_blank"
                     rel="noopener noreferrer"
                     onClick={(event) => event.stopPropagation()}
-                    className="mt-3 inline-flex items-center gap-2 rounded-xs border border-white/40 px-3 py-1.5 font-sans text-[9.5px] uppercase tracking-[0.16em] text-white transition-colors hover:bg-white hover:text-black"
+                    className="mt-3 inline-flex items-center gap-2 rounded-xs border border-white/40 px-3 py-1.5 font-tatuadora text-[9.5px] uppercase tracking-[0.16em] text-white transition-colors hover:bg-white hover:text-black"
                   >
                     <MessageCircle className="h-3 w-3" />
                     {t("gallery.quote")}
@@ -247,7 +247,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                 {item.featured && (
                   <span
                     aria-label="Destaque"
-                    className="absolute top-3 right-3 font-sans text-[8px] uppercase tracking-[0.2em] bg-white/90 text-zinc-900 px-2 py-0.5 font-medium shadow-xs"
+                    className="absolute top-3 right-3 font-tatuadora text-[8px] uppercase tracking-[0.2em] bg-white/90 text-zinc-900 px-2 py-0.5 font-medium shadow-xs"
                   >
                     Fine Line
                   </span>
@@ -312,19 +312,19 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                 <p className="font-tatuadora text-[10px] uppercase tracking-[0.3em] text-white/70">
                   {lightboxItem.styleCategory}
                 </p>
-                <p className="font-russa text-2xl md:text-3xl font-bold text-white tracking-[-0.01em]">
+                <p className="font-tatuadora text-2xl md:text-3xl font-light tracking-[0.05em] text-white">
                   {lightboxItem.title}
                 </p>
                 <Link
                   href={quoteUrl(lightboxItem)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="inline-flex items-center gap-2 rounded-xs border border-[#CCCCCC]/200 px-4 py-2 font-sans text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
+                  className="inline-flex items-center gap-2 rounded-xs border border-[#CCCCCC]/200 px-4 py-2 font-tatuadora text-[10px] uppercase tracking-[0.18em] text-white transition-colors hover:bg-white hover:text-black"
                 >
                   <MessageCircle className="h-3.5 w-3.5" />
                   {t("gallery.quoteThis")}
                 </Link>
-                <span className="font-sans text-[10px] tracking-[0.25em] text-white/50">
+                <span className="font-tatuadora text-[10px] tracking-[0.25em] text-white/50">
                   {String(lightboxIndex + 1).padStart(2, "0")} / {String(filteredItems.length).padStart(2, "0")}
                 </span>
               </div>
