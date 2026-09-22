@@ -156,25 +156,25 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
   };
 
   return (
-    <section id="galeria" className="relative bg-[#1A1A1A] py-24 sm:py-28 text-white md:py-36 border-t border-[#CCCCCC]/20">
+    <section id="galeria" className="relative bg-gradient-to-b from-[#CCCCCC] to-[#D1D1D1] py-24 sm:py-28 text-[#1A1A1A] md:py-36 border-t border-[#1A1A1A]/15">
       <div className="container relative mx-auto max-w-7xl px-5 sm:px-8 md:px-12">
         {/* Header */}
         <ScrollReveal direction="bottom" className="mb-14 text-center">
           <div className="flex items-center justify-center gap-3">
-            <span className="h-[1px] w-6 bg-[#808080]" />
-            <span className="font-tatuadora text-[9.5px] uppercase tracking-[0.3em] text-[#DCDCDC] font-medium">
+            <span className="h-[1px] w-6 bg-[#1A1A1A]" />
+            <span className="font-tatuadora text-[9.5px] uppercase tracking-[0.3em] text-[#333333] font-medium">
               {t("gallery.eyebrow")}
             </span>
-            <span className="h-[1px] w-6 bg-[#808080]" />
+            <span className="h-[1px] w-6 bg-[#1A1A1A]" />
           </div>
 
-          <h2 className="mt-4 font-russa text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[-0.01em] text-white font-bold">
+          <h2 className="mt-4 font-russa text-3xl sm:text-4xl md:text-5xl lg:text-6xl tracking-[-0.01em] text-[#1A1A1A] font-bold">
             {t("gallery.title")}
           </h2>
 
-          <div className="mx-auto mt-4 h-[1.5px] w-12 bg-white/30" />
+          <div className="mx-auto mt-4 h-[1.5px] w-12 bg-[#1A1A1A]/20" />
 
-          <p className="mx-auto mt-5 max-w-2xl font-tatuadora text-base sm:text-lg font-normal text-[#DCDCDC] leading-relaxed">
+          <p className="mx-auto mt-5 max-w-2xl font-tatuadora text-base sm:text-lg font-normal text-[#222222] leading-relaxed">
             {t("gallery.support")}
           </p>
         </ScrollReveal>
@@ -188,8 +188,8 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
               onClick={() => setActiveCategory(category.value)}
               className={`h-9 px-3 font-tatuadora text-[10px] uppercase tracking-[0.2em] font-medium transition-all ${
                 activeCategory === category.value
-                  ? "border-b-2 border-white text-white font-semibold"
-                  : "border-b-2 border-transparent text-[#CCCCCC] hover:text-white"
+                  ? "border-b-2 border-[#1A1A1A] text-[#1A1A1A] font-semibold"
+                  : "border-b-2 border-transparent text-[#333333] hover:text-[#1A1A1A]"
               }`}
             >
               {t(category.key)}
@@ -210,7 +210,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
                 transition={{ duration: 0.35, delay: index * 0.04 }}
                 className={`group relative ${
                   index % 3 === 1 ? "aspect-[3/4]" : "aspect-square"
-                } cursor-pointer overflow-hidden border border-[#CCCCCC]/20 bg-[#141416] shadow-[0_4px_20px_rgba(0,0,0,0.5)]`}
+                } cursor-pointer overflow-hidden border border-[#1A1A1A]/15 bg-[#D1D1D1] shadow-[0_4px_20px_rgba(0,0,0,0.5)]`}
                 onClick={() => setLightboxItem(item)}
               >
                 <Image
@@ -263,7 +263,7 @@ export default function GallerySection({ items = [] }: { items?: GalleryItem[] }
             href={STUDIO_CONFIG.instagram}
             target="_blank"
             rel="noopener noreferrer"
-            className="btn-luxury-outline inline-flex items-center gap-3 px-8 py-3.5 text-xs"
+            className="inline-flex border border-[#1A1A1A] text-[#1A1A1A] transition-colors hover:bg-[#1A1A1A] hover:text-white items-center gap-3 px-8 py-3.5 text-xs"
           >
             <InstagramIcon className="h-4 w-4" />
             {t("gallery.fullPortfolio")} · @russatatuadora

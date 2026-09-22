@@ -23,15 +23,15 @@ export default function PiercingSection() {
   const { t } = useLanguage();
 
   return (
-    <section id="piercing" className="relative overflow-hidden bg-[#222222] py-24 md:py-32 text-white border-t border-[#CCCCCC]/20">
+    <section id="piercing" className="relative overflow-hidden bg-gradient-to-b from-[#D1D1D1] to-[#CCCCCC] py-24 md:py-32 text-[#1A1A1A] border-t border-[#1A1A1A]/15">
       <div
-        className="absolute inset-0 bg-cover bg-center grayscale opacity-10 pointer-events-none"
+        className="absolute inset-0 bg-cover bg-center grayscale opacity-5 pointer-events-none"
         style={{
           backgroundImage:
             "url('https://images.unsplash.com/photo-1516589178581-6cd7833ae3b2?auto=format&fit=crop&w=1200&q=85')",
         }}
       />
-      <div className="absolute inset-0 bg-gradient-to-b from-[#222222] via-[#222222]/90 to-[#222222] pointer-events-none" />
+      <div className="absolute inset-0 bg-gradient-to-b from-[#D1D1D1] via-[#CCCCCC]/90 to-[#CCCCCC] pointer-events-none" />
 
       <div className="container relative mx-auto max-w-7xl px-5 sm:px-8 md:px-12">
         <div className="grid items-start gap-14 lg:grid-cols-[0.85fr_1.15fr] lg:gap-24">
@@ -41,30 +41,30 @@ export default function PiercingSection() {
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
           >
-            <div className="mb-6 inline-flex min-h-11 items-center gap-3 border border-[#CCCCCC]/20 px-3.5 py-2 font-tatuadora text-[9.5px] font-medium uppercase tracking-[0.25em] text-[#DCDCDC] bg-white/5">
-              <Gem className="h-4 w-4 text-white" /> {t("piercing.eyebrow")}
+            <div className="mb-6 inline-flex min-h-11 items-center gap-3 border border-[#1A1A1A]/20 px-3.5 py-2 font-tatuadora text-[9.5px] font-medium uppercase tracking-[0.25em] text-[#1A1A1A] bg-[#1A1A1A]/20">
+              <Gem className="h-4 w-4 text-[#1A1A1A]" /> {t("piercing.eyebrow")}
             </div>
 
-            <h2 className="font-russa text-3xl sm:text-4xl md:text-5xl uppercase leading-tight tracking-[-0.01em] text-white font-bold">
+            <h2 className="font-russa text-3xl sm:text-4xl md:text-5xl uppercase leading-tight tracking-[-0.01em] text-[#1A1A1A] font-bold">
               {t("piercing.title")}
             </h2>
 
-            <div className="mt-4 h-[1.5px] w-12 bg-white/30" />
+            <div className="mt-4 h-[1.5px] w-12 bg-[#1A1A1A]/20" />
 
-            <p className="mb-8 mt-6 max-w-lg font-tatuadora text-base sm:text-lg leading-relaxed text-[#DCDCDC] font-light">
+            <p className="mb-8 mt-6 max-w-lg font-tatuadora text-base sm:text-lg leading-relaxed text-[#222222] font-light">
               {t("piercing.support")}
             </p>
 
             <div className="mb-10 flex flex-wrap gap-3">
-              <span className="inline-flex min-h-11 items-center gap-2 border border-[#CCCCCC]/20 px-3.5 py-2 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#DCDCDC] bg-white/5">
-                <Shield className="h-3.5 w-3.5 text-white" /> {t("piercing.titanium")}
+              <span className="inline-flex min-h-11 items-center gap-2 border border-[#1A1A1A]/20 px-3.5 py-2 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#1A1A1A] bg-white/30">
+                <Shield className="h-3.5 w-3.5 text-[#1A1A1A]" /> {t("piercing.titanium")}
               </span>
-              <span className="inline-flex min-h-11 items-center gap-2 border border-[#CCCCCC]/20 px-3.5 py-2 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#DCDCDC] bg-white/5">
-                <Sparkles className="h-3.5 w-3.5 text-white" /> {t("piercing.sterile")}
+              <span className="inline-flex min-h-11 items-center gap-2 border border-[#1A1A1A]/20 px-3.5 py-2 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#1A1A1A] bg-white/30">
+                <Sparkles className="h-3.5 w-3.5 text-[#1A1A1A]" /> {t("piercing.sterile")}
               </span>
             </div>
 
-            <Button asChild className="btn-dotwork-outline min-h-11 px-8">
+            <Button asChild className="min-h-11 border border-[#1A1A1A] bg-[#1A1A1A] px-8 font-tatuadora text-[#CCCCCC] hover:bg-[#222222]">
               <Link href="#agenda">{t("piercing.book")}</Link>
             </Button>
           </motion.div>
@@ -74,7 +74,7 @@ export default function PiercingSection() {
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="border-t border-[#CCCCCC]/20"
+            className="border-t border-[#1A1A1A]/20"
           >
             {piercingTypes.map((piercing, index) => (
               <motion.div
@@ -83,18 +83,18 @@ export default function PiercingSection() {
                 whileInView={{ opacity: 1, y: 0 }}
                 viewport={{ once: true }}
                 transition={{ delay: 0.08 * index, duration: 0.4 }}
-                className="group border-b border-[#CCCCCC]/20 py-5 transition-colors hover:bg-white/[0.02] px-2"
+                className="group border-b border-[#1A1A1A]/20 py-5 transition-colors hover:bg-white/[0.02] px-2"
               >
                 <div className="flex items-baseline gap-3">
-                  <h3 className="shrink-0 font-tatuadora text-lg font-light sm:text-xl uppercase tracking-[0.08em] text-white transition-colors group-hover:text-[#DCDCDC]">
+                  <h3 className="shrink-0 font-tatuadora text-lg font-light sm:text-xl uppercase tracking-[0.08em] text-[#1A1A1A] transition-colors group-hover:text-[#222222]">
                     {t(piercing.nameKey)}
                   </h3>
-                  <span className="mb-1 h-px flex-1 border-b border-dotted border-white/20" />
-                  <span className="shrink-0 font-tatuadora text-lg font-light tracking-[0.08em] text-white">
+                  <span className="mb-1 h-px flex-1 border-b border-dotted border-[#1A1A1A]/20" />
+                  <span className="shrink-0 font-tatuadora text-lg font-light tracking-[0.08em] text-[#1A1A1A]">
                     {languageAwarePrice(piercing.price, t("piercing.eyebrow"), t)}
                   </span>
                 </div>
-                <p className="mt-2 max-w-md font-tatuadora text-sm leading-relaxed text-[#CCCCCC] font-light">
+                <p className="mt-2 max-w-md font-tatuadora text-sm leading-relaxed text-[#222222] font-light">
                   {t(piercing.descriptionKey)}
                 </p>
               </motion.div>

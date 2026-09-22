@@ -1,11 +1,8 @@
 "use client";
 
-import Image from "next/image";
 import { motion } from "framer-motion";
 import CountUp from "./CountUp";
 import { useLanguage } from "./LanguageProvider";
-
-const SILHOUETTE_WIDTH = "w-[340px] sm:w-[480px] md:w-[620px] lg:w-[760px] xl:w-[900px]";
 
 const stats = [
   { value: 12, suffix: "+", key: "about.years" },
@@ -22,24 +19,6 @@ export default function AboutSection() {
       id="sobre"
       className="relative overflow-hidden bg-gradient-to-b from-[#CCCCCC] to-[#D1D1D1] text-[#1A1A1A]"
     >
-      <div className="pointer-events-none absolute left-1/2 top-0 z-0 flex -translate-x-1/2 items-start justify-center select-none">
-        <motion.div
-          initial={{ opacity: 0, y: 24 }}
-          whileInView={{ opacity: 1, y: 0 }}
-          viewport={{ once: true }}
-          transition={{ duration: 0.9, ease: [0.16, 1, 0.3, 1] }}
-          className={`relative aspect-[301/210] opacity-80 mix-blend-multiply sm:opacity-85 lg:opacity-95 ${SILHOUETTE_WIDTH}`}
-        >
-          <Image
-            src="/images/brand/russa-continuation-bottom.png"
-            alt="Russa Tatuadora — Busto e Ombros (Continuação Oficial)"
-            fill
-            sizes="(max-width: 640px) 340px, (max-width: 768px) 480px, (max-width: 1024px) 620px, (max-width: 1280px) 760px, 900px"
-            className="object-contain object-top"
-          />
-        </motion.div>
-      </div>
-
       <div className="relative z-10 mx-auto w-full max-w-7xl px-5 py-20 sm:px-8 sm:py-28 md:px-12 md:py-32 lg:px-16">
         <motion.div
           initial={{ opacity: 0, y: 30 }}
@@ -80,7 +59,7 @@ export default function AboutSection() {
                 <p className="font-russa text-2xl font-bold text-[#1A1A1A] sm:text-3xl md:text-4xl">
                   <CountUp value={stat.value} suffix={stat.suffix} />
                 </p>
-                <p className="mt-1 font-tatuadora text-[8px] font-medium uppercase tracking-[0.2em] text-[#444444] sm:mt-1.5 sm:text-[9px]">
+                <p className="mt-1 font-tatuadora text-[8px] font-medium uppercase tracking-[0.2em] text-[#333333] sm:mt-1.5 sm:text-[9px]">
                   {t(stat.key)}
                 </p>
               </motion.div>
