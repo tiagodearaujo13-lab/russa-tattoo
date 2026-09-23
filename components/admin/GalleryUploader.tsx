@@ -106,47 +106,47 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
     <div className="space-y-6">
       {/* Header + Add Button */}
       <div className="flex items-center justify-between">
-        <p className="text-sm text-foreground/50">
+        <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#9E9E9E]">
           {items.length} trabalho(s) na galeria
         </p>
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button className="border border-white bg-transparent text-white hover:bg-white hover:text-black">
+            <Button className="rounded-none border border-white bg-white px-4 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#1A1A1A] hover:bg-[#CCCCCC] hover:text-[#1A1A1A]">
               <Plus className="w-4 h-4 mr-2" />
               Adicionar Trabalho
             </Button>
           </DialogTrigger>
-          <DialogContent className="glass border-white/10 max-w-md">
+          <DialogContent className="max-w-md border border-[#CCCCCC]/15 bg-[#222222] text-white">
             <DialogHeader>
-              <DialogTitle className="font-display">
+              <DialogTitle className="font-russa text-2xl text-white">
                 Novo Trabalho
               </DialogTitle>
             </DialogHeader>
             <div className="space-y-4">
               <div className="space-y-2">
-                <Label className="text-foreground/70">Título (opcional)</Label>
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">Título (opcional)</Label>
                 <Input
                   placeholder="Nome do trabalho"
                   value={formData.title}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, title: e.target.value }))
                   }
-                  className="bg-white/5 border-white/10"
+                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
                 />
               </div>
 
               <div className="space-y-2">
-                <Label className="text-foreground/70">Categoria (opcional)</Label>
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">Categoria (opcional)</Label>
                 <Select
                   value={formData.styleCategory}
                   onValueChange={(value) =>
                     setFormData((prev) => ({ ...prev, styleCategory: value ?? "" }))
                   }
                 >
-                  <SelectTrigger className="bg-white/5 border-white/10">
+                  <SelectTrigger className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white">
                     <SelectValue placeholder="Selecione" />
                   </SelectTrigger>
-                  <SelectContent className="bg-[#1a1a1a] border-white/10">
+                  <SelectContent className="border-[#CCCCCC]/15 bg-[#222222] font-tatuadora text-white">
                     {galleryCategories.map((cat) => (
                       <SelectItem key={cat} value={cat}>
                         {cat}
@@ -157,18 +157,23 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
               </div>
 
               <div className="space-y-2">
-                <Label className="text-foreground/70">URL da Imagem</Label>
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">URL da Imagem</Label>
                 <Input
                   placeholder="https://utfs.io/f/..."
                   value={formData.imageUrl}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))
                   }
-                  className="bg-white/5 border-white/10"
+                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
                 />
-                <p className="text-xs text-foreground/30">
+                <p className="font-tatuadora text-[9px] leading-relaxed text-[#808080]">
                   Envie pela área segura ou cole uma URL externa.
                 </p>
+                <div className="border border-dashed border-[#CCCCCC]/25 bg-[#1F1F1F]/50 p-6 text-center transition-colors hover:bg-[#222222]">
+                  <ImagePlus className="mx-auto mb-2 h-5 w-5 text-[#9E9E9E]" />
+                  <p className="mb-3 font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#CCCCCC]">
+                    Selecione uma imagem para o portfólio
+                  </p>
                 <UploadButton<OurFileRouter, "galleryImage">
                   endpoint="galleryImage"
                   onClientUploadComplete={(files) => {
@@ -176,13 +181,14 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                     if (url) setFormData((prev) => ({ ...prev, imageUrl: url }));
                   }}
                   onUploadError={(error) => console.error("[Gallery] Upload falhou:", error)}
-                  appearance={{ button: "bg-white text-black text-xs", allowedContent: "text-xs text-white/50" }}
+                  appearance={{ button: "rounded-none border border-white bg-white px-4 py-2 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#1A1A1A] transition-colors hover:bg-[#CCCCCC]", allowedContent: "mt-2 font-tatuadora text-[9px] text-[#808080]" }}
                   content={{ button: "Enviar foto" }}
                 />
+                </div>
               </div>
 
               <div className="space-y-2">
-                <Label className="text-foreground/70 flex items-center gap-1.5">
+                <Label className="flex items-center gap-1.5 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
                   <Camera className="w-3.5 h-3.5" /> URL do Post Instagram (opcional)
                 </Label>
                 <Input
@@ -194,7 +200,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                       instagramPostUrl: e.target.value,
                     }))
                   }
-                  className="bg-white/5 border-white/10"
+                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
                 />
               </div>
 
@@ -211,7 +217,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                   }
                   className="rounded border-white/10"
                 />
-                <Label htmlFor="featured" className="text-foreground/70 text-sm cursor-pointer">
+                <Label htmlFor="featured" className="cursor-pointer font-tatuadora text-[10px] uppercase tracking-[0.12em] text-[#B8B8B8]">
                   Marcar como destaque
                 </Label>
               </div>
@@ -222,7 +228,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                   isLoading === "create" ||
                   !formData.imageUrl
                 }
-                className="w-full border border-white bg-transparent text-white hover:bg-white hover:text-black"
+                className="w-full rounded-none border border-white bg-white font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#1A1A1A] hover:bg-[#CCCCCC] hover:text-[#1A1A1A]"
               >
                 {isLoading === "create" ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
@@ -238,12 +244,12 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
 
       {/* Gallery Grid */}
       {items.length === 0 ? (
-        <div className="glass rounded-xl p-16 text-center">
-          <ImagePlus className="w-12 h-12 text-foreground/20 mx-auto mb-4" />
-          <p className="text-foreground/40 text-sm">
+        <div className="border border-[#CCCCCC]/15 bg-[#1A1A1A] p-12 text-center sm:p-16">
+          <ImagePlus className="mx-auto mb-4 h-10 w-10 text-[#707070]" />
+          <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#9E9E9E]">
             Nenhum trabalho na galeria ainda.
           </p>
-          <p className="text-foreground/30 text-xs mt-1">
+          <p className="mt-2 font-tatuadora text-[9px] text-[#707070]">
             Clique em &quot;Adicionar Trabalho&quot; para começar.
           </p>
         </div>
@@ -252,7 +258,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="glass rounded-xl overflow-hidden group border border-white/5"
+              className="group overflow-hidden border border-[#CCCCCC]/15 bg-[#1A1A1A] transition-colors hover:border-[#CCCCCC]/30"
             >
               <div className="aspect-square relative">
                 <Image
@@ -263,16 +269,16 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                   className="object-cover"
                 />
                 {item.featured && (
-                  <Badge className="absolute top-2 right-2 bg-white/90 text-background text-[10px]">
+                  <Badge className="absolute right-2 top-2 rounded-none border border-white/20 bg-[#1A1A1A]/90 font-tatuadora text-[8px] uppercase tracking-[0.15em] text-white">
                     ⭐ Destaque
                   </Badge>
                 )}
               </div>
-              <div className="p-3 space-y-2">
-                <p className="text-sm font-medium truncate">{item.title}</p>
+              <div className="space-y-2 border-t border-[#CCCCCC]/10 p-3">
+                <p className="truncate font-tatuadora text-xs font-medium text-white">{item.title}</p>
                 <Badge
                   variant="outline"
-                  className="text-xs border-white/10 text-foreground/50"
+                  className="rounded-none border-[#CCCCCC]/15 font-tatuadora text-[8px] uppercase tracking-[0.14em] text-[#9E9E9E]"
                 >
                   {item.styleCategory}
                 </Badge>
@@ -281,7 +287,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 text-foreground/40 hover:text-yellow-400"
+                      className="h-7 w-7 text-[#808080] hover:bg-amber-500/10 hover:text-amber-300"
                       onClick={() => handleToggleFeatured(item.id)}
                       disabled={isLoading === `feat-${item.id}`}
                       title={item.featured ? "Remover destaque" : "Destacar"}
@@ -295,7 +301,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                     <Button
                       variant="ghost"
                       size="icon"
-                      className="h-7 w-7 text-foreground/40 hover:text-white"
+                      className="h-7 w-7 text-[#808080] hover:bg-white/10 hover:text-white"
                       asChild
                     >
                       <a
@@ -310,7 +316,7 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 text-foreground/40 hover:text-destructive"
+                    className="h-7 w-7 text-[#808080] hover:bg-red-500/10 hover:text-red-300"
                     onClick={() => handleRemove(item.id)}
                     disabled={isLoading === item.id}
                   >

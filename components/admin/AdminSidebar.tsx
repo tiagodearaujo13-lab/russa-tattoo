@@ -19,17 +19,17 @@ import { useState } from "react";
 const navItems = [
   {
     href: "/admin",
-    label: "Dashboard",
+    label: "Visão geral / Agendamentos",
     icon: LayoutDashboard,
   },
   {
     href: "/admin/agenda",
-    label: "Agenda",
+    label: "Calendário & Horários",
     icon: CalendarDays,
   },
   {
     href: "/admin/galeria",
-    label: "Galeria",
+    label: "Galeria & Obras",
     icon: ImageIcon,
   },
 ];
@@ -38,23 +38,23 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
   const pathname = usePathname();
 
   return (
-    <div className="flex flex-col h-full">
+    <div className="flex h-full flex-col">
       {/* Logo */}
-      <div className="p-6">
+      <div className="border-b border-[#CCCCCC]/10 px-6 py-7">
         <Link
           href="/admin"
-          className="font-display text-2xl text-white hover:text-white-light transition-colors"
+          className="font-russa text-2xl font-semibold tracking-wide text-white transition-colors hover:text-[#DCDCDC]"
           onClick={onLinkClick}
         >
-          Russa Tattoo
+          RUSSA
         </Link>
-        <p className="text-xs text-foreground/30 mt-1">Painel Admin</p>
+        <p className="mt-1 font-tatuadora text-[8px] uppercase tracking-[0.35em] text-[#808080]">Admin Panel</p>
       </div>
 
-      <Separator className="bg-white/5" />
+      <Separator className="bg-[#CCCCCC]/10" />
 
       {/* Navigation */}
-      <nav className="flex-1 p-4 space-y-1">
+      <nav className="flex-1 space-y-1 p-4 pt-6">
         {navItems.map((item) => {
           const isActive = pathname === item.href;
           return (
@@ -62,37 +62,37 @@ function SidebarContent({ onLinkClick }: { onLinkClick?: () => void }) {
               key={item.href}
               href={item.href}
               onClick={onLinkClick}
-              className={`flex items-center gap-3 px-4 py-3 rounded-xl text-sm font-medium transition-all ${
+              className={`relative flex items-center gap-3 border-l-2 px-3 py-3 font-tatuadora text-[9px] uppercase tracking-[0.15em] transition-all ${
                 isActive
-                  ? "bg-white/10 text-white border border-white/20"
-                  : "text-foreground/50 hover:text-foreground hover:bg-white/5"
+                  ? "border-l-white bg-[#222222] text-white"
+                  : "border-l-transparent text-[#8F8F8F] hover:bg-white/[0.03] hover:text-[#DCDCDC]"
               }`}
             >
-              <item.icon className="w-5 h-5" />
+              <item.icon className="h-4 w-4 shrink-0" />
               {item.label}
             </Link>
           );
         })}
       </nav>
 
-      <Separator className="bg-white/5" />
+      <Separator className="bg-[#CCCCCC]/10" />
 
       {/* Bottom actions */}
-      <div className="p-4 space-y-2">
+      <div className="space-y-2 p-4">
         <Link
           href="/"
           target="_blank"
-          className="flex items-center gap-3 px-4 py-3 rounded-xl text-sm text-foreground/40 hover:text-foreground hover:bg-white/5 transition-all"
+          className="flex items-center gap-3 border border-transparent px-3 py-3 font-tatuadora text-[9px] uppercase tracking-[0.15em] text-[#8F8F8F] transition-all hover:border-white/10 hover:text-[#DCDCDC]"
         >
-          <ExternalLink className="w-5 h-5" />
+          <ExternalLink className="h-4 w-4" />
           Ver Site
         </Link>
         <Button
           variant="ghost"
           onClick={() => signOut({ callbackUrl: "/" })}
-          className="w-full justify-start gap-3 px-4 py-3 text-sm text-foreground/40 hover:text-destructive h-auto font-normal"
+          className="h-auto w-full justify-start gap-3 border border-white/10 px-3 py-3 font-tatuadora text-[9px] font-normal uppercase tracking-[0.15em] text-zinc-400 transition-colors hover:border-white/30 hover:bg-transparent hover:text-white"
         >
-          <LogOut className="w-5 h-5" />
+          <LogOut className="h-4 w-4" />
           Terminar Sessão
         </Button>
       </div>
@@ -106,7 +106,7 @@ export default function AdminSidebar() {
   return (
     <>
       {/* Desktop Sidebar */}
-      <aside className="hidden lg:flex w-64 min-h-screen border-r border-white/5 bg-[#0d0d0d] flex-col fixed left-0 top-0">
+      <aside className="fixed left-0 top-0 hidden min-h-screen w-64 flex-col border-r border-[#CCCCCC]/10 bg-[#181818] lg:flex">
         <SidebarContent />
       </aside>
 
@@ -117,14 +117,14 @@ export default function AdminSidebar() {
             <Button
               variant="outline"
               size="icon"
-              className="glass border-white/10"
+              className="border border-white/10 bg-[#222222] text-white hover:bg-white/10"
             >
               <Menu className="w-5 h-5" />
             </Button>
           </SheetTrigger>
           <SheetContent
             side="left"
-            className="w-64 bg-[#0d0d0d] border-r border-white/10 p-0"
+            className="w-64 border-r border-[#CCCCCC]/10 bg-[#181818] p-0 text-white"
           >
             <SidebarContent onLinkClick={() => setIsMobileOpen(false)} />
           </SheetContent>

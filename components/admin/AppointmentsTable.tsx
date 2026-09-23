@@ -51,15 +51,15 @@ type AppointmentsTableProps = {
 const statusConfig = {
   pending_confirmation: {
     label: "Pendente",
-    className: "bg-yellow-500/10 text-yellow-500 border-yellow-500/30",
+    className: "border-amber-500/30 bg-amber-500/10 text-amber-300",
   },
   confirmed: {
     label: "Confirmado",
-    className: "bg-emerald-500/10 text-emerald-500 border-emerald-500/30",
+    className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
   },
   cancelled: {
     label: "Cancelado",
-    className: "bg-red-500/10 text-red-500 border-red-500/30",
+    className: "border-zinc-700 bg-zinc-800/40 text-zinc-400",
   },
 };
 
@@ -83,8 +83,8 @@ export default function AppointmentsTable({
 
   if (appointments.length === 0) {
     return (
-      <div className="glass rounded-xl p-12 text-center">
-        <p className="text-foreground/40 text-sm">
+      <div className="border border-[#CCCCCC]/15 bg-[#1A1A1A] p-12 text-center">
+        <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#808080]">
           Nenhuma solicitação de agendamento ainda.
         </p>
       </div>
@@ -93,15 +93,15 @@ export default function AppointmentsTable({
 
   return (
     <>
-      <div className="glass rounded-xl overflow-hidden border border-white/5">
+      <div className="overflow-hidden border border-[#CCCCCC]/15 bg-[#1A1A1A]">
         <Table>
           <TableHeader>
-            <TableRow className="border-white/5 hover:bg-transparent">
-              <TableHead className="text-foreground/40">Cliente</TableHead>
-              <TableHead className="text-foreground/40 hidden md:table-cell">Data/Hora</TableHead>
-              <TableHead className="text-foreground/40 hidden lg:table-cell">Estilo</TableHead>
-              <TableHead className="text-foreground/40">Status</TableHead>
-              <TableHead className="text-foreground/40 text-right">Ações</TableHead>
+            <TableRow className="border-b border-[#CCCCCC]/15 bg-[#222222] hover:bg-[#222222]">
+              <TableHead className="font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Cliente</TableHead>
+              <TableHead className="hidden font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E] md:table-cell">Data/Hora</TableHead>
+              <TableHead className="hidden font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E] lg:table-cell">Estilo</TableHead>
+              <TableHead className="font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Status</TableHead>
+              <TableHead className="text-right font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Ações</TableHead>
             </TableRow>
           </TableHeader>
           <TableBody>
@@ -110,33 +110,33 @@ export default function AppointmentsTable({
               return (
                 <TableRow
                   key={apt.id}
-                  className="border-white/5 hover:bg-white/5"
+                  className="border-b border-[#CCCCCC]/10 bg-[#1A1A1A] transition-colors hover:bg-[#222222]"
                 >
                   <TableCell>
                     <div>
-                      <p className="font-medium text-sm">{apt.clientName}</p>
-                      <p className="text-xs text-foreground/40">
+                      <p className="font-tatuadora text-xs font-medium text-white">{apt.clientName}</p>
+                      <p className="mt-1 font-tatuadora text-[10px] text-[#808080]">
                         {apt.clientEmail}
                       </p>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
                     {apt.slot ? (
-                      <div className="text-sm">
+                      <div className="font-tatuadora text-xs text-[#DCDCDC]">
                         <p>{format(parseISO(apt.slot.date), "dd/MM/yyyy")}</p>
-                        <p className="text-xs text-foreground/40">
+                        <p className="mt-1 text-[10px] text-[#808080]">
                           {apt.slot.timeStart} — {apt.slot.timeEnd}
                         </p>
                       </div>
                     ) : (
-                      <span className="text-foreground/30">—</span>
+                      <span className="text-[#707070]">—</span>
                     )}
                   </TableCell>
                   <TableCell className="hidden lg:table-cell">
-                    <span className="text-sm">{apt.tattooStyle}</span>
+                    <span className="font-tatuadora text-xs text-[#DCDCDC]">{apt.tattooStyle}</span>
                   </TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={`text-xs ${config.className}`}>
+                    <Badge variant="outline" className={`rounded-none px-2 py-0.5 font-tatuadora text-[9px] uppercase tracking-wider ${config.className}`}>
                       {config.label}
                     </Badge>
                   </TableCell>
@@ -145,7 +145,7 @@ export default function AppointmentsTable({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-foreground/40 hover:text-foreground"
+                        className="h-8 w-8 text-[#808080] transition-colors hover:bg-white/10 hover:text-white"
                         onClick={() => setDetailItem(apt)}
                       >
                         <Eye className="w-4 h-4" />
@@ -153,7 +153,7 @@ export default function AppointmentsTable({
                       <Button
                         variant="ghost"
                         size="icon"
-                        className="h-8 w-8 text-foreground/40 hover:text-white"
+                        className="h-8 w-8 text-[#808080] transition-colors hover:bg-white/10 hover:text-white"
                         asChild
                       >
                         <a
@@ -169,7 +169,7 @@ export default function AppointmentsTable({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-foreground/40 hover:text-emerald-500"
+                            className="h-8 w-8 text-[#808080] transition-colors hover:bg-emerald-500/10 hover:text-emerald-300"
                             onClick={() => handleConfirm(apt.id)}
                             disabled={loadingId === apt.id}
                           >
@@ -182,7 +182,7 @@ export default function AppointmentsTable({
                           <Button
                             variant="ghost"
                             size="icon"
-                            className="h-8 w-8 text-foreground/40 hover:text-destructive"
+                            className="h-8 w-8 text-[#808080] transition-colors hover:bg-red-500/10 hover:text-red-300"
                             onClick={() => handleCancel(apt.id)}
                             disabled={loadingId === apt.id}
                           >
@@ -201,71 +201,71 @@ export default function AppointmentsTable({
 
       {/* Detail Modal */}
       <Dialog open={!!detailItem} onOpenChange={() => setDetailItem(null)}>
-        <DialogContent className="glass border-white/10 max-w-lg">
+        <DialogContent className="max-w-lg border border-[#CCCCCC]/15 bg-[#222222] text-white">
           <DialogHeader>
-            <DialogTitle className="font-display text-xl">
+            <DialogTitle className="font-russa text-2xl text-white">
               Detalhes do Agendamento
             </DialogTitle>
           </DialogHeader>
           {detailItem && (
-            <div className="space-y-3 text-sm">
-              <div className="grid grid-cols-2 gap-3 p-4 rounded-xl bg-white/5">
+            <div className="space-y-3 font-tatuadora text-sm">
+              <div className="grid grid-cols-2 gap-3 border border-[#CCCCCC]/10 bg-[#1A1A1A] p-4">
                 <div>
-                  <p className="text-foreground/40">Nome</p>
-                  <p className="font-medium">{detailItem.clientName}</p>
+                  <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Nome</p>
+                  <p className="font-medium text-[#DCDCDC]">{detailItem.clientName}</p>
                 </div>
                 <div>
-                  <p className="text-foreground/40">E-mail</p>
-                  <p className="font-medium">{detailItem.clientEmail}</p>
+                  <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">E-mail</p>
+                  <p className="font-medium text-[#DCDCDC]">{detailItem.clientEmail}</p>
                 </div>
                 <div>
-                  <p className="text-foreground/40">WhatsApp</p>
-                  <p className="font-medium">{detailItem.clientWhatsapp}</p>
+                  <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">WhatsApp</p>
+                  <p className="font-medium text-[#DCDCDC]">{detailItem.clientWhatsapp}</p>
                 </div>
                 <div>
-                  <p className="text-foreground/40">Status</p>
+                  <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Status</p>
                   <Badge
                     variant="outline"
-                    className={`text-xs ${statusConfig[detailItem.status].className}`}
+                    className={`rounded-none px-2 py-0.5 font-tatuadora text-[9px] uppercase tracking-wider ${statusConfig[detailItem.status].className}`}
                   >
                     {statusConfig[detailItem.status].label}
                   </Badge>
                 </div>
               </div>
-              <div className="p-4 rounded-xl bg-white/5">
+              <div className="border border-[#CCCCCC]/10 bg-[#1A1A1A] p-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <p className="text-foreground/40">Estilo</p>
-                    <p className="font-medium">{detailItem.tattooStyle}</p>
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Estilo</p>
+                    <p className="font-medium text-[#DCDCDC]">{detailItem.tattooStyle}</p>
                   </div>
                   <div>
-                    <p className="text-foreground/40">Local</p>
-                    <p className="font-medium">{detailItem.bodyLocation}</p>
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Local</p>
+                    <p className="font-medium text-[#DCDCDC]">{detailItem.bodyLocation}</p>
                   </div>
                   <div>
-                    <p className="text-foreground/40">Tamanho</p>
-                    <p className="font-medium">{detailItem.approxSizeCm}</p>
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Tamanho</p>
+                    <p className="font-medium text-[#DCDCDC]">{detailItem.approxSizeCm}</p>
                   </div>
                 </div>
                 {detailItem.description && (
-                  <div className="mt-3 pt-3 border-t border-white/5">
-                    <p className="text-foreground/40">Descrição</p>
-                    <p className="text-foreground/70 mt-1">
+                  <div className="mt-3 border-t border-[#CCCCCC]/10 pt-3">
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Descrição</p>
+                    <p className="mt-1 leading-relaxed text-[#B8B8B8]">
                       {detailItem.description}
                     </p>
                   </div>
                 )}
               </div>
               {detailItem.referenceImageUrl && (
-                <div className="p-4 rounded-xl bg-white/5">
-                  <p className="text-foreground/40 mb-2">Imagem de Referência</p>
+                <div className="border border-[#CCCCCC]/10 bg-[#1A1A1A] p-4">
+                  <p className="mb-2 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Imagem de Referência</p>
                   <div className="relative h-60 w-full">
                     <Image
                       src={detailItem.referenceImageUrl}
                       alt="Referência"
                       fill
                       sizes="(max-width: 768px) 100vw, 480px"
-                      className="rounded-lg object-contain"
+                      className="border border-[#CCCCCC]/10 object-contain"
                     />
                   </div>
                 </div>

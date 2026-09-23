@@ -103,8 +103,9 @@ export default async function AdminDashboard() {
   return (
     <div className="space-y-8">
       <div>
-        <h1 className="font-display text-3xl mb-1">Dashboard</h1>
-        <p className="text-sm text-foreground/50">
+        <p className="mb-2 font-tatuadora text-[9px] uppercase tracking-[0.3em] text-[#808080]">Atelier · Painel administrativo</p>
+        <h1 className="mb-1 font-russa text-4xl font-semibold text-white sm:text-5xl">Visão geral</h1>
+        <p className="font-tatuadora text-xs font-light tracking-wide text-[#9E9E9E]">
           Visão geral das solicitações de agendamento.
         </p>
       </div>
@@ -114,22 +115,22 @@ export default async function AdminDashboard() {
         {metrics.map((metric) => (
           <div
             key={metric.label}
-            className="glass rounded-xl p-5 border border-white/5"
+            className="border border-[#CCCCCC]/15 bg-[#1A1A1A] p-5 transition-colors hover:border-[#CCCCCC]/25"
           >
             <div className="flex items-center gap-3 mb-3">
-              <div className={`p-2 rounded-lg ${metric.bg}`}>
+              <div className={`border border-white/10 p-2 ${metric.bg}`}>
                 <metric.icon className={`w-5 h-5 ${metric.color}`} />
               </div>
-              <span className="text-sm text-foreground/50">{metric.label}</span>
+              <span className="font-tatuadora text-[9px] uppercase tracking-[0.25em] text-[#808080]">{metric.label}</span>
             </div>
-            <p className="font-display text-3xl">{metric.value}</p>
+            <p className="mt-2 font-russa text-4xl font-semibold text-white sm:text-5xl">{metric.value}</p>
           </div>
         ))}
       </div>
 
       {/* Appointments Table */}
       <div>
-        <h2 className="font-display text-xl mb-4">Solicitações Recentes</h2>
+        <h2 className="mb-4 font-russa text-2xl text-white">Solicitações recentes</h2>
         <AppointmentsTable appointments={formattedAppointments} />
       </div>
     </div>
