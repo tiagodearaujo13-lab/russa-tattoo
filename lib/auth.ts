@@ -60,15 +60,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      * Esta é a primeira camada de defesa — o middleware é a segunda.
      */
     async signIn({ user }) {
-      const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+      const adminEmailsEnv = process.env.ADMIN_EMAIL ?? "";
+      const allowedAdmins = adminEmailsEnv
+        .split(",")
+        .map((email) => email.trim().toLowerCase())
+        .filter(Boolean);
+
       const userEmail = user.email?.trim().toLowerCase();
-      if (!adminEmail || !userEmail) {
-        if (!adminEmail) {
+
+      if (allowedAdmins.length === 0 || !userEmail) {
+        if (allowedAdmins.length === 0) {
           console.error("[Auth] ADMIN_EMAIL não configurado nas variáveis de ambiente.");
         }
         return false;
       }
-      return userEmail === adminEmail;
+
+      return allowedAdmins.includes(userEmail);
     },
 
     /**
