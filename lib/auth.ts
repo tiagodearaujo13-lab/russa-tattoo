@@ -2,7 +2,17 @@ import NextAuth from "next-auth";
 import ResendProvider from "next-auth/providers/resend";
 import { DrizzleAdapter } from "@auth/drizzle-adapter";
 import { db } from "@/lib/db";
+import {
+  users as dbUsers,
+  accounts as dbAccounts,
+  verificationTokens as dbVerificationTokens,
+} from "@/lib/db/schema";
 import { emailFrom } from "@/lib/resend";
+
+const resendProvider = ResendProvider({
+  apiKey: process.env.RESEND_API_KEY?.trim(),
+  from: emailFrom,
+});
 
 /**
  * Configuração central do Auth.js v5 (NextAuth).
@@ -12,12 +22,29 @@ import { emailFrom } from "@/lib/resend";
  * - Guard: Apenas ADMIN_EMAIL pode fazer login
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
-  adapter: DrizzleAdapter(db),
+  adapter: DrizzleAdapter(db, {
+    usersTable: dbUsers,
+    accountsTable: dbAccounts,
+    verificationTokensTable: dbVerificationTokens,
+  }),
+  trustHost: true,
   providers: [
-    ResendProvider({
-      apiKey: process.env.RESEND_API_KEY,
-      from: emailFrom,
-    }),
+    {
+      ...resendProvider,
+      async sendVerificationRequest(params) {
+        try {
+          await resendProvider.sendVerificationRequest(params);
+        } catch (error) {
+          const message =
+            error instanceof Error ? error.message : "Unknown Resend error";
+          console.error(
+            "[AUTH_RESEND_ERROR]:",
+            message.replace(/re_[A-Za-z0-9_-]+/g, "re_***")
+          );
+          throw error;
+        }
+      },
+    },
   ],
   session: {
     strategy: "jwt",
@@ -33,19 +60,22 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      * Esta é a primeira camada de defesa — o middleware é a segunda.
      */
     async signIn({ user }) {
-      const adminEmail = process.env.ADMIN_EMAIL;
-      if (!adminEmail) {
-        console.error("[Auth] ADMIN_EMAIL não configurado nas variáveis de ambiente.");
+      const adminEmail = process.env.ADMIN_EMAIL?.trim().toLowerCase();
+      const userEmail = user.email?.trim().toLowerCase();
+      if (!adminEmail || !userEmail) {
+        if (!adminEmail) {
+          console.error("[Auth] ADMIN_EMAIL não configurado nas variáveis de ambiente.");
+        }
         return false;
       }
-      return user.email?.toLowerCase() === adminEmail.toLowerCase();
+      return userEmail === adminEmail;
     },
 
     /**
      * Adiciona o e-mail ao token JWT para uso no middleware.
      */
     async jwt({ token, user }) {
-      if (user) {
+      if (user?.email) {
         token.email = user.email;
       }
       return token;
@@ -55,8 +85,8 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
      * Injeta o e-mail do token na sessão do cliente.
      */
     async session({ session, token }) {
-      if (token.email) {
-        session.user.email = token.email as string;
+      if (session.user && typeof token.email === "string") {
+        session.user.email = token.email;
       }
       return session;
     },

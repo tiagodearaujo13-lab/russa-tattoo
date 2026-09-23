@@ -15,22 +15,48 @@ function LoginForm() {
   const [email, setEmail] = useState("");
   const [isLoading, setIsLoading] = useState(false);
   const [isSent, setIsSent] = useState(false);
+  const [submitError, setSubmitError] = useState<string | null>(null);
   const searchParams = useSearchParams();
   const error = searchParams.get("error");
+  const authErrorMessages: Record<string, string> = {
+    Configuration:
+      "Erro de configuração no servidor. Verifique as variáveis de ambiente.",
+    AccessDenied:
+      "Acesso restrito. Este e-mail não possui permissão de administrador.",
+    EmailSignInError:
+      "Não foi possível enviar o link. Verifique a configuração de e-mail e tente novamente.",
+    CallbackRouteError:
+      "Não foi possível concluir o login. Confira a configuração do banco de dados e tente novamente.",
+    Verification: "O link de acesso expirou ou já foi utilizado. Solicite um novo.",
+    unauthorized: "Sessão expirada ou não autorizada. Faça login novamente.",
+    forbidden:
+      "Acesso restrito. Este e-mail não possui permissão de administrador.",
+  };
+  const errorMessage = error
+    ? authErrorMessages[error] ?? "Ocorreu um erro ao tentar entrar. Tente novamente."
+    : submitError;
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     setIsLoading(true);
+    setSubmitError(null);
 
     try {
-      await signIn("email", {
+      const result = await signIn("resend", {
         email,
         redirect: false,
-        callbackUrl: "/admin",
+        redirectTo: "/admin",
       });
+      if (result?.error) {
+        setSubmitError(
+          authErrorMessages[result.error] ??
+            "Ocorreu um erro ao tentar entrar. Tente novamente."
+        );
+        return;
+      }
       setIsSent(true);
     } catch {
-      console.error("[Login] Erro ao enviar magic link");
+      setSubmitError("Ocorreu um erro ao tentar entrar. Tente novamente.");
     } finally {
       setIsLoading(false);
     }
@@ -61,17 +87,13 @@ function LoginForm() {
             <p className="text-sm text-foreground/50">Painel Administrativo</p>
           </div>
 
-          {/* Error Messages */}
-          {error === "unauthorized" && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm mb-6">
+          {errorMessage && (
+            <div
+              role="alert"
+              className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm mb-6"
+            >
               <AlertCircle className="w-4 h-4 shrink-0" />
-              Sessão expirada ou não autorizada. Faça login novamente.
-            </div>
-          )}
-          {error === "forbidden" && (
-            <div className="flex items-center gap-2 p-3 rounded-lg bg-destructive/10 border border-destructive/30 text-destructive text-sm mb-6">
-              <AlertCircle className="w-4 h-4 shrink-0" />
-              Este e-mail não tem permissão para aceder ao painel.
+              {errorMessage}
             </div>
           )}
 
@@ -114,7 +136,10 @@ function LoginForm() {
                   type="email"
                   placeholder="seu@email.com"
                   value={email}
-                  onChange={(e) => setEmail(e.target.value)}
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                    setSubmitError(null);
+                  }}
                   required
                   className="bg-white/5 border-white/10 focus:border-white h-12"
                 />

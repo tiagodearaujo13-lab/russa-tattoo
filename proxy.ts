@@ -13,7 +13,7 @@ export default auth((req) => {
   const { pathname } = req.nextUrl;
 
   // Apenas protege rotas /admin
-  if (pathname.startsWith("/admin")) {
+  if (pathname === "/admin" || pathname.startsWith("/admin/")) {
     const session = req.auth;
 
     // Sem sessão → redirect para login
@@ -25,10 +25,10 @@ export default auth((req) => {
     }
 
     // E-mail não é o admin → forbidden
-    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminEmail = process.env.ADMIN_EMAIL?.trim();
     if (
       !adminEmail ||
-      session.user.email.toLowerCase() !== adminEmail.toLowerCase()
+      session.user.email.trim().toLowerCase() !== adminEmail.toLowerCase()
     ) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("error", "forbidden");

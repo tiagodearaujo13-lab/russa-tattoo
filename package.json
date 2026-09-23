@@ -6,7 +6,8 @@
     "dev": "next dev",
     "build": "next build",
     "start": "next start",
-    "lint": "eslint"
+    "lint": "eslint",
+    "check:env": "node scripts/validate-env.mjs"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",

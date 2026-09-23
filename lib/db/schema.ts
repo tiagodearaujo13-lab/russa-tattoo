@@ -2,6 +2,7 @@ import {
   pgTable,
   uuid,
   varchar,
+  integer,
   text,
   boolean,
   timestamp,
@@ -25,7 +26,10 @@ export const appointmentStatusEnum = pgEnum("appointment_status", [
 // ── Tabela: users ────────────────────────────────────────────
 export const users = pgTable("users", {
   id: uuid("id").defaultRandom().primaryKey(),
+  name: text("name"),
   email: varchar("email", { length: 255 }).unique().notNull(),
+  emailVerified: timestamp("email_verified", { withTimezone: true }),
+  image: text("image"),
   role: varchar("role", { length: 50 }).default("admin").notNull(),
   createdAt: timestamp("created_at", { withTimezone: true })
     .defaultNow()
@@ -88,13 +92,13 @@ export const accounts = pgTable("accounts", {
   type: varchar("type", { length: 255 }).notNull(),
   provider: varchar("provider", { length: 255 }).notNull(),
   providerAccountId: varchar("provider_account_id", { length: 255 }).notNull(),
-  refreshToken: text("refresh_token"),
-  accessToken: text("access_token"),
-  expiresAt: timestamp("expires_at", { withTimezone: true }),
-  tokenType: varchar("token_type", { length: 255 }),
+  refresh_token: text("refresh_token"),
+  access_token: text("access_token"),
+  expires_at: integer("expires_at"),
+  token_type: varchar("token_type", { length: 255 }),
   scope: varchar("scope", { length: 255 }),
-  idToken: text("id_token"),
-  sessionState: varchar("session_state", { length: 255 }),
+  id_token: text("id_token"),
+  session_state: varchar("session_state", { length: 255 }),
 });
 
 export const sessions = pgTable("sessions", {

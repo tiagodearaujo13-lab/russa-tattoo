@@ -73,24 +73,29 @@ export async function requestAppointmentAction(
 
     const data = parsed.data;
 
-    // 3–4. Reserva o slot e cria o agendamento na mesma transação.
-    const { slot } = await db.transaction(async (tx) => {
-      const [reservedSlot] = await tx
-        .update(scheduleSlots)
-        .set({ status: "reserved" })
-        .where(
-          and(
-            eq(scheduleSlots.id, data.slotId),
-            eq(scheduleSlots.status, "available")
-          )
+    // Neon HTTP não oferece transactions interativas; a atualização condicional
+    // reserva atomicamente o slot antes de criar o agendamento.
+    const [slot] = await db
+      .update(scheduleSlots)
+      .set({ status: "reserved" })
+      .where(
+        and(
+          eq(scheduleSlots.id, data.slotId),
+          eq(scheduleSlots.status, "available")
         )
-        .returning();
+      )
+      .returning();
 
-      if (!reservedSlot) {
-        throw new Error("SLOT_UNAVAILABLE");
-      }
+    if (!slot) {
+      return {
+        success: false,
+        message: "Este horário já não está disponível. Escolha outro horário.",
+        error: "SLOT_UNAVAILABLE",
+      };
+    }
 
-      await tx.insert(appointments).values({
+    try {
+      await db.insert(appointments).values({
         slotId: data.slotId,
         clientName: data.clientName,
         clientEmail: data.clientEmail,
@@ -101,9 +106,21 @@ export async function requestAppointmentAction(
         description: data.description || null,
         referenceImageUrl: data.referenceImageUrl || null,
       });
-
-      return { slot: reservedSlot };
-    });
+    } catch (error) {
+      // Libera o horário se a inserção falhar para evitar uma reserva fantasma.
+      await db
+        .update(scheduleSlots)
+        .set({ status: "available" })
+      .where(
+        and(
+          eq(scheduleSlots.id, data.slotId),
+          eq(scheduleSlots.status, "reserved"),
+          eq(scheduleSlots.date, slot.date),
+          eq(scheduleSlots.timeStart, slot.timeStart)
+        )
+      );
+      throw error;
+    }
 
     // 5. Renderiza os templates React Email depois do commit da transação.
     const adminEmail = process.env.ADMIN_EMAIL;
