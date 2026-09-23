@@ -28,7 +28,7 @@ Copie `.env.example` para `.env.local` e preencha:
 - `DATABASE_URL` — conexão Neon PostgreSQL.
 - `AUTH_SECRET` — segredo do Auth.js.
 - `AUTH_URL` ou `NEXTAUTH_URL` — URL pública da aplicação.
-- `ADMIN_EMAIL` — e-mail autorizado no painel.
+- `ADMIN_EMAIL` — e-mails autorizados no painel, separados por vírgula.
 - `RESEND_API_KEY` e `EMAIL_FROM` — envio de e-mails.
 - `UPSTASH_REDIS_REST_URL` e `UPSTASH_REDIS_REST_TOKEN` — rate limit.
 - `UPLOADTHING_TOKEN` — upload de imagens.

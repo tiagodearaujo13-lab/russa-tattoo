@@ -1,11 +1,12 @@
 import { auth } from "@/lib/auth";
 import { NextResponse } from "next/server";
+import { isAllowedAdminEmail } from "@/lib/admin-auth";
 
 /**
  * Middleware de segurança para rotas /admin/*.
  * Intercepta TODAS as requisições para o painel administrativo e verifica:
  * 1. Se existe uma sessão JWT válida
- * 2. Se o e-mail da sessão corresponde ao ADMIN_EMAIL
+ * 2. Se o e-mail da sessão está na lista ADMIN_EMAIL
  *
  * Se qualquer verificação falhar → redirect para /login com código 403.
  */
@@ -25,11 +26,7 @@ export default auth((req) => {
     }
 
     // E-mail não é o admin → forbidden
-    const adminEmail = process.env.ADMIN_EMAIL?.trim();
-    if (
-      !adminEmail ||
-      session.user.email.trim().toLowerCase() !== adminEmail.toLowerCase()
-    ) {
+    if (!isAllowedAdminEmail(session.user.email)) {
       const loginUrl = new URL("/login", req.url);
       loginUrl.searchParams.set("error", "forbidden");
       return NextResponse.redirect(loginUrl);

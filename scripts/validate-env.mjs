@@ -57,11 +57,15 @@ for (const name of ["AUTH_URL", "NEXTAUTH_URL"]) {
   check(name, valid, "deve ser uma URL http(s) válida");
 }
 
-const adminEmail = env("ADMIN_EMAIL");
+const adminEmails = env("ADMIN_EMAIL")
+  .split(",")
+  .map((email) => email.trim().toLowerCase())
+  .filter(Boolean);
+const validEmailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
 check(
   "ADMIN_EMAIL",
-  adminEmail.toLowerCase() === "tiagodearaujo13@gmail.com",
-  "configure o e-mail autorizado definido para a aplicação"
+  adminEmails.length > 0 && adminEmails.every((email) => validEmailPattern.test(email)),
+  "configure um ou mais e-mails válidos separados por vírgula"
 );
 
 const resendKey = env("RESEND_API_KEY");

@@ -1,5 +1,6 @@
 import { createUploadthing, type FileRouter } from "uploadthing/next";
 import { auth } from "@/lib/auth";
+import { isAllowedAdminEmail } from "@/lib/admin-auth";
 
 const f = createUploadthing();
 
@@ -22,11 +23,7 @@ export const ourFileRouter = {
         throw new Error("Não autenticado.");
       }
 
-      const adminEmail = process.env.ADMIN_EMAIL;
-      if (
-        !adminEmail ||
-        session.user.email.toLowerCase() !== adminEmail.toLowerCase()
-      ) {
+      if (!isAllowedAdminEmail(session.user.email)) {
         throw new Error("Acesso negado. Apenas a administradora pode fazer upload.");
       }
 

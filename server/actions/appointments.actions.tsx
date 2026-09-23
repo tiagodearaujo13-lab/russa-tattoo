@@ -6,6 +6,7 @@ import { appointmentSchema } from "@/lib/validations/appointment.schema";
 import { appointmentRateLimiter } from "@/lib/redis";
 import { resend, emailFrom } from "@/lib/resend";
 import { auth } from "@/lib/auth";
+import { getAllowedAdminEmails, isAllowedAdminEmail } from "@/lib/admin-auth";
 import { and, eq } from "drizzle-orm";
 import { render } from "@react-email/components";
 import ClientConfirmationEmail from "@/emails/ClientConfirmationEmail";
@@ -123,7 +124,7 @@ export async function requestAppointmentAction(
     }
 
     // 5. Renderiza os templates React Email depois do commit da transação.
-    const adminEmail = process.env.ADMIN_EMAIL;
+    const adminEmails = getAllowedAdminEmails();
     const clientHtml = await render(
       <ClientConfirmationEmail
         clientName={data.clientName}
@@ -145,7 +146,7 @@ export async function requestAppointmentAction(
       })
       .catch((err) => console.error("[Email] Erro ao enviar para cliente:", err));
 
-    if (adminEmail) {
+    if (adminEmails.length > 0) {
       const adminHtml = await render(
         <AdminNewAppointmentEmail
           clientName={data.clientName}
@@ -166,7 +167,7 @@ export async function requestAppointmentAction(
       resend.emails
         .send({
           from: emailFrom,
-          to: adminEmail,
+          to: adminEmails,
           subject: `🔔 Nova Solicitação — ${data.clientName} (${data.tattooStyle})`,
           html: adminHtml,
         })
@@ -205,10 +206,7 @@ export async function confirmAppointmentAction(
 ): Promise<ActionResult> {
   try {
     const session = await auth();
-    if (
-      !session?.user?.email ||
-      session.user.email.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()
-    ) {
+    if (!isAllowedAdminEmail(session?.user?.email)) {
       return { success: false, message: "Acesso negado.", error: "FORBIDDEN" };
     }
 
@@ -273,10 +271,7 @@ export async function cancelAppointmentAction(
 ): Promise<ActionResult> {
   try {
     const session = await auth();
-    if (
-      !session?.user?.email ||
-      session.user.email.toLowerCase() !== process.env.ADMIN_EMAIL?.toLowerCase()
-    ) {
+    if (!isAllowedAdminEmail(session?.user?.email)) {
       return { success: false, message: "Acesso negado.", error: "FORBIDDEN" };
     }
 

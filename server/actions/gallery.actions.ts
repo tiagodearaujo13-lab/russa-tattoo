@@ -4,6 +4,7 @@ import { db } from "@/lib/db";
 import { galleryItems } from "@/lib/db/schema";
 import { galleryItemSchema } from "@/lib/validations/gallery.schema";
 import { auth } from "@/lib/auth";
+import { isAllowedAdminEmail } from "@/lib/admin-auth";
 import { eq } from "drizzle-orm";
 import { revalidatePath } from "next/cache";
 import { z } from "zod";
@@ -18,7 +19,7 @@ type ActionResult = {
 // ── Helper: Verificar admin ──────────────────────────────────
 async function verifyAdmin(): Promise<void> {
   const session = await auth();
-  if (!session?.user?.email || session.user.email !== process.env.ADMIN_EMAIL) {
+  if (!isAllowedAdminEmail(session?.user?.email)) {
     throw new Error("UNAUTHORIZED");
   }
 }

@@ -8,6 +8,7 @@ import {
   verificationTokens as dbVerificationTokens,
 } from "@/lib/db/schema";
 import { emailFrom } from "@/lib/resend";
+import { getAllowedAdminEmails } from "@/lib/admin-auth";
 
 const resendProvider = ResendProvider({
   apiKey: process.env.RESEND_API_KEY?.trim(),
@@ -19,7 +20,7 @@ const resendProvider = ResendProvider({
  * - Provider: Magic Link via e-mail (Resend como transport)
  * - Adapter: Drizzle para persistir sessões no Neon PostgreSQL
  * - Strategy: JWT (mais performante em serverless, sem DB lookup por request)
- * - Guard: Apenas ADMIN_EMAIL pode fazer login
+ * - Guard: Apenas os e-mails configurados em ADMIN_EMAIL podem fazer login
  */
 export const { handlers, auth, signIn, signOut } = NextAuth({
   adapter: DrizzleAdapter(db, {
@@ -56,15 +57,11 @@ export const { handlers, auth, signIn, signOut } = NextAuth({
   },
   callbacks: {
     /**
-     * Guard: Bloqueia login para qualquer e-mail diferente do ADMIN_EMAIL.
+     * Guard: Bloqueia login para qualquer e-mail fora da lista ADMIN_EMAIL.
      * Esta é a primeira camada de defesa — o middleware é a segunda.
      */
     async signIn({ user }) {
-      const adminEmailsEnv = process.env.ADMIN_EMAIL ?? "";
-      const allowedAdmins = adminEmailsEnv
-        .split(",")
-        .map((email) => email.trim().toLowerCase())
-        .filter(Boolean);
+      const allowedAdmins = getAllowedAdminEmails();
 
       const userEmail = user.email?.trim().toLowerCase();
 
