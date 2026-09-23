@@ -6,7 +6,7 @@ import Link from "next/link";
 import { Button } from "@/components/ui/button";
 import { useLanguage } from "./LanguageProvider";
 
-const SILHOUETTE_WIDTH = "w-[340px] sm:w-[480px] md:w-[620px] lg:w-[760px] xl:w-[900px]";
+const BALACLAVA_WIDTH = "w-[300px] sm:w-[420px] md:w-[560px] lg:w-[680px] xl:w-[780px]";
 
 function LeftLetters({ text, delay = 0.2 }: { text: string; delay?: number }) {
   return (
@@ -44,9 +44,9 @@ export default function HeroSection() {
   return (
     <section id="hero" className="relative flex min-h-screen items-center justify-center overflow-hidden bg-[#1A1A1A] text-white">
       {/* A cabeça termina na base do Hero para continuar diretamente no About. */}
-      <div className="absolute bottom-0 left-1/2 z-0 flex -translate-x-1/2 items-end justify-center pointer-events-none select-none pb-0">
-        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }} className={`relative aspect-[2557/2428] animate-fade-in ${SILHOUETTE_WIDTH}`}>
-          <Image src="/images/brand/russa-hero-crop.png" alt="Olhar de Russa Tatuadora" fill priority sizes="(max-width: 640px) 340px, (max-width: 768px) 480px, (max-width: 1024px) 620px, (max-width: 1280px) 760px, 900px" className="object-contain object-bottom opacity-70 mix-blend-screen" />
+      <div className="pointer-events-none absolute bottom-0 left-1/2 z-0 flex -translate-x-1/2 select-none items-end justify-center">
+        <motion.div initial={{ opacity: 0 }} animate={{ opacity: 1 }} transition={{ duration: 1.8, ease: [0.16, 1, 0.3, 1] }} className={`relative aspect-[2557/2428] animate-fade-in ${BALACLAVA_WIDTH}`}>
+          <Image src="/images/brand/russa-hero-crop.png" alt="Olhar de Russa Tatuadora" fill priority sizes="(max-width: 639px) 300px, (max-width: 767px) 420px, (max-width: 1023px) 560px, (max-width: 1279px) 680px, 780px" className="object-contain object-bottom opacity-70 mix-blend-screen" />
         </motion.div>
       </div>
 
