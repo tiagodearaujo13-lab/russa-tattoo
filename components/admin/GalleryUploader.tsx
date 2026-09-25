@@ -1,20 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useState, useTransition } from "react";
 import { useRouter } from "next/navigation";
 import { UploadButton } from "@uploadthing/react";
 import type { OurFileRouter } from "@/app/api/uploadthing/core";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import {
-  Select,
-  SelectContent,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from "@/components/ui/select";
 import {
   Dialog,
   DialogContent,
@@ -28,183 +21,378 @@ import {
   Trash2,
   Star,
   StarOff,
-  Camera,
   Loader2,
   ImagePlus,
-  ExternalLink,
+  Sparkles,
+  Tag,
+  Check,
 } from "lucide-react";
-import { galleryCategories } from "@/lib/validations/gallery.schema";
 import {
-  addGalleryItemAction,
-  removeGalleryItemAction,
-  toggleFeaturedAction,
-} from "@/server/actions/gallery.actions";
-import { STUDIO_CONFIG } from "@/lib/constants/studio";
+  createGalleryItem,
+  deleteGalleryItem,
+  toggleFeaturedItem,
+} from "@/lib/actions/gallery.actions";
+import { normalizeCategory } from "@/lib/utils/taxonomy";
 
-type GalleryItem = {
+export type AdminGalleryItem = {
   id: string;
   title: string;
-  styleCategory: string;
+  description: string | null;
+  category: string;
+  categorySlug: string;
   imageUrl: string;
-  instagramPostUrl: string;
+  imageKey: string;
   featured: boolean;
+  createdAt: Date;
+};
+
+export type CategoryOption = {
+  name: string;
+  slug: string;
+  count: number;
 };
 
 type GalleryUploaderProps = {
-  items: GalleryItem[];
+  items: AdminGalleryItem[];
+  existingCategories?: CategoryOption[];
 };
 
-export default function GalleryUploader({ items }: GalleryUploaderProps) {
+const DEFAULT_CATEGORY_SUGGESTIONS = [
+  "Fine Line",
+  "Botânica",
+  "Micro-realismo",
+  "Floral Delicado",
+  "Lettering",
+  "Blackwork",
+  "Minimalista",
+  "Arte Autoral",
+];
+
+export default function GalleryUploader({
+  items,
+  existingCategories = [],
+}: GalleryUploaderProps) {
   const router = useRouter();
   const [isCreateOpen, setIsCreateOpen] = useState(false);
   const [isLoading, setIsLoading] = useState<string | null>(null);
+  const [errorMessage, setErrorMessage] = useState<string | null>(null);
+  const [, startTransition] = useTransition();
+
   const [formData, setFormData] = useState({
     title: "",
-    styleCategory: "",
+    category: "",
+    description: "",
     imageUrl: "",
-    instagramPostUrl: "",
+    imageKey: "",
     featured: false,
   });
 
+  // Lista unificada de sugestões sem duplicatas
+  const combinedSuggestions = Array.from(
+    new Set([
+      ...existingCategories.map((c) => c.name),
+      ...DEFAULT_CATEGORY_SUGGESTIONS,
+    ])
+  );
+
+  const normalizedPreview = formData.category.trim()
+    ? normalizeCategory(formData.category)
+    : null;
+
   const handleCreate = async () => {
+    setErrorMessage(null);
+    if (!formData.title.trim()) {
+      setErrorMessage("Informe o título da obra.");
+      return;
+    }
+    if (!formData.category.trim()) {
+      setErrorMessage("Informe ou selecione uma categoria/estilo.");
+      return;
+    }
+    if (!formData.imageUrl || !formData.imageKey) {
+      setErrorMessage("Por favor, faça o upload da imagem da obra.");
+      return;
+    }
+
     setIsLoading("create");
-    const result = await addGalleryItemAction({
-      ...formData,
-      title: formData.title.trim() || "Trabalho Russa Tattoo",
-      styleCategory: formData.styleCategory || "Outro",
-      instagramPostUrl: formData.instagramPostUrl.trim() || STUDIO_CONFIG.instagram,
-    });
-    if (result.success) {
+    try {
+      await createGalleryItem({
+        title: formData.title.trim(),
+        category: formData.category.trim(),
+        description: formData.description.trim() || undefined,
+        imageUrl: formData.imageUrl,
+        imageKey: formData.imageKey,
+        featured: formData.featured,
+      });
+
       setIsCreateOpen(false);
       setFormData({
         title: "",
-        styleCategory: "",
+        category: "",
+        description: "",
         imageUrl: "",
-        instagramPostUrl: "",
+        imageKey: "",
         featured: false,
       });
-      router.refresh();
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (err) {
+      console.error("[GalleryUploader] Erro ao criar:", err);
+      setErrorMessage(
+        err instanceof Error ? err.message : "Erro ao cadastrar obra."
+      );
+    } finally {
+      setIsLoading(null);
     }
-    setIsLoading(null);
   };
 
   const handleRemove = async (id: string) => {
+    if (!confirm("Tem certeza que deseja excluir esta obra e purgar a imagem?")) {
+      return;
+    }
     setIsLoading(id);
-    const result = await removeGalleryItemAction(id);
-    setIsLoading(null);
-    if (result.success) router.refresh();
+    try {
+      await deleteGalleryItem(id);
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (err) {
+      console.error("[GalleryUploader] Erro ao remover:", err);
+      alert(err instanceof Error ? err.message : "Erro ao excluir obra.");
+    } finally {
+      setIsLoading(null);
+    }
   };
 
   const handleToggleFeatured = async (id: string) => {
     setIsLoading(`feat-${id}`);
-    const result = await toggleFeaturedAction(id);
-    setIsLoading(null);
-    if (result.success) router.refresh();
+    try {
+      await toggleFeaturedItem(id);
+      startTransition(() => {
+        router.refresh();
+      });
+    } catch (err) {
+      console.error("[GalleryUploader] Erro ao alternar destaque:", err);
+    } finally {
+      setIsLoading(null);
+    }
   };
 
   return (
     <div className="space-y-6">
-      {/* Header + Add Button */}
-      <div className="flex items-center justify-between">
-        <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#9E9E9E]">
-          {items.length} trabalho(s) na galeria
-        </p>
+      {/* Barra Superior de Ações e Resumo de Taxonomia */}
+      <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between border border-[#CCCCCC]/15 bg-[#141414] p-5">
+        <div>
+          <h2 className="font-russa text-xl font-bold text-white">
+            Obras Cadastradas ({items.length})
+          </h2>
+          <div className="mt-2 flex flex-wrap items-center gap-1.5">
+            <span className="font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#808080] mr-1">
+              Estilos Ativos:
+            </span>
+            {existingCategories.length === 0 ? (
+              <span className="font-tatuadora text-[9px] text-[#666666] italic">
+                Nenhum estilo catalogado
+              </span>
+            ) : (
+              existingCategories.map((cat) => (
+                <Badge
+                  key={cat.slug}
+                  variant="outline"
+                  className="rounded-none border-[#CCCCCC]/20 bg-[#1A1A1A] font-tatuadora text-[8px] uppercase tracking-[0.14em] text-[#CCCCCC]"
+                >
+                  {cat.name} ({cat.count})
+                </Badge>
+              ))
+            )}
+          </div>
+        </div>
+
         <Dialog open={isCreateOpen} onOpenChange={setIsCreateOpen}>
           <DialogTrigger asChild>
-            <Button className="rounded-none border border-white bg-white px-4 font-tatuadora text-[9px] uppercase tracking-[0.16em] text-[#1A1A1A] hover:bg-[#CCCCCC] hover:text-[#1A1A1A]">
-              <Plus className="w-4 h-4 mr-2" />
-              Adicionar Trabalho
+            <Button className="rounded-none border border-white bg-white px-5 py-2.5 font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#1A1A1A] transition-all hover:bg-[#CCCCCC] hover:text-[#1A1A1A]">
+              <Plus className="mr-2 h-3.5 w-3.5" /> Adicionar Obra
             </Button>
           </DialogTrigger>
-          <DialogContent className="max-w-md border border-[#CCCCCC]/15 bg-[#222222] text-white">
+          <DialogContent className="max-w-lg rounded-none border border-[#CCCCCC]/20 bg-[#141414] text-white">
             <DialogHeader>
-              <DialogTitle className="font-russa text-2xl text-white">
-                Novo Trabalho
+              <DialogTitle className="font-russa text-2xl font-bold text-white">
+                Nova Obra Autoral
               </DialogTitle>
+              <p className="font-tatuadora text-xs text-[#9E9E9E]">
+                Defina o título, o estilo autoral e carregue a foto em alta resolução.
+              </p>
             </DialogHeader>
-            <div className="space-y-4">
+
+            <div className="space-y-5 py-4">
+              {errorMessage && (
+                <div className="border border-red-500/30 bg-red-500/10 p-3 font-tatuadora text-xs text-red-300">
+                  {errorMessage}
+                </div>
+              )}
+
+              {/* Título da Obra */}
               <div className="space-y-2">
-                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">Título (opcional)</Label>
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
+                  Título da Obra *
+                </Label>
                 <Input
-                  placeholder="Nome do trabalho"
+                  placeholder="Ex: Orquídea Silvestre em Fine Line"
                   value={formData.title}
                   onChange={(e) =>
                     setFormData((prev) => ({ ...prev, title: e.target.value }))
                   }
-                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
+                  className="rounded-none border-[#CCCCCC]/20 bg-[#1A1A1A] font-tatuadora text-sm text-white placeholder:text-[#666666] focus:border-white"
                 />
               </div>
 
+              {/* Combobox Inteligente de Estilo / Taxonomia Dinâmica */}
               <div className="space-y-2">
-                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">Categoria (opcional)</Label>
-                <Select
-                  value={formData.styleCategory}
-                  onValueChange={(value) =>
-                    setFormData((prev) => ({ ...prev, styleCategory: value ?? "" }))
-                  }
-                >
-                  <SelectTrigger className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white">
-                    <SelectValue placeholder="Selecione" />
-                  </SelectTrigger>
-                  <SelectContent className="border-[#CCCCCC]/15 bg-[#222222] font-tatuadora text-white">
-                    {galleryCategories.map((cat) => (
-                      <SelectItem key={cat} value={cat}>
-                        {cat}
-                      </SelectItem>
+                <div className="flex items-center justify-between">
+                  <Label className="flex items-center gap-1.5 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
+                    <Tag className="h-3 w-3" /> Categoria / Estilo Autoral *
+                  </Label>
+                  {normalizedPreview && (
+                    <span className="font-tatuadora text-[8.5px] uppercase tracking-[0.15em] text-emerald-400">
+                      Slug: #{normalizedPreview.slug}
+                    </span>
+                  )}
+                </div>
+
+                <div className="relative">
+                  <Input
+                    list="category-suggestions"
+                    placeholder="Selecione ou digite um novo estilo..."
+                    value={formData.category}
+                    onChange={(e) =>
+                      setFormData((prev) => ({
+                        ...prev,
+                        category: e.target.value,
+                      }))
+                    }
+                    className="rounded-none border-[#CCCCCC]/20 bg-[#1A1A1A] font-tatuadora text-sm text-white placeholder:text-[#666666] focus:border-white"
+                  />
+                  <datalist id="category-suggestions">
+                    {combinedSuggestions.map((cat) => (
+                      <option key={cat} value={cat} />
                     ))}
-                  </SelectContent>
-                </Select>
-              </div>
+                  </datalist>
+                </div>
 
-              <div className="space-y-2">
-                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">URL da Imagem</Label>
-                <Input
-                  placeholder="https://utfs.io/f/..."
-                  value={formData.imageUrl}
-                  onChange={(e) =>
-                    setFormData((prev) => ({ ...prev, imageUrl: e.target.value }))
-                  }
-                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
-                />
-                <p className="font-tatuadora text-[9px] leading-relaxed text-[#808080]">
-                  Envie pela área segura ou cole uma URL externa.
-                </p>
-                <div className="border border-dashed border-[#CCCCCC]/25 bg-[#1F1F1F]/50 p-6 text-center transition-colors hover:bg-[#222222]">
-                  <ImagePlus className="mx-auto mb-2 h-5 w-5 text-[#9E9E9E]" />
-                  <p className="mb-3 font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#CCCCCC]">
-                    Selecione uma imagem para o portfólio
-                  </p>
-                <UploadButton<OurFileRouter, "galleryImage">
-                  endpoint="galleryImage"
-                  onClientUploadComplete={(files) => {
-                    const url = files?.[0]?.ufsUrl || files?.[0]?.url;
-                    if (url) setFormData((prev) => ({ ...prev, imageUrl: url }));
-                  }}
-                  onUploadError={(error) => console.error("[Gallery] Upload falhou:", error)}
-                  appearance={{ button: "rounded-none border border-white bg-white px-4 py-2 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#1A1A1A] transition-colors hover:bg-[#CCCCCC]", allowedContent: "mt-2 font-tatuadora text-[9px] text-[#808080]" }}
-                  content={{ button: "Enviar foto" }}
-                />
+                {/* Sugestões Rápidas em Pílulas */}
+                <div className="flex flex-wrap gap-1.5 pt-1">
+                  {combinedSuggestions.slice(0, 6).map((cat) => (
+                    <button
+                      type="button"
+                      key={cat}
+                      onClick={() =>
+                        setFormData((prev) => ({ ...prev, category: cat }))
+                      }
+                      className={`font-tatuadora text-[8px] uppercase tracking-[0.12em] px-2 py-1 border transition-colors ${
+                        formData.category.toLowerCase() === cat.toLowerCase()
+                          ? "border-white bg-white text-black font-semibold"
+                          : "border-[#CCCCCC]/20 bg-[#1E1E1E] text-[#9E9E9E] hover:border-white/50 hover:text-white"
+                      }`}
+                    >
+                      {cat}
+                    </button>
+                  ))}
                 </div>
               </div>
 
+              {/* Descrição Opcional */}
               <div className="space-y-2">
-                <Label className="flex items-center gap-1.5 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
-                  <Camera className="w-3.5 h-3.5" /> URL do Post Instagram (opcional)
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
+                  Descrição Poética / Técnica (Opcional)
                 </Label>
-                <Input
-                  placeholder="https://instagram.com/p/..."
-                  value={formData.instagramPostUrl}
+                <textarea
+                  rows={2}
+                  placeholder="Ex: Tatuagem autoral executada com agulha 03RL, pigmento carbono premium..."
+                  value={formData.description}
                   onChange={(e) =>
                     setFormData((prev) => ({
                       ...prev,
-                      instagramPostUrl: e.target.value,
+                      description: e.target.value,
                     }))
                   }
-                  className="rounded-none border-[#CCCCCC]/20 bg-[#141414] font-tatuadora text-sm text-white placeholder:text-[#707070] focus:border-white"
+                  className="w-full rounded-none border border-[#CCCCCC]/20 bg-[#1A1A1A] p-3 font-tatuadora text-sm text-white placeholder:text-[#666666] outline-none focus:border-white"
                 />
               </div>
 
-              <div className="flex items-center gap-2">
+              {/* Upload via UploadThing v7 */}
+              <div className="space-y-2">
+                <Label className="font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#9E9E9E]">
+                  Fotografia da Obra (UploadThing) *
+                </Label>
+
+                {formData.imageUrl ? (
+                  <div className="relative aspect-video w-full overflow-hidden border border-[#CCCCCC]/20 bg-[#1E1E1E]">
+                    <Image
+                      src={formData.imageUrl}
+                      alt="Preview da obra"
+                      fill
+                      className="object-cover"
+                    />
+                    <div className="absolute inset-0 bg-black/40 flex items-center justify-center gap-3 opacity-0 hover:opacity-100 transition-opacity">
+                      <Button
+                        type="button"
+                        variant="destructive"
+                        size="sm"
+                        className="rounded-none font-tatuadora text-[9px] uppercase tracking-[0.15em]"
+                        onClick={() =>
+                          setFormData((prev) => ({
+                            ...prev,
+                            imageUrl: "",
+                            imageKey: "",
+                          }))
+                        }
+                      >
+                        Trocar Imagem
+                      </Button>
+                    </div>
+                    <div className="absolute bottom-2 left-2 flex items-center gap-1 bg-black/80 px-2 py-1 font-tatuadora text-[8px] uppercase tracking-[0.1em] text-emerald-400">
+                      <Check className="h-3 w-3" /> Imagem Carregada
+                    </div>
+                  </div>
+                ) : (
+                  <div className="border border-dashed border-[#CCCCCC]/25 bg-[#1F1F1F]/50 p-6 text-center transition-colors hover:bg-[#222222]">
+                    <ImagePlus className="mx-auto mb-2 h-6 w-6 text-[#9E9E9E]" />
+                    <p className="mb-3 font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#CCCCCC]">
+                      Selecione uma imagem de alta resolução
+                    </p>
+                    <UploadButton<OurFileRouter, "galleryImage">
+                      endpoint="galleryImage"
+                      onClientUploadComplete={(files) => {
+                        const file = files?.[0];
+                        const url = file?.ufsUrl || file?.url;
+                        const key = file?.key || "ut_key";
+                        if (url) {
+                          setFormData((prev) => ({
+                            ...prev,
+                            imageUrl: url,
+                            imageKey: key,
+                          }));
+                        }
+                      }}
+                      onUploadError={(error) => {
+                        console.error("[Gallery] Upload falhou:", error);
+                        setErrorMessage(`Falha no upload: ${error.message}`);
+                      }}
+                      appearance={{
+                        button:
+                          "rounded-none border border-white bg-white px-4 py-2 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#1A1A1A] transition-colors hover:bg-[#CCCCCC]",
+                        allowedContent:
+                          "mt-2 font-tatuadora text-[9px] text-[#808080]",
+                      }}
+                      content={{ button: "Carregar Fotografia" }}
+                    />
+                  </div>
+                )}
+              </div>
+
+              {/* Destaque */}
+              <div className="flex items-center gap-2 pt-2">
                 <input
                   type="checkbox"
                   id="featured"
@@ -215,10 +403,14 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                       featured: e.target.checked,
                     }))
                   }
-                  className="rounded border-white/10"
+                  className="rounded-none border-white/20 bg-[#1A1A1A] text-white accent-white"
                 />
-                <Label htmlFor="featured" className="cursor-pointer font-tatuadora text-[10px] uppercase tracking-[0.12em] text-[#B8B8B8]">
-                  Marcar como destaque
+                <Label
+                  htmlFor="featured"
+                  className="cursor-pointer font-tatuadora text-[10px] uppercase tracking-[0.12em] text-[#B8B8B8] flex items-center gap-1.5"
+                >
+                  <Sparkles className="h-3 w-3 text-amber-400" /> Marcar como
+                  Destaque na Página Inicial
                 </Label>
               </div>
 
@@ -226,31 +418,31 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
                 onClick={handleCreate}
                 disabled={
                   isLoading === "create" ||
-                  !formData.imageUrl
+                  !formData.imageUrl ||
+                  !formData.title ||
+                  !formData.category
                 }
                 className="w-full rounded-none border border-white bg-white font-tatuadora text-[9px] uppercase tracking-[0.2em] text-[#1A1A1A] hover:bg-[#CCCCCC] hover:text-[#1A1A1A]"
               >
                 {isLoading === "create" ? (
                   <Loader2 className="w-4 h-4 mr-2 animate-spin" />
                 ) : (
-                  <ImagePlus className="w-4 h-4 mr-2" />
+                  <Plus className="w-4 h-4 mr-2" />
                 )}
-                Adicionar à Galeria
+                Publicar Obra no Atelier
               </Button>
             </div>
           </DialogContent>
         </Dialog>
       </div>
 
-      {/* Gallery Grid */}
+      {/* Grade de Obras no Painel */}
       {items.length === 0 ? (
-        <div className="border border-[#CCCCCC]/15 bg-[#1A1A1A] p-12 text-center sm:p-16">
-          <ImagePlus className="mx-auto mb-4 h-10 w-10 text-[#707070]" />
-          <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#9E9E9E]">
-            Nenhum trabalho na galeria ainda.
-          </p>
-          <p className="mt-2 font-tatuadora text-[9px] text-[#707070]">
-            Clique em &quot;Adicionar Trabalho&quot; para começar.
+        <div className="border border-[#CCCCCC]/15 bg-[#141414] p-12 text-center sm:p-20">
+          <ImagePlus className="mx-auto mb-4 h-12 w-12 text-[#666666]" />
+          <h3 className="font-russa text-xl text-white">Nenhuma obra catalogada</h3>
+          <p className="mt-2 font-tatuadora text-xs text-[#9E9E9E] max-w-md mx-auto">
+            O banco de dados está limpo e pronto para o acervo autoral oficial. Clique em &quot;Adicionar Obra&quot; para registrar a primeira peça.
           </p>
         </div>
       ) : (
@@ -258,67 +450,69 @@ export default function GalleryUploader({ items }: GalleryUploaderProps) {
           {items.map((item) => (
             <div
               key={item.id}
-              className="group overflow-hidden border border-[#CCCCCC]/15 bg-[#1A1A1A] transition-colors hover:border-[#CCCCCC]/30"
+              className="group overflow-hidden border border-[#CCCCCC]/15 bg-[#141414] transition-all hover:border-[#CCCCCC]/40"
             >
-              <div className="aspect-square relative">
+              <div className="aspect-square relative overflow-hidden bg-black/50">
                 <Image
                   src={item.imageUrl}
                   alt={item.title}
                   fill
                   sizes="(max-width: 768px) 50vw, (max-width: 1024px) 33vw, 25vw"
-                  className="object-cover"
+                  className="object-cover transition-transform duration-500 group-hover:scale-105"
                 />
                 {item.featured && (
-                  <Badge className="absolute right-2 top-2 rounded-none border border-white/20 bg-[#1A1A1A]/90 font-tatuadora text-[8px] uppercase tracking-[0.15em] text-white">
+                  <Badge className="absolute right-2 top-2 rounded-none border border-amber-400/40 bg-black/85 font-tatuadora text-[8px] uppercase tracking-[0.15em] text-amber-300">
                     ⭐ Destaque
                   </Badge>
                 )}
               </div>
-              <div className="space-y-2 border-t border-[#CCCCCC]/10 p-3">
-                <p className="truncate font-tatuadora text-xs font-medium text-white">{item.title}</p>
-                <Badge
-                  variant="outline"
-                  className="rounded-none border-[#CCCCCC]/15 font-tatuadora text-[8px] uppercase tracking-[0.14em] text-[#9E9E9E]"
-                >
-                  {item.styleCategory}
-                </Badge>
-                <div className="flex items-center justify-between pt-2">
-                  <div className="flex gap-1">
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 text-[#808080] hover:bg-amber-500/10 hover:text-amber-300"
-                      onClick={() => handleToggleFeatured(item.id)}
-                      disabled={isLoading === `feat-${item.id}`}
-                      title={item.featured ? "Remover destaque" : "Destacar"}
-                    >
-                      {item.featured ? (
-                        <StarOff className="w-3.5 h-3.5" />
-                      ) : (
-                        <Star className="w-3.5 h-3.5" />
-                      )}
-                    </Button>
-                    <Button
-                      variant="ghost"
-                      size="icon"
-                      className="h-7 w-7 text-[#808080] hover:bg-white/10 hover:text-white"
-                      asChild
-                    >
-                      <a
-                        href={item.instagramPostUrl}
-                        target="_blank"
-                        rel="noopener noreferrer"
-                      >
-                        <ExternalLink className="w-3.5 h-3.5" />
-                      </a>
-                    </Button>
-                  </div>
+              <div className="space-y-2 border-t border-[#CCCCCC]/10 p-3.5 bg-[#171717]">
+                <p className="truncate font-tatuadora text-xs font-medium text-white">
+                  {item.title}
+                </p>
+                <div className="flex items-center justify-between">
+                  <Badge
+                    variant="outline"
+                    className="rounded-none border-[#CCCCCC]/20 bg-[#1A1A1A] font-tatuadora text-[8px] uppercase tracking-[0.14em] text-[#CCCCCC]"
+                  >
+                    {item.category}
+                  </Badge>
+                </div>
+
+                {item.description && (
+                  <p className="line-clamp-2 font-tatuadora text-[10px] text-[#808080]">
+                    {item.description}
+                  </p>
+                )}
+
+                <div className="flex items-center justify-between pt-2 border-t border-white/5">
+                  <Button
+                    variant="ghost"
+                    size="sm"
+                    className="h-8 px-2 font-tatuadora text-[9px] uppercase tracking-[0.12em] text-[#9E9E9E] hover:text-white"
+                    onClick={() => handleToggleFeatured(item.id)}
+                    disabled={isLoading === `feat-${item.id}`}
+                  >
+                    {item.featured ? (
+                      <>
+                        <StarOff className="w-3.5 h-3.5 mr-1 text-amber-400" />
+                        Remover
+                      </>
+                    ) : (
+                      <>
+                        <Star className="w-3.5 h-3.5 mr-1" />
+                        Destacar
+                      </>
+                    )}
+                  </Button>
+
                   <Button
                     variant="ghost"
                     size="icon"
-                    className="h-7 w-7 text-[#808080] hover:bg-red-500/10 hover:text-red-300"
+                    className="h-8 w-8 text-[#808080] hover:bg-red-500/10 hover:text-red-400"
                     onClick={() => handleRemove(item.id)}
                     disabled={isLoading === item.id}
+                    title="Excluir obra permanentemente"
                   >
                     {isLoading === item.id ? (
                       <Loader2 className="w-3.5 h-3.5 animate-spin" />

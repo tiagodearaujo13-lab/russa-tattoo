@@ -1,35 +1,25 @@
 import * as React from "react";
 import { STUDIO_CONFIG } from "@/lib/constants/studio";
 
-type AdminNewAppointmentEmailProps = {
+type AdminQuoteRequestEmailProps = {
   clientName: string;
   clientEmail: string;
   clientWhatsapp: string;
-  date: string;
-  timeStart: string;
-  timeEnd: string;
-  tattooStyle: string;
   bodyLocation: string;
-  approxSizeCm: string;
-  description?: string | null;
-  referenceImageUrl?: string | null;
+  description: string;
   adminPanelUrl: string;
 };
 
-export default function AdminNewAppointmentEmail({
+export default function AdminQuoteRequestEmail({
   clientName,
   clientEmail,
   clientWhatsapp,
-  date,
-  timeStart,
-  timeEnd,
-  tattooStyle,
   bodyLocation,
-  approxSizeCm,
   description,
-  referenceImageUrl,
   adminPanelUrl,
-}: AdminNewAppointmentEmailProps) {
+}: AdminQuoteRequestEmailProps) {
+  const whatsappNumber = clientWhatsapp.replace(/[^0-9+]/g, "");
+
   return (
     <div
       style={{
@@ -43,18 +33,19 @@ export default function AdminNewAppointmentEmail({
     >
       <h1
         style={{
-          fontFamily: "'Permanent Marker', cursive",
+          fontFamily: "'Bodoni Moda', serif",
           color: "#ffffff",
           fontSize: "28px",
           marginBottom: "8px",
+          letterSpacing: "-0.01em",
         }}
       >
-        🔔 Nova Solicitação!
+        ✨ Novo Pedido de Orçamento
       </h1>
 
       <p style={{ color: "#a0a0a0", fontSize: "14px", marginBottom: "24px" }}>
-        <strong style={{ color: "#f5f5f5" }}>{clientName}</strong> enviou uma
-        solicitação de agendamento.
+        <strong style={{ color: "#f5f5f5" }}>{clientName}</strong> solicitou um
+        orçamento de tatuagem através do site.
       </p>
 
       {/* Dados do Cliente */}
@@ -63,7 +54,7 @@ export default function AdminNewAppointmentEmail({
           padding: "20px",
           backgroundColor: "rgba(255, 255, 255, 0.05)",
           border: "1px solid rgba(255, 255, 255, 0.15)",
-          borderRadius: "12px",
+          borderRadius: "4px",
           marginBottom: "16px",
         }}
       >
@@ -73,7 +64,7 @@ export default function AdminNewAppointmentEmail({
             fontSize: "13px",
             marginBottom: "12px",
             textTransform: "uppercase" as const,
-            letterSpacing: "1px",
+            letterSpacing: "2px",
           }}
         >
           Dados do Cliente
@@ -82,10 +73,14 @@ export default function AdminNewAppointmentEmail({
           <tbody>
             <tr>
               <td style={{ color: "#a0a0a0", padding: "4px 0" }}>👤 Nome:</td>
-              <td style={{ fontWeight: 600, padding: "4px 0" }}>{clientName}</td>
+              <td style={{ fontWeight: 600, padding: "4px 0" }}>
+                {clientName}
+              </td>
             </tr>
             <tr>
-              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>📧 E-mail:</td>
+              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>
+                📧 E-mail:
+              </td>
               <td style={{ padding: "4px 0" }}>
                 <a href={`mailto:${clientEmail}`} style={{ color: "#ffffff" }}>
                   {clientEmail}
@@ -98,7 +93,7 @@ export default function AdminNewAppointmentEmail({
               </td>
               <td style={{ padding: "4px 0" }}>
                 <a
-                  href={`https://wa.me/${clientWhatsapp.replace(/[^0-9+]/g, "")}`}
+                  href={`https://wa.me/${whatsappNumber}`}
                   style={{ color: "#ffffff" }}
                 >
                   {clientWhatsapp}
@@ -109,12 +104,12 @@ export default function AdminNewAppointmentEmail({
         </table>
       </div>
 
-      {/* Detalhes da Tattoo */}
+      {/* Detalhes do Projeto */}
       <div
         style={{
           padding: "20px",
           backgroundColor: "rgba(255, 255, 255, 0.03)",
-          borderRadius: "12px",
+          borderRadius: "4px",
           border: "1px solid rgba(255, 255, 255, 0.08)",
           marginBottom: "16px",
         }}
@@ -125,82 +120,95 @@ export default function AdminNewAppointmentEmail({
             fontSize: "13px",
             marginBottom: "12px",
             textTransform: "uppercase" as const,
-            letterSpacing: "1px",
+            letterSpacing: "2px",
           }}
         >
-          Detalhes da Tatuagem
+          Projeto de Tatuagem
         </h3>
         <table style={{ width: "100%", fontSize: "14px" }}>
           <tbody>
             <tr>
-              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>📅 Data:</td>
-              <td style={{ fontWeight: 600, padding: "4px 0" }}>{date}</td>
-            </tr>
-            <tr>
               <td style={{ color: "#a0a0a0", padding: "4px 0" }}>
-                🕐 Horário:
+                📍 Local do Corpo:
               </td>
-              <td style={{ fontWeight: 600, padding: "4px 0" }}>
-                {timeStart} — {timeEnd}
-              </td>
-            </tr>
-            <tr>
-              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>🎨 Estilo:</td>
-              <td style={{ fontWeight: 600, padding: "4px 0" }}>{tattooStyle}</td>
-            </tr>
-            <tr>
-              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>📍 Local:</td>
               <td style={{ fontWeight: 600, padding: "4px 0" }}>
                 {bodyLocation}
               </td>
             </tr>
-            <tr>
-              <td style={{ color: "#a0a0a0", padding: "4px 0" }}>
-                📏 Tamanho:
-              </td>
-              <td style={{ fontWeight: 600, padding: "4px 0" }}>
-                {approxSizeCm}
-              </td>
-            </tr>
           </tbody>
         </table>
-        {description && (
-          <div style={{ marginTop: "12px", paddingTop: "12px", borderTop: "1px solid rgba(255,255,255,0.05)" }}>
-            <p style={{ color: "#a0a0a0", fontSize: "12px" }}>📝 Descrição:</p>
-            <p style={{ color: "#ccc", fontSize: "14px", marginTop: "4px" }}>
-              {description}
-            </p>
-          </div>
-        )}
+        <div
+          style={{
+            marginTop: "12px",
+            paddingTop: "12px",
+            borderTop: "1px solid rgba(255,255,255,0.05)",
+          }}
+        >
+          <p style={{ color: "#a0a0a0", fontSize: "12px" }}>
+            📝 Ideia e Detalhes:
+          </p>
+          <p
+            style={{
+              color: "#ccc",
+              fontSize: "14px",
+              marginTop: "4px",
+              lineHeight: "1.6",
+              whiteSpace: "pre-wrap" as const,
+            }}
+          >
+            {description}
+          </p>
+        </div>
       </div>
 
-      {/* Reference Image */}
-      {referenceImageUrl && (
-        <div style={{ marginBottom: "24px" }}>
-          <p style={{ color: "#a0a0a0", fontSize: "12px", marginBottom: "8px" }}>
-            🖼️ Imagem de Referência:
-          </p>
-          <a href={referenceImageUrl} style={{ color: "#ffffff", fontSize: "14px" }}>
-            Ver imagem →
-          </a>
-        </div>
-      )}
+      {/* Ações Rápidas */}
+      <div style={{ marginBottom: "24px" }}>
+        <a
+          href={`mailto:${clientEmail}?subject=${encodeURIComponent("Re: Orçamento de Tatuagem — Russa Tattoo Studio")}`}
+          style={{
+            display: "inline-block",
+            backgroundColor: "#ffffff",
+            color: "#0a0a0a",
+            padding: "14px 32px",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontWeight: 700,
+            fontSize: "14px",
+            marginRight: "12px",
+          }}
+        >
+          Responder por E-mail
+        </a>
+        <a
+          href={`https://wa.me/${whatsappNumber}`}
+          style={{
+            display: "inline-block",
+            backgroundColor: "transparent",
+            color: "#ffffff",
+            padding: "12px 28px",
+            borderRadius: "4px",
+            textDecoration: "none",
+            fontWeight: 700,
+            fontSize: "14px",
+            border: "1px solid rgba(255,255,255,0.3)",
+          }}
+        >
+          Abrir WhatsApp
+        </a>
+      </div>
 
-      {/* CTA */}
+      {/* CTA Painel */}
       <a
         href={adminPanelUrl}
         style={{
           display: "inline-block",
-          backgroundColor: "#ffffff",
-          color: "#0a0a0a",
-          padding: "14px 32px",
-          borderRadius: "8px",
-          textDecoration: "none",
-          fontWeight: 700,
-          fontSize: "14px",
+          color: "#808080",
+          padding: "8px 0",
+          textDecoration: "underline",
+          fontSize: "13px",
         }}
       >
-        Ver no Painel Admin
+        Ver no Painel Admin →
       </a>
 
       <p
@@ -215,8 +223,7 @@ export default function AdminNewAppointmentEmail({
         <a href={`mailto:${STUDIO_CONFIG.email}`} style={{ color: "#ffffff" }}>
           {STUDIO_CONFIG.email}
         </a>
-        <br />© {new Date().getFullYear()} Russa Tattoo Studio — Sistema de
-        Agendamento
+        <br />© {new Date().getFullYear()} Russa Tattoo Studio — Pedidos de Orçamento
       </p>
     </div>
   );

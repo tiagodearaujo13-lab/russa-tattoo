@@ -7,16 +7,14 @@ import { motion } from "framer-motion";
 import { Menu, Phone } from "lucide-react";
 import { Button } from "@/components/ui/button";
 import { Sheet, SheetContent, SheetTrigger } from "@/components/ui/sheet";
-import { STUDIO_CONFIG, getWhatsAppUrl } from "@/lib/constants/studio";
+import { STUDIO_CONFIG, STUDIO_WHATSAPP_NUMBER, getWhatsAppUrl } from "@/lib/constants/studio";
 import { useLanguage } from "./LanguageProvider";
 import type { Language } from "@/lib/i18n/translations";
 
-const instagramUrl = STUDIO_CONFIG.instagram;
 const navLinks = [
   { href: "#sobre", key: "header.about" },
   { href: "#estilos", key: "header.styles" },
-  { href: "#piercing", key: "header.piercing" },
-  { href: "#agenda", key: "header.booking" },
+  { href: "#orcamento", key: "header.booking" },
   { href: "#galeria", key: "header.gallery" },
   { href: "#faq", key: "header.faq" },
   { href: "#contacto", key: "header.contact" },
@@ -95,6 +93,10 @@ export default function Header() {
   const [isMobileOpen, setIsMobileOpen] = useState(false);
   const { language, setLanguage, t } = useLanguage();
 
+  const instagramUrl = STUDIO_CONFIG.instagram.url;
+
+  const hasWhatsApp = STUDIO_WHATSAPP_NUMBER.length > 0;
+
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 30);
     window.addEventListener("scroll", handleScroll, { passive: true });
@@ -150,7 +152,7 @@ export default function Header() {
             asChild
             className="btn-dotwork-outline text-[9px] sm:text-[9.5px] tracking-[0.2em] py-2 px-4 sm:px-5 min-h-9"
           >
-            <Link href="#agenda">{t("header.book")}</Link>
+            <Link href="#orcamento">{t("header.book")}</Link>
           </Button>
         </div>
 
@@ -205,17 +207,19 @@ export default function Header() {
                     className="btn-dotwork-outline w-full min-h-11 text-xs tracking-[0.2em]"
                     onClick={() => setIsMobileOpen(false)}
                   >
-                    <Link href="#agenda">{t("header.book")}</Link>
+                    <Link href="#orcamento">{t("header.book")}</Link>
                   </Button>
-                  <Button
-                    asChild
-                    className="btn-dotwork-primary w-full min-h-11 text-xs tracking-[0.2em]"
-                  >
-                    <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-                      <Phone className="mr-2 h-4 w-4" />
-                      WhatsApp
-                    </Link>
-                  </Button>
+                  {hasWhatsApp && (
+                    <Button
+                      asChild
+                      className="btn-dotwork-primary w-full min-h-11 text-xs tracking-[0.2em]"
+                    >
+                      <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                        <Phone className="mr-2 h-4 w-4" />
+                        WhatsApp
+                      </Link>
+                    </Button>
+                  )}
                   <div className="flex items-center justify-center pt-2">
                     <Link
                       href={instagramUrl}

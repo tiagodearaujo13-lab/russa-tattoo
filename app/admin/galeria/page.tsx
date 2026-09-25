@@ -2,10 +2,11 @@ import { db } from "@/lib/db";
 import { galleryItems } from "@/lib/db/schema";
 import { desc } from "drizzle-orm";
 import GalleryUploader from "@/components/admin/GalleryUploader";
+import { getActiveCategories } from "@/lib/actions/gallery.actions";
 import type { Metadata } from "next";
 
 export const metadata: Metadata = {
-  title: "Galeria",
+  title: "Galeria & Obras",
 };
 
 export const dynamic = "force-dynamic";
@@ -15,25 +16,34 @@ export default async function GaleriaPage() {
     .select({
       id: galleryItems.id,
       title: galleryItems.title,
-      styleCategory: galleryItems.styleCategory,
+      description: galleryItems.description,
+      category: galleryItems.category,
+      categorySlug: galleryItems.categorySlug,
       imageUrl: galleryItems.imageUrl,
-      instagramPostUrl: galleryItems.instagramPostUrl,
+      imageKey: galleryItems.imageKey,
       featured: galleryItems.featured,
+      createdAt: galleryItems.createdAt,
     })
     .from(galleryItems)
-    .orderBy(desc(galleryItems.createdAt));
+    .orderBy(desc(galleryItems.featured), desc(galleryItems.createdAt));
+
+  const existingCategories = await getActiveCategories();
 
   return (
     <div className="space-y-8">
       <div>
-        <p className="mb-2 font-tatuadora text-[9px] uppercase tracking-[0.3em] text-[#808080]">Atelier · Portfólio</p>
-        <h1 className="mb-1 font-russa text-4xl font-semibold text-white sm:text-5xl">Galeria &amp; obras</h1>
+        <p className="mb-2 font-tatuadora text-[9px] uppercase tracking-[0.3em] text-[#808080]">
+          Atelier · Portfólio &amp; Taxonomia
+        </p>
+        <h1 className="mb-1 font-russa text-4xl font-semibold text-white sm:text-5xl">
+          Galeria &amp; Obras
+        </h1>
         <p className="font-tatuadora text-xs font-light tracking-wide text-[#9E9E9E]">
-          Gerir fotos do portfólio e links do Instagram.
+          Gerir obras autorais, estilos dinâmicos e mídias de alta resolução.
         </p>
       </div>
 
-      <GalleryUploader items={items} />
+      <GalleryUploader items={items} existingCategories={existingCategories} />
     </div>
   );
 }

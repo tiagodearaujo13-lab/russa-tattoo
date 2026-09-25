@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import { Bodoni_Moda, Cormorant_Garamond, Montserrat } from "next/font/google";
+import { STUDIO_CONFIG } from "@/lib/constants/studio";
 import "./globals.css";
 
 const bodoniModa = Bodoni_Moda({
@@ -25,43 +26,60 @@ const cormorant = Cormorant_Garamond({
 
 export const metadata: Metadata = {
   title: {
-    default: "Russa Tattoo Studio — Arte que Marca para Sempre",
+    default: "Russa Tattoo Studio — Atelier Exclusivo de Tatuagem · Fine Line & Arte Autoral",
     template: "%s | Russa Tattoo Studio",
   },
   description:
-    "Russa Tattoo Studio no Algarve, Portugal. Tattoo & body piercing com Fine Line, Blackwork e estilos minimalistas. Agende a sua sessão.",
+    "Russa Tattoo Studio em Parchal, Algarve, Portugal. Atelier exclusivo de tatuagem especializado em Fine Line, Botânica, Micro-Realismo e arte autoral. Solicite o seu orçamento.",
   metadataBase: new URL(process.env.NEXTAUTH_URL || "http://localhost:3000"),
   alternates: { languages: { "pt-PT": "/", en: "/" } },
   openGraph: {
     type: "website",
     locale: "pt_PT",
     alternateLocale: ["en_GB"],
-    title: "Russa Tattoo Studio — Algarve",
-    description: "Arte que marca para sempre. Tattoo & body piercing no Algarve, Portugal.",
+    title: "Russa Tattoo Studio — Parchal, Algarve",
+    description: "Atelier exclusivo de tatuagem em Parchal, Algarve. Fine Line, Botânica, Micro-Realismo e arte autoral.",
     siteName: "Russa Tattoo Studio",
   },
   twitter: {
     card: "summary_large_image",
-    title: "Russa Tattoo Studio — Algarve",
-    description: "Tattoo & body piercing no Algarve, Portugal.",
+    title: "Russa Tattoo Studio — Parchal, Algarve",
+    description: "Atelier exclusivo de tatuagem em Parchal, Algarve, Portugal.",
   },
 };
 
 const structuredData = {
   "@context": "https://schema.org",
   "@type": "TattooParlor",
-  name: "Russa Tattoo Studio",
-  description: "Tattoo & body piercing studio no Algarve, Portugal.",
-  url: process.env.NEXTAUTH_URL || "http://localhost:3000",
-  telephone: "+351 912 345 678",
-  priceRange: "Desde 25€",
-  areaServed: "Algarve, Portugal",
-  address: { "@type": "PostalAddress", addressRegion: "Algarve", addressCountry: "PT" },
+  name: STUDIO_CONFIG.name,
+  image: "https://russatattoo.com/og-image.jpg",
+  "@id": "https://russatattoo.com/#studio",
+  url: "https://russatattoo.com",
+  telephone: STUDIO_CONFIG.contact.phone,
+  email: STUDIO_CONFIG.email,
+  sameAs: [STUDIO_CONFIG.instagram.url],
+  priceRange: "$$$",
+  address: {
+    "@type": "PostalAddress",
+    streetAddress: STUDIO_CONFIG.location.street,
+    addressLocality: STUDIO_CONFIG.location.parish,
+    postalCode: STUDIO_CONFIG.location.postalCode,
+    addressRegion: STUDIO_CONFIG.location.region,
+    addressCountry: STUDIO_CONFIG.location.countryCode,
+  },
+  geo: {
+    "@type": "GeoCoordinates",
+    latitude: STUDIO_CONFIG.location.coordinates.latitude,
+    longitude: STUDIO_CONFIG.location.coordinates.longitude,
+  },
   openingHoursSpecification: [
-    { "@type": "OpeningHoursSpecification", dayOfWeek: ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"], opens: "10:00", closes: "19:00" },
-    { "@type": "OpeningHoursSpecification", dayOfWeek: "Saturday", opens: "10:00", closes: "15:00" },
+    {
+      "@type": "OpeningHoursSpecification",
+      dayOfWeek: ["Tuesday", "Wednesday", "Thursday", "Friday", "Saturday"],
+      opens: "10:00",
+      closes: "19:00",
+    },
   ],
-  hasOfferCatalog: { "@type": "OfferCatalog", name: "Tattoo & Body Piercing", itemListElement: [{ "@type": "Offer", name: "Piercing", price: "25", priceCurrency: "EUR" }] },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {

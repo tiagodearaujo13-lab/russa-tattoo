@@ -17,7 +17,7 @@ import {
   DialogHeader,
   DialogTitle,
 } from "@/components/ui/dialog";
-import { Check, X, Eye, MessageCircle, Loader2 } from "lucide-react";
+import { Check, X, Eye, MessageCircle, Mail, Loader2 } from "lucide-react";
 import { useState } from "react";
 import {
   confirmAppointmentAction,
@@ -30,9 +30,9 @@ type Appointment = {
   clientName: string;
   clientEmail: string;
   clientWhatsapp: string;
-  tattooStyle: string;
+  tattooStyle: string | null;
   bodyLocation: string;
-  approxSizeCm: string;
+  approxSizeCm: string | null;
   description: string | null;
   referenceImageUrl: string | null;
   status: "pending_confirmation" | "confirmed" | "cancelled";
@@ -50,11 +50,11 @@ type AppointmentsTableProps = {
 
 const statusConfig = {
   pending_confirmation: {
-    label: "Pendente",
+    label: "Orçamento Recebido",
     className: "border-amber-500/30 bg-amber-500/10 text-amber-300",
   },
   confirmed: {
-    label: "Confirmado",
+    label: "Em Conversa / Agendado",
     className: "border-emerald-500/30 bg-emerald-500/10 text-emerald-300",
   },
   cancelled: {
@@ -85,7 +85,7 @@ export default function AppointmentsTable({
     return (
       <div className="border border-[#CCCCCC]/15 bg-[#1A1A1A] p-12 text-center">
         <p className="font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#808080]">
-          Nenhuma solicitação de agendamento ainda.
+          Nenhum pedido de orçamento recebido ainda.
         </p>
       </div>
     );
@@ -98,8 +98,7 @@ export default function AppointmentsTable({
           <TableHeader>
             <TableRow className="border-b border-[#CCCCCC]/15 bg-[#222222] hover:bg-[#222222]">
               <TableHead className="font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Cliente</TableHead>
-              <TableHead className="hidden font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E] md:table-cell">Data/Hora</TableHead>
-              <TableHead className="hidden font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E] lg:table-cell">Estilo</TableHead>
+              <TableHead className="hidden font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E] md:table-cell">Projeto</TableHead>
               <TableHead className="font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Status</TableHead>
               <TableHead className="text-right font-tatuadora text-[9px] font-medium uppercase tracking-[0.25em] text-[#9E9E9E]">Ações</TableHead>
             </TableRow>
@@ -118,27 +117,28 @@ export default function AppointmentsTable({
                       <p className="mt-1 font-tatuadora text-[10px] text-[#808080]">
                         {apt.clientEmail}
                       </p>
+                      <p className="mt-0.5 font-tatuadora text-[10px] text-[#666666]">
+                        {apt.clientWhatsapp}
+                      </p>
                     </div>
                   </TableCell>
                   <TableCell className="hidden md:table-cell">
-                    {apt.slot ? (
-                      <div className="font-tatuadora text-xs text-[#DCDCDC]">
-                        <p>{format(parseISO(apt.slot.date), "dd/MM/yyyy")}</p>
+                    <div className="font-tatuadora text-xs text-[#DCDCDC]">
+                      <p>{apt.bodyLocation}</p>
+                      {apt.approxSizeCm && (
                         <p className="mt-1 text-[10px] text-[#808080]">
-                          {apt.slot.timeStart} — {apt.slot.timeEnd}
+                          {apt.approxSizeCm}
                         </p>
-                      </div>
-                    ) : (
-                      <span className="text-[#707070]">—</span>
-                    )}
-                  </TableCell>
-                  <TableCell className="hidden lg:table-cell">
-                    <span className="font-tatuadora text-xs text-[#DCDCDC]">{apt.tattooStyle}</span>
+                      )}
+                    </div>
                   </TableCell>
                   <TableCell>
                     <Badge variant="outline" className={`rounded-none px-2 py-0.5 font-tatuadora text-[9px] uppercase tracking-wider ${config.className}`}>
                       {config.label}
                     </Badge>
+                    <p className="mt-1 font-tatuadora text-[9px] text-[#666666]">
+                      {format(parseISO(apt.createdAt), "dd/MM/yyyy HH:mm")}
+                    </p>
                   </TableCell>
                   <TableCell className="text-right">
                     <div className="flex items-center justify-end gap-1">
@@ -150,6 +150,20 @@ export default function AppointmentsTable({
                       >
                         <Eye className="w-4 h-4" />
                       </Button>
+                      {/* Responder por E-mail */}
+                      <Button
+                        variant="ghost"
+                        size="icon"
+                        className="h-8 w-8 text-[#808080] transition-colors hover:bg-white/10 hover:text-white"
+                        asChild
+                      >
+                        <a
+                          href={`mailto:${apt.clientEmail}?subject=${encodeURIComponent("Re: Orçamento de Tatuagem — Russa Tattoo Studio")}`}
+                        >
+                          <Mail className="w-4 h-4" />
+                        </a>
+                      </Button>
+                      {/* Abrir WhatsApp */}
                       <Button
                         variant="ghost"
                         size="icon"
@@ -204,7 +218,7 @@ export default function AppointmentsTable({
         <DialogContent className="max-w-lg border border-[#CCCCCC]/15 bg-[#222222] text-white">
           <DialogHeader>
             <DialogTitle className="font-russa text-2xl text-white">
-              Detalhes do Agendamento
+              Detalhes do Orçamento
             </DialogTitle>
           </DialogHeader>
           {detailItem && (
@@ -220,7 +234,14 @@ export default function AppointmentsTable({
                 </div>
                 <div>
                   <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">WhatsApp</p>
-                  <p className="font-medium text-[#DCDCDC]">{detailItem.clientWhatsapp}</p>
+                  <a
+                    href={`https://wa.me/${detailItem.clientWhatsapp.replace(/[^0-9+]/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    className="font-medium text-[#DCDCDC] hover:text-white underline decoration-white/20"
+                  >
+                    {detailItem.clientWhatsapp}
+                  </a>
                 </div>
                 <div>
                   <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Status</p>
@@ -235,22 +256,26 @@ export default function AppointmentsTable({
               <div className="border border-[#CCCCCC]/10 bg-[#1A1A1A] p-4">
                 <div className="grid grid-cols-2 gap-3">
                   <div>
-                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Estilo</p>
-                    <p className="font-medium text-[#DCDCDC]">{detailItem.tattooStyle}</p>
-                  </div>
-                  <div>
-                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Local</p>
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Local do Corpo</p>
                     <p className="font-medium text-[#DCDCDC]">{detailItem.bodyLocation}</p>
                   </div>
-                  <div>
-                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Tamanho</p>
-                    <p className="font-medium text-[#DCDCDC]">{detailItem.approxSizeCm}</p>
-                  </div>
+                  {detailItem.approxSizeCm && (
+                    <div>
+                      <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Tamanho</p>
+                      <p className="font-medium text-[#DCDCDC]">{detailItem.approxSizeCm}</p>
+                    </div>
+                  )}
+                  {detailItem.tattooStyle && (
+                    <div>
+                      <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Estilo</p>
+                      <p className="font-medium text-[#DCDCDC]">{detailItem.tattooStyle}</p>
+                    </div>
+                  )}
                 </div>
                 {detailItem.description && (
                   <div className="mt-3 border-t border-[#CCCCCC]/10 pt-3">
-                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Descrição</p>
-                    <p className="mt-1 leading-relaxed text-[#B8B8B8]">
+                    <p className="mb-1 font-tatuadora text-[9px] uppercase tracking-[0.18em] text-[#808080]">Ideia e Detalhes</p>
+                    <p className="mt-1 leading-relaxed text-[#B8B8B8] whitespace-pre-wrap">
                       {detailItem.description}
                     </p>
                   </div>
@@ -270,6 +295,31 @@ export default function AppointmentsTable({
                   </div>
                 </div>
               )}
+              {/* Ações Rápidas no Modal */}
+              <div className="flex gap-3 pt-2">
+                <Button
+                  asChild
+                  className="btn-dotwork-outline flex-1 min-h-10 text-[10px] tracking-[0.18em] uppercase font-semibold"
+                >
+                  <a href={`mailto:${detailItem.clientEmail}?subject=${encodeURIComponent("Re: Orçamento de Tatuagem — Russa Tattoo Studio")}`}>
+                    <Mail className="mr-2 h-4 w-4" />
+                    Responder por E-mail
+                  </a>
+                </Button>
+                <Button
+                  asChild
+                  className="btn-dotwork-outline flex-1 min-h-10 text-[10px] tracking-[0.18em] uppercase font-semibold"
+                >
+                  <a
+                    href={`https://wa.me/${detailItem.clientWhatsapp.replace(/[^0-9+]/g, "")}`}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                  >
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    Abrir WhatsApp
+                  </a>
+                </Button>
+              </div>
             </div>
           )}
         </DialogContent>

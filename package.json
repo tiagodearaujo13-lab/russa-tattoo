@@ -8,7 +8,8 @@
     "start": "next start",
     "lint": "eslint",
     "test": "node --experimental-strip-types --test",
-    "check:env": "node scripts/validate-env.mjs"
+    "check:env": "node scripts/validate-env.mjs",
+    "db:clean-mocks": "npx tsx --env-file=.env.local scripts/clean-mock-data.ts"
   },
   "dependencies": {
     "@auth/drizzle-adapter": "^1.11.3",

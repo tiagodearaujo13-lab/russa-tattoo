@@ -1,60 +1,34 @@
 import { z } from "zod";
 
 /**
- * Categorias de estilo para a galeria.
+ * Schema de validação Zod para submissão/edição de obras no portfólio.
+ * Aplicado estritamente no formulário e no Server Action.
  */
-export const galleryCategories = [
-  "Fine Line",
-  "Blackwork",
-  "Old School",
-  "Neo Traditional",
-  "Realismo",
-  "Aquarela",
-  "Tribal",
-  "Minimalista",
-  "Geométrico",
-  "Lettering",
-  "Pontilhismo",
-  "Piercing",
-  "Outro",
-] as const;
-
-/**
- * Schema Zod para validação de itens da galeria.
- * Aplicado no servidor antes de inserção/atualização no banco.
- */
-export const galleryItemSchema = z.object({
+export const galleryItemFormSchema = z.object({
   title: z
     .string()
-    .min(2, { message: "Título deve ter pelo menos 2 caracteres." })
-    .max(150, { message: "Título deve ter no máximo 150 caracteres." })
-    .trim(),
-
-  styleCategory: z.enum(galleryCategories, {
-    message: "Selecione uma categoria válida.",
-  }),
-
-  imageUrl: z
+    .trim()
+    .min(2, "O título deve ter no mínimo 2 caracteres")
+    .max(120, "O título deve conter no máximo 120 caracteres"),
+  description: z
     .string()
-    .url({ message: "URL da imagem inválida." }),
-
-  instagramPostUrl: z
+    .trim()
+    .max(500, "A descrição não pode exceder 500 caracteres")
+    .optional(),
+  imageUrl: z.string().url("URL de imagem inválida"),
+  imageKey: z.string().min(1, "Chave do arquivo de imagem ausente"),
+  category: z
     .string()
-    .url({ message: "URL do post do Instagram inválida." })
-    .regex(
-      /^https?:\/\/(www\.)?instagram\.com\/.+/,
-      { message: "A URL deve ser um link válido do Instagram." }
-    ),
-
-  featured: z
-    .boolean()
-    .default(false),
+    .trim()
+    .min(2, "O estilo deve possuir no mínimo 2 caracteres")
+    .max(60, "O estilo não deve ultrapassar 60 caracteres")
+    .refine((val) => !/^[^a-zA-Z0-9À-ÿ\s]+$/.test(val), {
+      message: "O nome da categoria deve conter caracteres alfanuméricos válidos",
+    }),
+  featured: z.boolean().default(false),
 });
 
-export type GalleryItemFormData = z.infer<typeof galleryItemSchema>;
+export type GalleryItemFormData = z.infer<typeof galleryItemFormSchema>;
 
-/**
- * Schema para atualização parcial de itens da galeria.
- */
-export const galleryItemUpdateSchema = galleryItemSchema.partial();
-export type GalleryItemUpdateData = z.infer<typeof galleryItemUpdateSchema>;
+// Alias para compatibilidade
+export const galleryItemSchema = galleryItemFormSchema;

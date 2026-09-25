@@ -3,37 +3,60 @@
 import { motion } from "framer-motion";
 import Link from "next/link";
 import { Button } from "@/components/ui/button";
-import { MapPin, Clock, Phone, Mail, MessageCircle } from "lucide-react";
+import { MapPin, Clock, Phone, Mail, MessageCircle, ExternalLink } from "lucide-react";
 import InstagramIcon from "@/components/public/InstagramIcon";
-import { getWhatsAppUrl, STUDIO_CONFIG } from "@/lib/constants/studio";
+import { STUDIO_CONFIG, STUDIO_WHATSAPP_NUMBER, getWhatsAppUrl } from "@/lib/constants/studio";
 import { useLanguage } from "./LanguageProvider";
 
 export default function ContactSection() {
   const { t } = useLanguage();
+  const hasWhatsApp = STUDIO_WHATSAPP_NUMBER.length > 0;
+
   const contactInfo = [
     {
       icon: MapPin,
       label: t("contact.address"),
-      value: STUDIO_CONFIG.address.street,
-      href: STUDIO_CONFIG.address.googleMapsUrl,
+      customContent: (
+        <div>
+          <p className="font-tatuadora text-base sm:text-lg text-zinc-100 font-normal">
+            {STUDIO_CONFIG.location.street}
+          </p>
+          <p className="font-tatuadora text-xs sm:text-sm text-[#CCCCCC]/80 font-light mt-0.5">
+            {STUDIO_CONFIG.location.postalCode} {STUDIO_CONFIG.location.parish} — Algarve, Portugal
+          </p>
+        </div>
+      ),
+      href: STUDIO_CONFIG.maps.directSearchUrl,
     },
     {
       icon: Clock,
       label: t("contact.hours"),
-      value: t("contact.schedule"),
+      customContent: (
+        <p className="font-tatuadora text-base sm:text-lg text-zinc-200">
+          {t("contact.schedule")}
+        </p>
+      ),
       href: null,
     },
     {
       icon: Phone,
       label: t("contact.phone"),
-      value: process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351 912 345 678",
-      href: `tel:${(process.env.NEXT_PUBLIC_STUDIO_PHONE || "+351912345678").replace(/\s/g, "")}`,
+      customContent: (
+        <p className="font-tatuadora text-base sm:text-lg text-zinc-200">
+          {STUDIO_CONFIG.contact.phoneDisplay}
+        </p>
+      ),
+      href: `tel:${STUDIO_CONFIG.contact.phone.replace(/\s/g, "")}`,
     },
     {
       icon: Mail,
       label: t("contact.email"),
-      value: "contacto@russatattoo.pt",
-      href: "mailto:contacto@russatattoo.pt",
+      customContent: (
+        <p className="font-tatuadora text-base sm:text-lg text-zinc-200">
+          {STUDIO_CONFIG.email}
+        </p>
+      ),
+      href: `mailto:${STUDIO_CONFIG.email}`,
     },
   ];
 
@@ -77,14 +100,12 @@ export default function ContactSection() {
                         href={info.href}
                         target={info.href.startsWith("http") ? "_blank" : undefined}
                         rel={info.href.startsWith("http") ? "noopener noreferrer" : undefined}
-                        className="font-tatuadora text-base sm:text-lg text-zinc-200 transition-colors hover:text-white"
+                        className="block transition-colors hover:text-white"
                       >
-                        {info.value}
+                        {info.customContent}
                       </Link>
                     ) : (
-                      <p className="font-tatuadora text-base sm:text-lg text-zinc-200">
-                        {info.value}
-                      </p>
+                      info.customContent
                     )}
                   </div>
                 </div>
@@ -92,14 +113,16 @@ export default function ContactSection() {
             </div>
 
             <div className="flex flex-wrap gap-3">
+              {hasWhatsApp && (
+                <Button asChild className="btn-dotwork-outline min-h-11 font-tatuadora tracking-[0.18em] uppercase text-xs font-semibold">
+                  <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
+                    <MessageCircle className="mr-2 h-4 w-4" />
+                    {t("contact.whatsapp")}
+                  </Link>
+                </Button>
+              )}
               <Button asChild className="btn-dotwork-outline min-h-11 font-tatuadora tracking-[0.18em] uppercase text-xs font-semibold">
-                <Link href={getWhatsAppUrl()} target="_blank" rel="noopener noreferrer">
-                  <MessageCircle className="mr-2 h-4 w-4" />
-                  {t("contact.whatsapp")}
-                </Link>
-              </Button>
-              <Button asChild className="btn-dotwork-outline min-h-11 font-tatuadora tracking-[0.18em] uppercase text-xs font-semibold">
-                <Link href={STUDIO_CONFIG.instagram} target="_blank" rel="noopener noreferrer">
+                <Link href={STUDIO_CONFIG.contact.instagramUrl} target="_blank" rel="noopener noreferrer">
                   <InstagramIcon className="mr-2 h-4 w-4" />
                   {t("contact.instagram")}
                 </Link>
@@ -107,28 +130,41 @@ export default function ContactSection() {
             </div>
           </motion.div>
 
-          {/* Google Maps Embed */}
+          {/* Google Maps Embed — Tratamento Monocromático de Luxo */}
           <motion.div
             initial={{ opacity: 0, x: 40 }}
             whileInView={{ opacity: 1, x: 0 }}
             viewport={{ once: true }}
             transition={{ duration: 0.7 }}
-            className="relative min-h-[420px] overflow-hidden border border-white/[0.08] bg-[#141414]"
+            className="flex flex-col gap-3"
           >
-            <iframe
-              src={
-                STUDIO_CONFIG.address.embedMapUrl ||
-                "https://www.google.com/maps?q=Algarve+Portugal&output=embed"
-              }
-              width="100%"
-              height="100%"
-              style={{ border: 0, minHeight: 420 }}
-              allowFullScreen
-              loading="lazy"
-              referrerPolicy="no-referrer-when-downgrade"
-              title={t("contact.map")}
-              className="grayscale transition-all duration-500 hover:grayscale-0"
-            />
+            <div className="relative aspect-video sm:aspect-[16/9] w-full overflow-hidden border border-[#CCCCCC]/20 bg-[#141414] group shadow-2xl">
+              <iframe
+                src={STUDIO_CONFIG.maps.embedUrl}
+                width="100%"
+                height="100%"
+                style={{ border: 0 }}
+                allowFullScreen
+                loading="lazy"
+                referrerPolicy="no-referrer-when-downgrade"
+                title={t("contact.map")}
+                className="h-full w-full grayscale invert contrast-[1.2] opacity-80 transition-all duration-700 group-hover:opacity-100"
+              />
+              <div className="absolute bottom-4 right-4 z-10">
+                <Link
+                  href={STUDIO_CONFIG.maps.directSearchUrl}
+                  target="_blank"
+                  rel="noopener noreferrer"
+                  className="inline-flex items-center gap-2 border border-white/20 bg-black/85 px-4 py-2 font-tatuadora text-[10px] uppercase tracking-[0.2em] text-white backdrop-blur-md transition-colors hover:bg-white hover:text-black"
+                >
+                  <span>Como Chegar</span>
+                  <ExternalLink className="h-3 w-3" />
+                </Link>
+              </div>
+            </div>
+            <p className="font-tatuadora text-[10px] uppercase tracking-[0.18em] text-[#808080] text-right">
+              {STUDIO_CONFIG.location.formattedAddress}
+            </p>
           </motion.div>
         </div>
       </div>

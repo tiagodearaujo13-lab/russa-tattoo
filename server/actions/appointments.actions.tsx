@@ -6,7 +6,11 @@ import { appointmentSchema } from "@/lib/validations/appointment.schema";
 import { appointmentRateLimiter } from "@/lib/redis";
 import { resend, emailFrom } from "@/lib/resend";
 import { auth } from "@/lib/auth";
-import { getAllowedAdminEmails, isAllowedAdminEmail } from "@/lib/admin-auth";
+import {
+  getAdminNotificationEmails,
+  isAllowedAdminEmail,
+} from "@/lib/admin-auth";
+import { STUDIO_CONFIG } from "@/lib/constants/studio";
 import { and, eq } from "drizzle-orm";
 import { render } from "@react-email/components";
 import ClientConfirmationEmail from "@/emails/ClientConfirmationEmail";
@@ -124,7 +128,7 @@ export async function requestAppointmentAction(
     }
 
     // 5. Renderiza os templates React Email depois do commit da transação.
-    const adminEmails = getAllowedAdminEmails();
+    const adminEmails = getAdminNotificationEmails(STUDIO_CONFIG.email);
     const clientHtml = await render(
       <ClientConfirmationEmail
         clientName={data.clientName}
@@ -147,6 +151,10 @@ export async function requestAppointmentAction(
       .catch((err) => console.error("[Email] Erro ao enviar para cliente:", err));
 
     if (adminEmails.length > 0) {
+      console.info(
+        "[Email] Disparando alerta de novo agendamento para:",
+        adminEmails.join(", ")
+      );
       const adminHtml = await render(
         <AdminNewAppointmentEmail
           clientName={data.clientName}
@@ -226,11 +234,15 @@ export async function confirmAppointmentAction(
       .where(eq(appointments.id, appointmentId));
 
     // Notifica o cliente da confirmação
-    const [slot] = await db
-      .select()
-      .from(scheduleSlots)
-      .where(eq(scheduleSlots.id, appointment.slotId))
-      .limit(1);
+    let slot: typeof scheduleSlots.$inferSelect | undefined;
+    if (appointment.slotId) {
+      const [foundSlot] = await db
+        .select()
+        .from(scheduleSlots)
+        .where(eq(scheduleSlots.id, appointment.slotId))
+        .limit(1);
+      slot = foundSlot;
+    }
 
     resend.emails
       .send({
@@ -291,11 +303,13 @@ export async function cancelAppointmentAction(
       .set({ status: "cancelled" })
       .where(eq(appointments.id, appointmentId));
 
-    // Libera o slot de volta para 'available'
-    await db
-      .update(scheduleSlots)
-      .set({ status: "available" })
-      .where(eq(scheduleSlots.id, appointment.slotId));
+    // Libera o slot de volta para 'available' se houver slot vinculado
+    if (appointment.slotId) {
+      await db
+        .update(scheduleSlots)
+        .set({ status: "available" })
+        .where(eq(scheduleSlots.id, appointment.slotId));
+    }
 
     // Notifica o cliente
     resend.emails

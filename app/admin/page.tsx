@@ -12,7 +12,7 @@ export const metadata: Metadata = {
 export const dynamic = "force-dynamic";
 
 export default async function AdminDashboard() {
-  // Buscar agendamentos com dados dos slots
+  // Buscar pedidos de orçamento com dados dos slots (se existirem)
   const allAppointments = await db
     .select({
       id: appointments.id,
@@ -64,37 +64,34 @@ export default async function AdminDashboard() {
   ).length;
   const total = formattedAppointments.length;
 
-  const today = new Date().toISOString().split("T")[0];
-  const todayAppointments = formattedAppointments.filter(
-    (a) => a.slot?.date === today
-  ).length;
-
   const metrics = [
     {
       icon: AlertTriangle,
-      label: "Pendentes",
+      label: "Orçamentos Pendentes",
       value: pending,
       color: "text-yellow-500",
       bg: "bg-yellow-500/10",
     },
     {
       icon: CheckCircle,
-      label: "Confirmados",
+      label: "Em Conversa / Agendados",
       value: confirmed,
       color: "text-emerald-500",
       bg: "bg-emerald-500/10",
     },
     {
       icon: CalendarDays,
-      label: "Hoje",
-      value: todayAppointments,
+      label: "Total de Pedidos",
+      value: total,
       color: "text-white",
       bg: "bg-white/10",
     },
     {
       icon: Clock,
-      label: "Total",
-      value: total,
+      label: "Hoje",
+      value: formattedAppointments.filter(
+        (a) => a.createdAt.split("T")[0] === new Date().toISOString().split("T")[0]
+      ).length,
       color: "text-foreground/60",
       bg: "bg-white/5",
     },
@@ -104,9 +101,9 @@ export default async function AdminDashboard() {
     <div className="space-y-8">
       <div>
         <p className="mb-2 font-tatuadora text-[9px] uppercase tracking-[0.3em] text-[#808080]">Atelier · Painel administrativo</p>
-        <h1 className="mb-1 font-russa text-4xl font-semibold text-white sm:text-5xl">Visão geral</h1>
+        <h1 className="mb-1 font-russa text-4xl font-semibold text-white sm:text-5xl">Pedidos de Orçamento</h1>
         <p className="font-tatuadora text-xs font-light tracking-wide text-[#9E9E9E]">
-          Visão geral das solicitações de agendamento.
+          Gerencie os pedidos de orçamento recebidos pelo site.
         </p>
       </div>
 
@@ -128,9 +125,9 @@ export default async function AdminDashboard() {
         ))}
       </div>
 
-      {/* Appointments Table */}
+      {/* Appointments / Quotes Table */}
       <div>
-        <h2 className="mb-4 font-russa text-2xl text-white">Solicitações recentes</h2>
+        <h2 className="mb-4 font-russa text-2xl text-white">Pedidos recentes</h2>
         <AppointmentsTable appointments={formattedAppointments} />
       </div>
     </div>

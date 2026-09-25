@@ -7,12 +7,11 @@ import { Separator } from "@/components/ui/separator";
 import { STUDIO_CONFIG } from "@/lib/constants/studio";
 import { useLanguage } from "./LanguageProvider";
 
-const instagramUrl = STUDIO_CONFIG.instagram;
+const instagramUrl = STUDIO_CONFIG.instagram.url;
 const footerLinks = [
   ["#sobre", "header.about"],
   ["#estilos", "header.styles"],
-  ["#piercing", "header.piercing"],
-  ["#agenda", "header.booking"],
+  ["#orcamento", "header.booking"],
   ["#galeria", "header.gallery"],
   ["#faq", "header.faq"],
   ["#contacto", "header.contact"],
@@ -111,8 +110,14 @@ export default function Footer() {
 
         {/* Direitos Autorais & RGPD */}
         <div className="flex flex-col items-center justify-between gap-3 font-tatuadora text-[10px] uppercase tracking-[0.2em] text-[#CCCCCC] md:flex-row">
-          <p>© {year} Russa Tatuadora · Algarve, Portugal.</p>
-          <p className="text-[#CCCCCC]">Fine Line · Botânica · Body Piercing</p>
+          <p>© {year} Russa Tatuadora · Parchal, Algarve, Portugal.</p>
+          <p className="text-[#CCCCCC]">Fine Line · Botânica · Micro-Realismo · Arte Autoral</p>
+          <a
+            href={`mailto:${STUDIO_CONFIG.email}`}
+            className="transition-colors hover:text-white"
+          >
+            {STUDIO_CONFIG.email}
+          </a>
           <p>{t("footer.rgpd")}</p>
         </div>
       </div>

@@ -5,14 +5,14 @@ import LanguageProvider from "@/components/public/LanguageProvider";
 import CustomCursor from "@/components/public/CustomCursor";
 
 export const metadata: Metadata = {
-  title: "Russa Tattoo Studio — Arte que Marca para Sempre | Algarve",
+  title: "Russa Tattoo Studio — Atelier Exclusivo de Tatuagem | Parchal, Algarve",
   description:
-    "Atelier Boutique de tatuagem e body piercing no Algarve, Portugal. Mais de 12 anos de experiência com especialidade em Fine Line, Botânica, Micro-Realismo e Lettering delicado. Agende a sua sessão.",
+    "Atelier exclusivo de tatuagem em Parchal, Algarve, Portugal. Mais de 12 anos de experiência com especialidade em Fine Line, Botânica, Micro-Realismo e Lettering delicado. Solicite o seu orçamento.",
   keywords: [
     "tatuagem",
     "tattoo",
-    "piercing",
     "algarve",
+    "parchal",
     "fine line",
     "botânica",
     "micro realismo",
@@ -20,10 +20,11 @@ export const metadata: Metadata = {
     "minimalista",
     "estúdio tatuagem algarve",
     "russa tattoo",
+    "arte autoral",
   ],
   openGraph: {
-    title: "Russa Tattoo Studio",
-    description: "Arte que marca para sempre. Tatuagens exclusivas no Algarve.",
+    title: "Russa Tattoo Studio — Parchal, Algarve",
+    description: "Atelier exclusivo de tatuagem em Parchal, Algarve. Fine Line, Botânica, Micro-Realismo e arte autoral.",
     type: "website",
     locale: "pt_PT",
   },

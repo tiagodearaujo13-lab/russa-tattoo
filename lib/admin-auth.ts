@@ -7,6 +7,15 @@ export function getAllowedAdminEmails(): string[] {
     .filter(Boolean);
 }
 
+export function getAdminNotificationEmails(officialEmail: string): string[] {
+  return Array.from(
+    new Set([
+      ...getAllowedAdminEmails(),
+      officialEmail.trim().toLowerCase(),
+    ])
+  );
+}
+
 export function isAllowedAdminEmail(email: string | null | undefined): boolean {
   const userEmail = email?.trim().toLowerCase();
   return Boolean(userEmail && getAllowedAdminEmails().includes(userEmail));

@@ -70,7 +70,7 @@ export default function HeroSection() {
 
         <motion.p initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.5, duration: 0.7 }} className="mx-auto mt-6 max-w-xl font-tatuadora text-sm font-normal leading-relaxed text-[#DCDCDC] sm:mt-8 sm:text-base md:text-lg">{t("hero.support")}</motion.p>
         <motion.div initial={{ opacity: 0, y: 20 }} animate={{ opacity: 1, y: 0 }} transition={{ delay: 1.7, duration: 0.7 }} className="mt-8 flex max-w-md flex-col items-stretch justify-center gap-3.5 self-center sm:mt-10 sm:max-w-none sm:flex-row sm:items-center sm:gap-4">
-          <Button asChild className="btn-dotwork-primary min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#agenda">{t("hero.book")}</Link></Button>
+          <Button asChild className="btn-dotwork-primary min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#orcamento">{t("hero.book")}</Link></Button>
           <Button asChild className="btn-dotwork-outline min-h-[48px] px-8 text-xs font-semibold uppercase tracking-[0.2em]"><Link href="#galeria" className="group">{t("hero.portfolio")}<span aria-hidden="true" className="ml-2.5 inline-block transition-transform duration-300 group-hover:translate-x-1 group-hover:-translate-y-0.5">↗</span></Link></Button>
         </motion.div>
       </div>
